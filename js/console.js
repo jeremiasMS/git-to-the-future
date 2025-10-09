@@ -1,0 +1,335 @@
+// 🖥️ Simulador de consola Git interactiva
+class GitConsole {
+  constructor() {
+    this.output = document.getElementById('consoleOutput');
+    this.input = document.getElementById('commandInput');
+    this.executeBtn = document.getElementById('executeBtn');
+    this.gitState = {
+      initialized: false,
+      staged: [],
+      committed: [],
+      branches: ['main'],
+      currentBranch: 'main',
+      commits: [],
+    };
+    this.initializeEventListeners();
+  }
+
+  initializeEventListeners() {
+    // Botones de comandos predefinidos - ahora escriben en el input
+    document.querySelectorAll('.cmd-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const command = btn.getAttribute('data-command');
+        this.input.value = `git ${command}`;
+        this.input.focus();
+      });
+    });
+
+    // Ejecutar comando desde input
+    this.executeBtn.addEventListener('click', () => {
+      const command = this.input.value.trim();
+      if (command) {
+        this.executeCommand(command.replace('git ', ''));
+        this.input.value = '';
+      }
+    });
+
+    // Enter en el input
+    this.input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        this.executeBtn.click();
+      }
+    });
+  }
+
+  addOutput(text, className = '') {
+    const line = document.createElement('div');
+    line.className = `output-line ${className}`;
+    line.innerHTML = `<span class="prompt">$</span> ${text}`;
+    this.output.appendChild(line);
+    this.output.scrollTop = this.output.scrollHeight;
+  }
+
+  executeCommand(command) {
+    const parts = command.toLowerCase().split(' ');
+    const mainCommand = parts[0];
+    const args = parts.slice(1);
+
+    this.addOutput(`git ${command}`);
+
+    switch (mainCommand) {
+      case 'init':
+        this.gitInit();
+        break;
+      case 'status':
+        this.gitStatus();
+        break;
+      case 'add':
+        this.gitAdd(args);
+        break;
+      case 'commit':
+        this.gitCommit(args);
+        break;
+      case 'branch':
+        this.gitBranch(args);
+        break;
+      case 'checkout':
+        this.gitCheckout(args);
+        break;
+      case 'merge':
+        this.gitMerge(args);
+        break;
+      case 'log':
+        this.gitLog();
+        break;
+      case 'reset':
+        this.gitReset();
+        break;
+      case 'clear':
+        this.clearConsole();
+        break;
+      default:
+        this.addOutput(`Comando no reconocido: ${command}`, 'warning');
+        this.addOutput(
+          '💡 Tip: Usa los botones o comandos como init, status, add, commit',
+          'info'
+        );
+    }
+  }
+
+  gitInit() {
+    if (this.gitState.initialized) {
+      this.addOutput(
+        'Ya existe un repositorio Git inicializado',
+        'warning'
+      );
+    } else {
+      this.gitState.initialized = true;
+      this.addOutput(
+        '✅ Repositorio Git inicializado exitosamente',
+        'success'
+      );
+      this.addOutput(
+        '📚 Explicación: git init crea un nuevo repositorio Git vacío',
+        'info'
+      );
+    }
+  }
+
+  gitStatus() {
+    if (!this.gitState.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    this.addOutput(`En la rama ${this.gitState.currentBranch}`, 'info');
+
+    if (
+      this.gitState.staged.length === 0 &&
+      this.gitState.commits.length === 0
+    ) {
+      this.addOutput(
+        'No hay nada para hacer commit, directorio de trabajo limpio',
+        'success'
+      );
+    } else if (this.gitState.staged.length > 0) {
+      this.addOutput('Cambios preparados para commit:', 'success');
+      this.gitState.staged.forEach((file) => {
+        this.addOutput(`  nuevo archivo: ${file}`, 'success');
+      });
+    }
+
+    this.addOutput(
+      '📚 Explicación: git status muestra el estado del directorio de trabajo',
+      'info'
+    );
+  }
+
+  gitAdd(args) {
+    if (!this.gitState.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    const files = ['index.html', 'README.md', 'style.css'];
+    this.gitState.staged = [...files];
+    this.addOutput(
+      '✅ Archivos agregados al área de preparación',
+      'success'
+    );
+    files.forEach((file) => {
+      this.addOutput(`  ${file}`, 'success');
+    });
+    this.addOutput(
+      '📚 Explicación: git add prepara los archivos para el próximo commit',
+      'info'
+    );
+  }
+
+  gitCommit(args) {
+    if (!this.gitState.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    if (this.gitState.staged.length === 0) {
+      this.addOutput(
+        '❌ No hay cambios preparados para commit',
+        'warning'
+      );
+      this.addOutput('💡 Tip: Usa "git add ." primero', 'info');
+      return;
+    }
+
+    const commitId = Math.random().toString(36).substr(2, 7);
+    const commitMsg = args.join(' ') || 'Initial commit';
+
+    this.gitState.commits.push({
+      id: commitId,
+      message: commitMsg,
+      files: [...this.gitState.staged],
+    });
+
+    this.gitState.staged = [];
+
+    this.addOutput(
+      `✅ [${this.gitState.currentBranch} ${commitId}] ${commitMsg}`,
+      'success'
+    );
+    this.addOutput(
+      '📚 Explicación: git commit guarda los cambios en el historial del repositorio',
+      'info'
+    );
+  }
+
+  gitBranch(args) {
+    if (!this.gitState.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    if (args.length === 0) {
+      this.addOutput('Ramas disponibles:', 'info');
+      this.gitState.branches.forEach((branch) => {
+        const marker =
+          branch === this.gitState.currentBranch ? '* ' : '  ';
+        const color =
+          branch === this.gitState.currentBranch ? 'success' : '';
+        this.addOutput(`${marker}${branch}`, color);
+      });
+    } else {
+      const newBranch = args[0];
+      if (!this.gitState.branches.includes(newBranch)) {
+        this.gitState.branches.push(newBranch);
+        this.addOutput(`✅ Rama '${newBranch}' creada`, 'success');
+      } else {
+        this.addOutput(`❌ La rama '${newBranch}' ya existe`, 'warning');
+      }
+    }
+
+    this.addOutput(
+      '📚 Explicación: git branch crea o lista las ramas del repositorio',
+      'info'
+    );
+  }
+
+  gitCheckout(args) {
+    if (!this.gitState.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    if (args.length === 0) {
+      this.addOutput('❌ Especifica una rama para cambiar', 'warning');
+      return;
+    }
+
+    const targetBranch = args[0];
+    if (this.gitState.branches.includes(targetBranch)) {
+      this.gitState.currentBranch = targetBranch;
+      this.addOutput(`✅ Cambiado a rama '${targetBranch}'`, 'success');
+      this.addOutput(
+        '📚 Explicación: git checkout cambia entre ramas o commits',
+        'info'
+      );
+    } else {
+      this.addOutput(`❌ La rama '${targetBranch}' no existe`, 'warning');
+    }
+  }
+
+  gitMerge(args) {
+    if (!this.gitState.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    if (args.length === 0) {
+      this.addOutput('❌ Especifica una rama para fusionar', 'warning');
+      return;
+    }
+
+    const sourceBranch = args[0];
+    if (this.gitState.branches.includes(sourceBranch)) {
+      this.addOutput(
+        `✅ Fusión de '${sourceBranch}' en '${this.gitState.currentBranch}' completada`,
+        'success'
+      );
+      this.addOutput(
+        '📚 Explicación: git merge combina cambios de diferentes ramas',
+        'info'
+      );
+    } else {
+      this.addOutput(`❌ La rama '${sourceBranch}' no existe`, 'warning');
+    }
+  }
+
+  gitLog() {
+    if (!this.gitState.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    if (this.gitState.commits.length === 0) {
+      this.addOutput('No hay commits en el historial', 'info');
+    } else {
+      this.addOutput('Historial de commits:', 'info');
+      this.gitState.commits.reverse().forEach((commit) => {
+        this.addOutput(`commit ${commit.id}`, 'success');
+        this.addOutput(`    ${commit.message}`, '');
+      });
+      this.gitState.commits.reverse(); // Restaurar orden original
+    }
+
+    this.addOutput(
+      '📚 Explicación: git log muestra el historial de commits',
+      'info'
+    );
+  }
+
+  gitReset() {
+    if (!this.gitState.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    this.gitState.staged = [];
+    this.addOutput('✅ Área de preparación limpiada', 'success');
+    this.addOutput(
+      '📚 Explicación: git reset deshace cambios en el área de preparación',
+      'info'
+    );
+  }
+
+  clearConsole() {
+    this.output.innerHTML = `
+      <div class="output-line">
+        <span class="prompt">$</span> Consola limpiada - ¡Continuemos aprendiendo Git! 🚀
+      </div>
+    `;
+  }
+}
+
+// Inicializar la consola cuando se carga la página
+document.addEventListener('DOMContentLoaded', () => {
+  new GitConsole();
+});
