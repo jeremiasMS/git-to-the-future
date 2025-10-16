@@ -4,6 +4,31 @@
 Cada commit representa un evento clave y cada rama una historia alternativa.  
 Un recurso divertido y visual para explicar conceptos de Git como *branching*, *merge* y *cherry-pick*.
 
+## ✨ Funcionalidades
+
+### 🎮 Consola Git Interactiva en Vivo
+- **Sincronización en tiempo real**: Cada comando Git que ejecutes se refleja instantáneamente en el gráfico visual
+- **Modo Aprendizaje**: Reinicia el gráfico y crea tu propio historial desde cero
+- **Modo Demo**: Carga el historial completo de "Volver al Futuro" con un clic
+- **Feedback visual**: Mensajes informativos te guían mientras aprendes
+
+### 📊 Visualización GitGraph
+- Gráfico interactivo que se actualiza en tiempo real
+- Colores distintos para cada rama
+- Representación visual de merges y bifurcaciones
+
+### 🎯 Comandos Disponibles
+Todos sincronizados con el gráfico:
+- `git init` - Inicializa repositorio y crea rama main
+- `git add .` - Prepara archivos para commit
+- `git commit -m "mensaje"` - Crea commit visible en el gráfico
+- `git branch [nombre]` - Crea nueva rama desde el punto actual
+- `git checkout [rama]` - Cambia de rama
+- `git merge [rama]` - Fusiona ramas (¡verás la unión!)
+- `git status` - Muestra estado actual
+- `git log` - Historial de commits
+- `git reset` - Limpia staging area
+
 ---
 ---
 

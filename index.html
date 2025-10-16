@@ -19,6 +19,10 @@
     </header>
     <div class="main-container">
       <div class="graph-container">
+        <div class="branch-indicator">
+          <span class="indicator-label">📍 Rama actual:</span>
+          <span class="indicator-value" id="currentBranchIndicator">main (Demo BTTF)</span>
+        </div>
         <main id="gitGraph"></main>
       </div>
       <div class="console-container">
@@ -110,6 +114,23 @@
             data-tooltip="Limpia la consola"
           >
             clear
+          </button>
+        </div>
+
+        <div class="special-buttons">
+          <button
+            class="special-btn reset-btn"
+            id="resetGraphBtn"
+            data-tooltip="Reinicia el gráfico para empezar de cero"
+          >
+            🔄 Reiniciar Gráfico
+          </button>
+          <button
+            class="special-btn demo-btn"
+            id="loadDemoBtn"
+            data-tooltip="Carga el demo completo de Volver al Futuro"
+          >
+            🚗 Cargar Demo BTTF
           </button>
         </div>
 

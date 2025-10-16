@@ -40,6 +40,22 @@ class GitConsole {
         this.executeBtn.click();
       }
     });
+
+    // Botón de reiniciar gráfico
+    const resetGraphBtn = document.getElementById('resetGraphBtn');
+    if (resetGraphBtn) {
+      resetGraphBtn.addEventListener('click', () => {
+        this.resetGraph();
+      });
+    }
+
+    // Botón de cargar demo
+    const loadDemoBtn = document.getElementById('loadDemoBtn');
+    if (loadDemoBtn) {
+      loadDemoBtn.addEventListener('click', () => {
+        this.loadDemo();
+      });
+    }
   }
 
   addOutput(text, className = '') {
@@ -105,12 +121,22 @@ class GitConsole {
       );
     } else {
       this.gitState.initialized = true;
+      
+      // Actualizar el gráfico
+      if (window.GitGraphController) {
+        window.GitGraphController.init();
+      }
+      
       this.addOutput(
         '✅ Repositorio Git inicializado exitosamente',
         'success'
       );
       this.addOutput(
         '📚 Explicación: git init crea un nuevo repositorio Git vacío',
+        'info'
+      );
+      this.addOutput(
+        '🎨 ¡Mira el gráfico! Se ha creado la rama main con un commit inicial',
         'info'
       );
     }
@@ -182,7 +208,14 @@ class GitConsole {
     }
 
     const commitId = Math.random().toString(36).substr(2, 7);
-    const commitMsg = args.join(' ') || 'Initial commit';
+    // Extraer el mensaje del commit (después de -m '')
+    let commitMsg = 'Changes committed';
+    const msgIndex = args.indexOf('-m');
+    if (msgIndex !== -1 && args[msgIndex + 1]) {
+      commitMsg = args.slice(msgIndex + 1).join(' ').replace(/['"]/g, '');
+    } else if (args.length > 0 && !args[0].startsWith('-')) {
+      commitMsg = args.join(' ');
+    }
 
     this.gitState.commits.push({
       id: commitId,
@@ -192,12 +225,21 @@ class GitConsole {
 
     this.gitState.staged = [];
 
+    // Actualizar el gráfico
+    if (window.GitGraphController) {
+      window.GitGraphController.commit(commitMsg);
+    }
+
     this.addOutput(
       `✅ [${this.gitState.currentBranch} ${commitId}] ${commitMsg}`,
       'success'
     );
     this.addOutput(
       '📚 Explicación: git commit guarda los cambios en el historial del repositorio',
+      'info'
+    );
+    this.addOutput(
+      `🎨 ¡Mira el gráfico! Nuevo commit en la rama '${this.gitState.currentBranch}'`,
       'info'
     );
   }
@@ -221,7 +263,24 @@ class GitConsole {
       const newBranch = args[0];
       if (!this.gitState.branches.includes(newBranch)) {
         this.gitState.branches.push(newBranch);
-        this.addOutput(`✅ Rama '${newBranch}' creada`, 'success');
+        
+        // Actualizar el gráfico
+        if (window.GitGraphController) {
+          const success = window.GitGraphController.branch(newBranch);
+          if (success) {
+            this.addOutput(`✅ Rama '${newBranch}' creada desde '${this.gitState.currentBranch}'`, 'success');
+            this.addOutput(
+              `🎨 ¡Mira el gráfico! La rama '${newBranch}' se ha bifurcado desde '${this.gitState.currentBranch}'`,
+              'info'
+            );
+            this.addOutput(
+              `💡 Usa "git checkout ${newBranch}" para cambiar a la nueva rama`,
+              'info'
+            );
+          }
+        } else {
+          this.addOutput(`✅ Rama '${newBranch}' creada`, 'success');
+        }
       } else {
         this.addOutput(`❌ La rama '${newBranch}' ya existe`, 'warning');
       }
@@ -246,14 +305,30 @@ class GitConsole {
 
     const targetBranch = args[0];
     if (this.gitState.branches.includes(targetBranch)) {
+      const previousBranch = this.gitState.currentBranch;
       this.gitState.currentBranch = targetBranch;
-      this.addOutput(`✅ Cambiado a rama '${targetBranch}'`, 'success');
+      
+      // Actualizar el gráfico
+      if (window.GitGraphController) {
+        window.GitGraphController.checkout(targetBranch);
+      }
+      
+      this.addOutput(`✅ Cambiado de '${previousBranch}' a '${targetBranch}'`, 'success');
       this.addOutput(
         '📚 Explicación: git checkout cambia entre ramas o commits',
         'info'
       );
+      this.addOutput(
+        `🎨 ¡Mira el gráfico! El indicador muestra que ahora estás en '${targetBranch}'`,
+        'info'
+      );
+      this.addOutput(
+        `💡 Los próximos commits se añadirán a la rama '${targetBranch}'`,
+        'info'
+      );
     } else {
       this.addOutput(`❌ La rama '${targetBranch}' no existe`, 'warning');
+      this.addOutput(`💡 Usa "git branch" para ver las ramas disponibles`, 'info');
     }
   }
 
@@ -270,16 +345,36 @@ class GitConsole {
 
     const sourceBranch = args[0];
     if (this.gitState.branches.includes(sourceBranch)) {
-      this.addOutput(
-        `✅ Fusión de '${sourceBranch}' en '${this.gitState.currentBranch}' completada`,
-        'success'
-      );
+      // Actualizar el gráfico
+      if (window.GitGraphController) {
+        const success = window.GitGraphController.merge(sourceBranch);
+        if (success) {
+          this.addOutput(
+            `✅ Merge: '${sourceBranch}' → '${this.gitState.currentBranch}'`,
+            'success'
+          );
+          this.addOutput(
+            `🎨 ¡Mira el gráfico! Las ramas se han fusionado en '${this.gitState.currentBranch}'`,
+            'info'
+          );
+          this.addOutput(
+            `💡 Los cambios de '${sourceBranch}' ahora están en '${this.gitState.currentBranch}'`,
+            'info'
+          );
+        }
+      } else {
+        this.addOutput(
+          `✅ Fusión de '${sourceBranch}' en '${this.gitState.currentBranch}' completada`,
+          'success'
+        );
+      }
       this.addOutput(
         '📚 Explicación: git merge combina cambios de diferentes ramas',
         'info'
       );
     } else {
       this.addOutput(`❌ La rama '${sourceBranch}' no existe`, 'warning');
+      this.addOutput(`💡 Usa "git branch" para ver las ramas disponibles`, 'info');
     }
   }
 
@@ -326,6 +421,54 @@ class GitConsole {
         <span class="prompt">$</span> Consola limpiada - ¡Continuemos aprendiendo Git! 🚀
       </div>
     `;
+  }
+
+  resetGraph() {
+    // Reiniciar estado
+    this.gitState = {
+      initialized: false,
+      staged: [],
+      committed: [],
+      branches: ['main'],
+      currentBranch: 'main',
+      commits: [],
+    };
+
+    // Reiniciar gráfico
+    if (window.GitGraphController) {
+      window.GitGraphController.reset();
+    }
+
+    // Limpiar consola y mostrar mensaje
+    this.output.innerHTML = '';
+    this.addOutput('🔄 Gráfico reiniciado completamente', 'success');
+    this.addOutput('✨ Canvas limpio - Listo para crear tu propio historial Git', 'info');
+    this.addOutput('🎯 El indicador muestra "Sin repositorio"', 'info');
+    this.addOutput('💡 Comienza con "git init" para crear un nuevo repositorio', 'info');
+  }
+
+  loadDemo() {
+    // Reiniciar estado y marcar como inicializado
+    this.gitState = {
+      initialized: true,
+      staged: [],
+      committed: [],
+      branches: ['main', 'clara-viva', 'biff-paradise', 'marty-calendario', 'marty-sin-papas', 'familia-feliz'],
+      currentBranch: 'main',
+      commits: [],
+    };
+
+    // Cargar el demo completo
+    if (window.GitGraphController) {
+      window.GitGraphController.loadDemo();
+    }
+
+    // Limpiar consola y mostrar mensaje
+    this.output.innerHTML = '';
+    this.addOutput('🚗⚡ Demo "Volver al Futuro" cargado', 'success');
+    this.addOutput('🎬 Puedes ver las líneas temporales de la película en el gráfico', 'info');
+    this.addOutput('💡 Usa "git branch" para ver todas las ramas creadas', 'info');
+    this.addOutput('📚 Este es un ejemplo completo de cómo Git maneja ramas y merges', 'info');
   }
 }
 

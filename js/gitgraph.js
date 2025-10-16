@@ -1,5 +1,24 @@
 // 🎬 Gráfico de líneas temporales de "Volver al Futuro" usando GitGraph
-document.addEventListener('DOMContentLoaded', () => {
+// Gráfico global para acceso desde la consola
+let gitgraph;
+let branches = {};
+let currentBranch;
+let currentBranchName = 'main';
+
+// Función para actualizar el indicador de rama actual
+function updateBranchIndicator(branchName) {
+  const indicator = document.getElementById('currentBranchIndicator');
+  if (indicator) {
+    indicator.textContent = branchName;
+    indicator.style.animation = 'pulse 0.5s ease-in-out';
+    setTimeout(() => {
+      indicator.style.animation = '';
+    }, 500);
+  }
+}
+
+// Función para inicializar el gráfico
+function initializeGitGraph() {
   const colors = [
     '#2196f3',
     '#a1887f',
@@ -11,7 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   
   const graphContainer = document.getElementById('gitGraph');
-  const gitgraph = GitgraphJS.createGitgraph(graphContainer, {
+  
+  // Limpiar el contenedor
+  graphContainer.innerHTML = '';
+  
+  gitgraph = GitgraphJS.createGitgraph(graphContainer, {
     template: GitgraphJS.templateExtend('metro', {
       colors,
       commit: {
@@ -25,7 +48,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Rama principal
-  const main = gitgraph.branch('main');
+  branches.main = gitgraph.branch('main');
+  currentBranch = branches.main;
+  currentBranchName = 'main';
+  updateBranchIndicator('main');
+  
+  return gitgraph;
+}
+
+// Función para cargar el demo completo de Back to the Future
+function loadBackToTheFutureDemo() {
+  initializeGitGraph();
+  
+  const main = branches.main;
   main.commit('1885 Lejano Oeste');
   main.commit('Doc viaja por error (Checkout)');
   main.commit('Marty llega a 1985');
@@ -112,4 +147,82 @@ document.addEventListener('DOMContentLoaded', () => {
   main.commit('Biff descubre la verdad');
   main.commit('');
   main.commit('');
+}
+
+// Funciones para control del gráfico desde la consola
+window.GitGraphController = {
+  init: function() {
+    initializeGitGraph();
+    branches.main.commit('Initial commit');
+    updateBranchIndicator('main');
+  },
+  
+  commit: function(message) {
+    if (currentBranch) {
+      // Añadir indicador de rama actual al mensaje
+      const commitMessage = `[${currentBranchName}] ${message}`;
+      currentBranch.commit(commitMessage);
+      return true;
+    }
+    return false;
+  },
+  
+  branch: function(branchName) {
+    if (currentBranch && !branches[branchName]) {
+      branches[branchName] = currentBranch.branch(branchName);
+      // Hacer un commit visual para mostrar la bifurcación
+      branches[branchName].commit(`✨ Rama '${branchName}' creada`);
+      return true;
+    }
+    return false;
+  },
+  
+  checkout: function(branchName) {
+    if (branches[branchName]) {
+      currentBranch = branches[branchName];
+      currentBranchName = branchName;
+      updateBranchIndicator(branchName);
+      // Hacer un commit de checkout para visualizar el cambio
+      currentBranch.commit(`🎯 Checkout a '${branchName}'`);
+      return true;
+    }
+    return false;
+  },
+  
+  merge: function(branchName) {
+    if (currentBranch && branches[branchName]) {
+      currentBranch.merge(branches[branchName]);
+      // Commit de merge para visualizar
+      currentBranch.commit(`🔀 Merge '${branchName}' → '${currentBranchName}'`);
+      return true;
+    }
+    return false;
+  },
+  
+  loadDemo: function() {
+    loadBackToTheFutureDemo();
+    currentBranchName = 'main';
+    updateBranchIndicator('main (Demo BTTF)');
+  },
+  
+  reset: function() {
+    branches = {};
+    currentBranch = null;
+    currentBranchName = '';
+    const indicator = document.getElementById('currentBranchIndicator');
+    if (indicator) {
+      indicator.textContent = 'Sin repositorio';
+      indicator.style.opacity = '0.5';
+    }
+  },
+  
+  getCurrentBranch: function() {
+    return currentBranchName;
+  }
+};
+
+// Cargar el demo al inicio
+document.addEventListener('DOMContentLoaded', () => {
+  loadBackToTheFutureDemo();
+  updateBranchIndicator('main (Demo BTTF)');
 });
