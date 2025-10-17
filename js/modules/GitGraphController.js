@@ -314,8 +314,8 @@ export class GitGraphController {
     familiaFeliz.commit('No despiden a Marty del trabajo');
 
     main.commit('Biff descubre la verdad');
-    main.commit('');
-    main.commit('');
+    main.commit('Biff intenta ocultar la verdad');
+    main.commit('La familia McFly sospecha de Biff');
 
     this.currentBranchName = 'main';
   }
