@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantalla 4: Wild West (1885) | Git to the Future</title>
+  
+  <!-- CSS Modular -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/components/base.css">
+  <link rel="stylesheet" href="../css/components/branch-indicator.css">
+  <link rel="stylesheet" href="../css/components/console.css">
+  <link rel="stylesheet" href="../css/components/graph.css">
+  <link rel="stylesheet" href="../css/components/navigation.css">
+  
+  <!-- GitGraph CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>
+
+  <style>
+    /* Tema del Lejano Oeste */
+    body {
+      background: linear-gradient(135deg, #3e2723 0%, #1a1a2e 100%);
+    }
+    .header {
+      border-bottom: 2px solid #a1887f;
+    }
+  </style>
+</head>
+<body class="screen-body">
+  <!-- Navegación Superior -->
+  <div id="navigationContainer"></div>
+
+  <!-- Header de la Pantalla -->
+  <header class="header">
+    <div class="container">
+      <div id="breadcrumbContainer"></div>
+      <h1 class="text-gradient" style="color: #a1887f;">🤠 Pantalla 4: Wild West (1885)</h1>
+      <p class="text-muted">Doc está atrapado en el Lejano Oeste. Aprende git stash para guardar cambios temporalmente</p>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="container" style="max-width: 1400px; margin: 0 auto; padding: var(--spacing-xl);">
+    
+    <!-- Historia / Contexto -->
+    <section class="card card--accent" style="margin-bottom: var(--spacing-lg); border-color: #a1887f;">
+      <h2>📖 Historia: Viaje Accidental al Pasado</h2>
+      <p>
+        Al intentar volver de 1955 a 1985, un rayo golpea el DeLorean enviando al Doc accidentalmente al 
+        <strong>Lejano Oeste (1885)</strong>. Marty encuentra una carta del Doc escondida durante 70 años.
+      </p>
+      <p>
+        En esta pantalla final aprenderás sobre <strong>git stash</strong> y comandos avanzados:
+      </p>
+      <ul>
+        <li><code>git stash</code> - Guardar cambios temporalmente sin hacer commit</li>
+        <li><code>git stash pop</code> - Recuperar los cambios guardados</li>
+        <li><code>git stash list</code> - Ver todos los stashes guardados</li>
+        <li><code>git branch -d [rama]</code> - Eliminar ramas que ya no necesitas</li>
+        <li>Gestión de trabajo en progreso (WIP - Work In Progress)</li>
+      </ul>
+      <div class="badge badge--warning" style="margin-top: var(--spacing-md); background: linear-gradient(135deg, #a1887f, #8d6e63);">
+        🤠 git stash es como guardar tus herramientas antes de cambiar de tarea
+      </div>
+    </section>
+
+    <!-- Progreso de Ejercicios -->
+    <div id="exerciseProgress"></div>
+
+    <!-- Instrucciones del Ejercicio Actual -->
+    <div id="exerciseInstructions"></div>
+
+    <!-- Grid de Dos Columnas -->
+    <div class="grid" style="grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); margin-top: var(--spacing-lg);">
+      
+      <!-- Columna Izquierda: Gráfico -->
+      <div class="graph" style="border-color: #a1887f;">
+        <div class="branch-indicator" style="background: linear-gradient(135deg, #8d6e63, #a1887f);">
+          <span class="branch-indicator__label">🤠 Era:</span>
+          <span class="branch-indicator__value" id="currentBranchIndicator">1885 (Wild West)</span>
+        </div>
+        
+        <h2 class="graph__title" style="color: #a1887f;">🐎 Líneas Temporales del Oeste</h2>
+        <p class="graph__description">El historial más antiguo de todos</p>
+        
+        <div class="graph__canvas" id="gitGraph"></div>
+
+        <!-- Info del Oeste -->
+        <div class="graph__info" style="border-color: #a1887f; background: rgba(161, 136, 127, 0.1);">
+          <div class="graph__info-item">
+            <span class="graph__info-label">🗓️ Año:</span>
+            <span class="graph__info-value" style="color: #a1887f;">1885</span>
+          </div>
+          <div class="graph__info-item">
+            <span class="graph__info-label">🎯 Objetivo:</span>
+            <span class="graph__info-value">Rescatar al Doc</span>
+          </div>
+          <div class="graph__info-item">
+            <span class="graph__info-label">⚡ Combustible:</span>
+            <span class="graph__info-value">Locomotora de vapor</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Consola -->
+      <div class="console" style="border-color: #a1887f;">
+        <h2 class="console__title" style="color: #a1887f;">🖥️ Telégrafo Temporal</h2>
+        <p class="console__description">Comunicación con el DeLorean en 1885</p>
+
+        <!-- Output de la Consola -->
+        <div class="console__output" id="consoleOutput">
+          <div class="console__output-line console__output-line--info">
+            <span class="prompt">$</span> 📧 Carta del Doc: "Querido Marty, estoy atrapado en 1885..."
+          </div>
+          <div class="console__output-line console__output-line--info">
+            <span class="prompt">$</span> Marty: "¡Tengo que rescatar al Doc del Lejano Oeste!" 🤠
+          </div>
+        </div>
+
+        <!-- Botones de Comandos Rápidos -->
+        <div class="console__commands">
+          <button class="console__cmd-btn" data-command="status">status</button>
+          <button class="console__cmd-btn" data-command="stash">stash</button>
+          <button class="console__cmd-btn" data-command="stash list">stash list</button>
+          <button class="console__cmd-btn" data-command="stash pop">stash pop</button>
+          <button class="console__cmd-btn" data-command="branch 1885">branch 1885</button>
+          <button class="console__cmd-btn" data-command="checkout 1885">checkout 1885</button>
+        </div>
+
+        <!-- Input de Comando -->
+        <div class="console__input">
+          <span class="console__input-prompt" style="color: #a1887f;">git $</span>
+          <input 
+            type="text" 
+            class="console__input-field" 
+            id="commandInput" 
+            placeholder="Comandos del oeste..."
+            autocomplete="off"
+          >
+          <button class="console__execute-btn" id="executeBtn" style="background: #a1887f;">▶</button>
+        </div>
+
+        <!-- Botones Especiales -->
+        <div class="console__special-buttons">
+          <button class="console__special-btn console__special-btn--reset" id="resetBtn">
+            🔄 Reiniciar
+          </button>
+          <button class="console__special-btn console__special-btn--demo" id="hintBtn">
+            💡 Pista
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Mapa Temporal -->
+    <section class="card card--primary" style="margin-top: var(--spacing-lg);">
+      <h3>🗺️ Mapa de Viajes Temporales Completo</h3>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-lg) 0; flex-wrap: wrap;">
+        <div class="text-center" style="flex: 1; min-width: 150px;">
+          <div style="font-size: 48px;">🤠</div>
+          <strong style="color: #a1887f;">1885</strong>
+          <p class="text-muted text-sm">Lejano Oeste</p>
+        </div>
+        <div style="font-size: 24px; color: var(--color-accent);">→</div>
+        <div class="text-center" style="flex: 1; min-width: 150px;">
+          <div style="font-size: 48px;">🎸</div>
+          <strong style="color: #2196f3;">1955</strong>
+          <p class="text-muted text-sm">Rock & Roll</p>
+        </div>
+        <div style="font-size: 24px; color: var(--color-accent);">→</div>
+        <div class="text-center" style="flex: 1; min-width: 150px;">
+          <div style="font-size: 48px;">📼</div>
+          <strong style="color: #ff9100;">1985</strong>
+          <p class="text-muted text-sm">Presente</p>
+        </div>
+        <div style="font-size: 24px; color: var(--color-accent);">→</div>
+        <div class="text-center" style="flex: 1; min-width: 150px;">
+          <div style="font-size: 48px;">🚀</div>
+          <strong style="color: #7c4dff;">2015</strong>
+          <p class="text-muted text-sm">Futuro</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ayuda Adicional -->
+    <section class="card card--secondary" style="margin-top: var(--spacing-lg);">
+      <h3>🎓 Comandos Avanzados</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-md);">
+        <div>
+          <strong style="color: #a1887f;">git stash</strong>
+          <p class="text-muted text-sm">Guarda cambios sin commit temporalmente</p>
+          <code class="text-xs">Útil cuando necesitas cambiar de rama rápidamente</code>
+        </div>
+        <div>
+          <strong style="color: #a1887f;">git stash pop</strong>
+          <p class="text-muted text-sm">Recupera los últimos cambios guardados</p>
+          <code class="text-xs">Restaura tu trabajo en progreso</code>
+        </div>
+        <div>
+          <strong style="color: #a1887f;">git stash list</strong>
+          <p class="text-muted text-sm">Muestra todos los stashes guardados</p>
+          <code class="text-xs">Puedes tener múltiples stashes</code>
+        </div>
+        <div>
+          <strong style="color: #a1887f;">git branch -d [rama]</strong>
+          <p class="text-muted text-sm">Elimina una rama que ya no necesitas</p>
+          <code class="text-xs">Limpia tu historial</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- Congratulations Message -->
+    <section class="card card--accent" style="margin-top: var(--spacing-lg); border-color: #4caf50; background: rgba(76, 175, 80, 0.1);">
+      <h3 style="color: #4caf50;">🎉 ¡Última Pantalla!</h3>
+      <p>
+        Esta es la última pantalla de ejercicios interactivos. Al completarla, desbloquearás el 
+        <strong>Demo Completo de Back to the Future</strong> donde verás todos los conceptos integrados 
+        en una visualización completa de la trilogía.
+      </p>
+      <p class="text-muted">
+        ¡Vamos Doc! El futuro nos espera... 🚗⚡💨
+      </p>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-muted" style="padding: var(--spacing-xl); margin-top: var(--spacing-xl);">
+    <p>🚗⚡ Git to the Future - Aprende Git usando Back to the Future</p>
+    <p class="text-sm">Pantalla 4 de 4 | Wild West (1885)</p>
+  </footer>
+
+  <!-- JavaScript Modular -->
+  <script type="module">
+    import { 
+      GitGraphController, 
+      ConsoleController, 
+      ScreenController,
+      ExerciseValidator,
+      SCREEN_EXERCISES,
+      UIController,
+      Logger 
+    } from '../js/modules/index.js';
+
+    Logger.log('Iniciando Pantalla 4: Wild West');
+
+    const graph = new GitGraphController('gitGraph');
+    const consoleCtrl = new ConsoleController('consoleOutput', 'commandInput', graph);
+    const validator = new ExerciseValidator(consoleCtrl, graph);
+    const ui = new UIController();
+    const screenCtrl = new ScreenController();
+
+    // Inicializar con escenario del Lejano Oeste
+    graph.initialize();
+    graph.commit('1955 - Doc ayuda a Marty');
+    graph.commit('⚡ Rayo golpea el DeLorean');
+    
+    consoleCtrl.state.initialized = true;
+    ui.updateBranchIndicator('main (1955)');
+
+    // Configurar ejercicios
+    validator.setExercises(SCREEN_EXERCISES.screen4);
+
+    // Renderizar UI
+    screenCtrl.renderNavigation('navigationContainer');
+    screenCtrl.renderBreadcrumb('breadcrumbContainer');
+
+    const firstExercise = validator.getCurrentExercise();
+    if (firstExercise) {
+      ui.showExerciseInstructions(firstExercise, 'exerciseInstructions');
+      ui.updateExerciseProgress(0, SCREEN_EXERCISES.screen4.length, 'exerciseProgress');
+    }
+
+    // Interceptar comandos
+    const originalExecute = consoleCtrl.executeCommand.bind(consoleCtrl);
+    consoleCtrl.executeCommand = function(commandString) {
+      originalExecute(commandString);
+
+      const parts = commandString.trim().toLowerCase().split(' ');
+      const command = parts[0] === 'git' ? parts[1] : parts[0];
+      const args = parts[0] === 'git' ? parts.slice(2) : parts.slice(1);
+
+      const result = validator.validateCommand(command, args);
+      
+      if (result.valid) {
+        ui.showNotification(result.message, 'success');
+        const nextResult = validator.nextExercise();
+        
+        if (nextResult.completed) {
+          ui.showNotification('🎉 ¡Has completado todas las pantallas de Git to the Future!', 'success', 5000);
+          ui.createConfetti();
+          screenCtrl.completeScreen(4);
+          
+          setTimeout(() => {
+            ui.showCompletionModal('Wild West (1885)', () => {
+              // Desbloquear demo final
+              screenCtrl.completeScreen(4);
+              ui.showNotification('🎬 Demo completo desbloqueado!', 'success', 3000);
+              setTimeout(() => {
+                screenCtrl.navigateTo(5); // Demo
+              }, 1000);
+            });
+          }, 2000);
+        } else {
+          ui.updateExerciseProgress(
+            validator.currentExerciseIndex,
+            SCREEN_EXERCISES.screen4.length,
+            'exerciseProgress'
+          );
+          ui.showExerciseInstructions(nextResult.exercise, 'exerciseInstructions');
+        }
+      }
+    };
+
+    // Event listeners
+    document.getElementById('executeBtn').addEventListener('click', () => {
+      const input = document.getElementById('commandInput');
+      const command = input.value.trim();
+      if (command) {
+        consoleCtrl.executeCommand(command);
+        input.value = '';
+      }
+    });
+
+    document.getElementById('commandInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('executeBtn').click();
+      }
+    });
+
+    document.querySelectorAll('.console__cmd-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('commandInput').value = btn.getAttribute('data-command');
+        document.getElementById('commandInput').focus();
+      });
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (confirm('¿Reiniciar la pantalla?')) {
+        location.reload();
+      }
+    });
+
+    document.getElementById('hintBtn').addEventListener('click', () => {
+      const exercise = validator.getCurrentExercise();
+      if (exercise && exercise.hint) {
+        ui.showNotification(exercise.hint, 'info', 5000);
+      }
+    });
+
+    // Actualizar indicador
+    const originalCheckout = graph.checkout.bind(graph);
+    graph.checkout = function(branchName) {
+      const result = originalCheckout(branchName);
+      if (result) {
+        const year = branchName === '1885' ? '1885 (Wild West)' : branchName;
+        ui.updateBranchIndicator(year);
+      }
+      return result;
+    };
+
+    Logger.log('Pantalla 4 lista - Lejano Oeste activado 🤠');
+  </script>
+
+</body>
+</html>
