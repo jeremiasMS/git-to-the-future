@@ -35,10 +35,10 @@
 <body class="screen-body">
   <!-- Header Principal de la App -->
   <header class="app-header">
-    <a href="../index-menu.html" style="text-decoration: none;">
-      <img src="https://see.fontimg.com/api/rf5/eZLAm/MmQ4YjNlYzk1MDFhNDFkM2IwMGVkNzBhZTU1NjkyZDAub3Rm/Z2l0IHRvIHRoZSBmdXR1cmU/marty.png?r=dw&h=65&w=1000&fg=000000&bg=FFFFFF&s=65" alt="Git to the Future Logo" class="app-header__logo">
+    <a href="../index.html" style="text-decoration: none;">
+      
+      <h1 class="app-header__title">GIT TO THE FUTURE</h1>
     </a>
-    <h1 class="app-header__title">GIT TO THE FUTURE</h1>
   </header>
 
   <!-- Navegación Superior -->
@@ -72,30 +72,6 @@
         </p>
       </div>
     </section>
-
-    <!-- Estadísticas del Aprendizaje -->
-    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
-      <div class="card card--primary" style="text-align: center;">
-        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">✅</div>
-        <h3 style="color: #4caf50; margin: 0;">4 Pantallas</h3>
-        <p class="text-muted text-sm">Completadas</p>
-      </div>
-      <div class="card card--secondary" style="text-align: center;">
-        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🎯</div>
-        <h3 style="color: #ff9100; margin: 0;">10+ Comandos</h3>
-        <p class="text-muted text-sm">Git Aprendidos</p>
-      </div>
-      <div class="card card--accent" style="text-align: center;">
-        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🚀</div>
-        <h3 style="color: #2196f3; margin: 0;">5 Épocas</h3>
-        <p class="text-muted text-sm">Temporales Visitadas</p>
-      </div>
-      <div class="card card--primary" style="text-align: center;">
-        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🎓</h3>
-        <h3 style="color: #7c4dff; margin: 0;">Git Master</h3>
-        <p class="text-muted text-sm">Nivel Alcanzado</p>
-      </div>
-    </div>
 
     <!-- Gráfico Principal -->
     <div class="graph" style="border: 3px solid #2196f3;">
@@ -138,57 +114,6 @@
           <div class="graph__legend-color" style="background-color: #7c4dff;"></div>
           <span>Familia Feliz</span>
         </div>
-      </div>
-    </div>
-
-    <!-- Consola Interactiva -->
-    <div class="console" style="margin-top: var(--spacing-xl); border: 3px solid #ff9100;">
-      <h2 class="console__title">🖥️ Consola Interactiva</h2>
-      <p class="console__description">Explora el repositorio BTTF con comandos Git</p>
-
-      <!-- Output de la Consola -->
-      <div class="console__output" id="consoleOutput">
-        <div class="console__output-line console__output-line--success">
-          <span class="prompt">$</span> 🎉 ¡Demo completo de Back to the Future cargado!
-        </div>
-        <div class="console__output-line console__output-line--info">
-          <span class="prompt">$</span> Usa comandos Git para explorar las líneas temporales
-        </div>
-        <div class="console__output-line console__output-line--info">
-          <span class="prompt">$</span> 💡 Prueba: git branch, git log, git status
-        </div>
-      </div>
-
-      <!-- Botones de Comandos -->
-      <div class="console__commands">
-        <button class="console__cmd-btn" data-command="branch">branch</button>
-        <button class="console__cmd-btn" data-command="log">log</button>
-        <button class="console__cmd-btn" data-command="status">status</button>
-        <button class="console__cmd-btn" data-command="checkout main">checkout main</button>
-        <button class="console__cmd-btn" data-command="checkout familia-feliz">familia-feliz</button>
-      </div>
-
-      <!-- Input -->
-      <div class="console__input">
-        <span class="console__input-prompt">git $</span>
-        <input 
-          type="text" 
-          class="console__input-field" 
-          id="commandInput" 
-          placeholder="Explora el historial..."
-          autocomplete="off"
-        >
-        <button class="console__execute-btn" id="executeBtn">▶</button>
-      </div>
-
-      <!-- Botones Especiales -->
-      <div class="console__special-buttons">
-        <button class="console__special-btn console__special-btn--demo" id="reloadDemoBtn">
-          🔄 Recargar Demo
-        </button>
-        <button class="console__special-btn console__special-btn--reset" id="backToMenuBtn">
-          🏠 Volver al Menú
-        </button>
       </div>
     </div>
 
@@ -237,61 +162,6 @@
             El final feliz: el 1985 mejorado donde la familia McFly es exitosa 
             y Marty evita el accidente que arruinaría su futuro.
           </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Comandos Útiles -->
-    <section class="card card--primary" style="margin-top: var(--spacing-xl);">
-      <h3>🎓 Comandos Git que Aprendiste</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
-        <div>
-          <strong>git init</strong>
-          <p class="text-muted text-sm">Inicializar repositorio</p>
-        </div>
-        <div>
-          <strong>git add</strong>
-          <p class="text-muted text-sm">Preparar archivos</p>
-        </div>
-        <div>
-          <strong>git commit</strong>
-          <p class="text-muted text-sm">Guardar cambios</p>
-        </div>
-        <div>
-          <strong>git branch</strong>
-          <p class="text-muted text-sm">Crear/listar ramas</p>
-        </div>
-        <div>
-          <strong>git checkout</strong>
-          <p class="text-muted text-sm">Cambiar de rama</p>
-        </div>
-        <div>
-          <strong>git merge</strong>
-          <p class="text-muted text-sm">Fusionar ramas</p>
-        </div>
-        <div>
-          <strong>git log</strong>
-          <p class="text-muted text-sm">Ver historial</p>
-        </div>
-        <div>
-          <strong>git status</strong>
-          <p class="text-muted text-sm">Estado actual</p>
-        </div>
-        <div>
-          <strong>git stash</strong>
-          <p class="text-muted text-sm">Guardar temporalmente</p>
-        </div>
-        <div>
-          <strong>git reset</strong>
-          <p class="text-muted text-sm">Deshacer cambios</p>
-        </div>
-        <div>
-          <strong>git revert</strong>
-          <p class="text-muted text-sm">Revertir commits</p>
-        </div>
-        <div>
-          <strong>git branch -d</strong>
-          <p class="text-muted text-sm">Eliminar ramas</p>
         </div>
       </div>
     </section>
