@@ -83,8 +83,10 @@ export class ScreenController {
 
   // Obtener porcentaje de progreso
   getProgressPercentage() {
-    const completed = this.screens.filter(s => s.completed).length;
-    return Math.round((completed / this.screens.length) * 100);
+    // Solo contar las 4 pantallas principales (excluyendo el demo)
+    const mainScreens = this.screens.filter(s => s.id <= 4);
+    const completed = mainScreens.filter(s => s.completed).length;
+    return Math.round((completed / mainScreens.length) * 100);
   }
 
   // Reiniciar todo el progreso

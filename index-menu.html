@@ -444,13 +444,16 @@
       progressBar.style.width = `${progress}%`;
       progressText.textContent = `${progress}%`;
 
-      const completed = screenCtrl.screens.filter(s => s.completed).length;
+      // Solo contar pantallas principales (1-4, excluyendo demo)
+      const mainScreens = screenCtrl.screens.filter(s => s.id <= 4);
+      const completed = mainScreens.filter(s => s.completed).length;
+      
       if (completed === 0) {
         progressDesc.textContent = 'Comienza tu viaje temporal aprendiendo Git';
       } else if (completed < 4) {
         progressDesc.textContent = `${completed} de 4 pantallas completadas - ¡Sigue así!`;
-      } else {
-        progressDesc.textContent = '🎉 ¡Todas las pantallas completadas! Disfruta del demo';
+      } else if (completed === 4) {
+        progressDesc.textContent = '🎉 ¡Todas las pantallas completadas! Ahora puedes ver el demo final';
       }
 
       // Actualizar cada card
