@@ -318,7 +318,7 @@ export class ConsoleController {
         this.graphController.undoLastCommit();
       }
 
-      this.addOutput(`✅ Commit deshecho: "${lastCommit.message}"`, 'success');
+      this.addOutput(`✅ Commit deshecho (cambios preservados en staging): "${lastCommit.message}"`, 'success');
       this.addOutput('💾 Los cambios se mantienen en el área de preparación (staged)', 'info');
       this.addOutput('📚 Explicación: reset --soft deshace commits pero mantiene los cambios', 'warning');
       this.addOutput('⚠️ Este comando reescribe la historia (usar con cuidado)', 'warning');
