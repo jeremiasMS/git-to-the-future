@@ -1,0 +1,162 @@
+/* 🖥️ Console Component */
+.console {
+  background-color: var(--color-surface);
+  border: var(--border-width) solid var(--color-accent);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+}
+
+.console__title {
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-xl);
+}
+
+.console__description {
+  color: var(--color-muted);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Console Output */
+.console__output {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-highlight);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-md);
+  height: 300px;
+  overflow-y: auto;
+  font-family: var(--font-family-code);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-md);
+}
+
+.console__output-line {
+  margin: var(--spacing-xs) 0;
+  color: var(--color-text);
+}
+
+.console__output-line .prompt {
+  color: var(--color-secondary);
+  font-weight: bold;
+  margin-right: var(--spacing-xs);
+}
+
+.console__output-line--success { color: var(--color-accent); }
+.console__output-line--info { color: var(--color-highlight); }
+.console__output-line--warning { color: var(--color-secondary); }
+
+/* Command Buttons Grid */
+.console__commands {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.console__cmd-btn {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-primary);
+  color: var(--color-text);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  font-family: var(--font-family-code);
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.console__cmd-btn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+  box-shadow: 0 0 10px var(--color-primary);
+}
+
+/* Console Input */
+.console__input {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-highlight);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm);
+  gap: var(--spacing-sm);
+}
+
+.console__input-prompt {
+  color: var(--color-secondary);
+  font-family: var(--font-family-code);
+  font-weight: bold;
+}
+
+.console__input-field {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font-family: var(--font-family-code);
+  font-size: var(--font-size-base);
+  outline: none;
+}
+
+.console__input-field::placeholder {
+  color: var(--color-muted);
+}
+
+.console__execute-btn {
+  background-color: var(--color-accent);
+  border: none;
+  color: var(--color-bg);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-normal);
+}
+
+.console__execute-btn:hover {
+  background-color: var(--color-highlight);
+  box-shadow: 0 0 8px var(--color-highlight);
+}
+
+/* Special Buttons */
+.console__special-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-muted);
+}
+
+.console__special-btn {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  font-weight: bold;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-md);
+  border: none;
+}
+
+.console__special-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.console__special-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.console__special-btn--reset {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-highlight));
+  color: var(--color-bg);
+}
+
+.console__special-btn--demo {
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
+  color: var(--color-bg);
+}

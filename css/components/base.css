@@ -1,0 +1,270 @@
+/* 🎮 Componentes Reutilizables */
+
+/* Card Base */
+.card {
+  background-color: var(--color-surface);
+  border: var(--border-width) solid var(--color-secondary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.card--primary { border-color: var(--color-primary); }
+.card--accent { border-color: var(--color-accent); }
+.card--highlight { border-color: var(--color-highlight); }
+
+/* Buttons */
+.btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: all var(--transition-normal);
+  font-weight: bold;
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: var(--color-bg);
+}
+
+.btn--accent {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-highlight));
+  color: var(--color-bg);
+}
+
+.btn--secondary {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-primary);
+  color: var(--color-text);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn--icon {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* Badge/Indicator */
+.badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  text-align: center;
+}
+
+.badge--primary { background-color: var(--color-primary); color: var(--color-bg); }
+.badge--success { background-color: var(--color-success); color: var(--color-bg); }
+.badge--accent { background-color: var(--color-accent); color: var(--color-bg); }
+
+/* Container */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+.container--fluid {
+  width: 100%;
+  padding: var(--spacing-lg);
+}
+
+/* Grid System */
+.grid {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.grid--2 { grid-template-columns: repeat(2, 1fr); }
+.grid--3 { grid-template-columns: repeat(3, 1fr); }
+.grid--auto { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+
+@media (max-width: 768px) {
+  .grid--2, .grid--3 { grid-template-columns: 1fr; }
+}
+
+/* Header */
+.header {
+  padding: var(--spacing-lg) 0;
+  border-bottom: var(--border-width) solid var(--color-highlight);
+  margin-bottom: var(--spacing-lg);
+}
+
+.header__title {
+  font-size: 2em;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.header__subtitle {
+  color: var(--color-muted);
+  font-size: var(--font-size-base);
+}
+
+/* Section */
+.section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.section__title {
+  font-size: var(--font-size-xl);
+  color: var(--color-secondary);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.section__description {
+  color: var(--color-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 🎬 Headings con fuentes BTTF */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+  font-weight: normal;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 3em;
+  color: var(--color-primary);
+  text-shadow: 0 0 20px rgba(255, 42, 0, 0.5);
+  margin-bottom: var(--spacing-lg);
+}
+
+h2 {
+  font-size: 2.5em;
+  color: var(--color-secondary);
+  text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+  margin-bottom: var(--spacing-md);
+}
+
+h3 {
+  font-size: 2em;
+  color: var(--color-accent);
+  text-shadow: 0 0 10px rgba(0, 119, 255, 0.4);
+  margin-bottom: var(--spacing-md);
+}
+
+h4 {
+  font-size: 1.75em;
+  color: var(--color-highlight);
+  text-shadow: 0 0 8px rgba(255, 110, 199, 0.3);
+  margin-bottom: var(--spacing-sm);
+}
+
+h5 {
+  font-size: 1.5em;
+  color: var(--color-success);
+  text-shadow: 0 0 6px rgba(139, 195, 74, 0.3);
+  margin-bottom: var(--spacing-sm);
+}
+
+h6 {
+  font-size: 1.25em;
+  color: var(--color-text);
+  text-shadow: 0 0 4px rgba(238, 238, 238, 0.2);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* 🚗 Header Principal de la App */
+.app-header {
+  background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 50%, #16213e 100%);
+  padding: var(--spacing-xl) 0;
+  text-align: center;
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-accent), var(--color-highlight));
+  border-image-slice: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.app-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
+}
+
+.app-header__logo {
+  max-width: 600px;
+  height: auto;
+  margin: 0 auto var(--spacing-md);
+  display: block;
+  filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.5));
+  transition: transform 0.3s ease;
+}
+
+.app-header__logo:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 30px rgba(255, 204, 0, 0.8));
+}
+
+.app-header__title {
+  font-family: var(--font-family-heading);
+  font-size: 4em;
+  font-weight: normal;
+  letter-spacing: 0.1em;
+  margin: 0;
+  background: linear-gradient(135deg, #ff2a00 0%, #ffcc00 25%, #0077ff 50%, #ff6ec7 75%, #ff2a00 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 5s ease infinite;
+  text-shadow: 0 0 40px rgba(255, 204, 0, 0.5);
+  filter: drop-shadow(0 0 20px rgba(255, 42, 0, 0.6));
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.app-header__subtitle {
+  font-size: 1.2em;
+  color: var(--color-secondary);
+  margin-top: var(--spacing-sm);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .app-header__title {
+    font-size: 2.5em;
+  }
+  
+  .app-header__logo {
+    max-width: 90%;
+  }
+  
+  .app-header__subtitle {
+    font-size: 1em;
+  }
+}

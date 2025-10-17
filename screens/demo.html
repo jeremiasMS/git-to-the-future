@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Completo BTTF | Git to the Future</title>
+  
+  <!-- CSS Modular -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/components/base.css">
+  <link rel="stylesheet" href="../css/components/branch-indicator.css">
+  <link rel="stylesheet" href="../css/components/console.css">
+  <link rel="stylesheet" href="../css/components/graph.css">
+  <link rel="stylesheet" href="../css/components/navigation.css">
+  
+  <!-- GitGraph CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>
+
+  <style>
+    /* Tema premium para el demo */
+    body {
+      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #2196f3 100%);
+      background-attachment: fixed;
+    }
+    .demo-banner {
+      background: linear-gradient(135deg, #2196f3, #ff9100, #ff4081);
+      padding: var(--spacing-xl);
+      text-align: center;
+      border-radius: var(--border-radius-lg);
+      margin-bottom: var(--spacing-xl);
+      animation: pulse 3s infinite;
+    }
+  </style>
+</head>
+<body class="screen-body">
+  <!-- Header Principal de la App -->
+  <header class="app-header">
+    <a href="../index.html" style="text-decoration: none;">
+      
+      <h1 class="app-header__title">GIT TO THE FUTURE</h1>
+    </a>
+  </header>
+
+  <!-- Navegación Superior -->
+  <div id="navigationContainer"></div>
+
+  <!-- Banner Especial -->
+  <div class="demo-banner">
+    <h1 style="font-size: 48px; margin: 0; color: white; text-shadow: 0 0 20px rgba(0,0,0,0.5);">
+      🎬 Demo Completo: Back to the Future
+    </h1>
+    <p style="font-size: 20px; margin: var(--spacing-sm) 0 0 0; color: white;">
+      La historia completa de las líneas temporales de la trilogía
+    </p>
+  </div>
+
+  <!-- Contenido Principal -->
+  <main class="container" style="max-width: 1600px; margin: 0 auto; padding: var(--spacing-xl);">
+    
+    <!-- Felicitaciones -->
+    <section class="card card--accent" style="margin-bottom: var(--spacing-lg); border: 3px solid #4caf50; background: rgba(76, 175, 80, 0.1);">
+      <div style="text-align: center;">
+        <div style="font-size: 72px; margin-bottom: var(--spacing-md);">🎉🚗⚡🎓</div>
+        <h2 style="color: #4caf50; font-size: 32px;">¡Felicitaciones!</h2>
+        <p style="font-size: 18px;">
+          Has completado todas las pantallas de aprendizaje de Git. Ahora disfruta del 
+          <strong>historial completo de Back to the Future</strong> recreado con Git.
+        </p>
+        <p class="text-muted">
+          Este demo muestra todos los viajes temporales de Marty y Doc como un repositorio Git real,
+          con todas sus ramas, merges y líneas temporales alternativas.
+        </p>
+      </div>
+    </section>
+
+    <!-- Gráfico Principal -->
+    <div class="graph" style="border: 3px solid #2196f3;">
+      <div class="branch-indicator" style="background: linear-gradient(135deg, #2196f3, #ff9100, #ff4081);">
+        <span class="branch-indicator__label">🎬 Demo:</span>
+        <span class="branch-indicator__value" id="currentBranchIndicator">Back to the Future (Completo)</span>
+      </div>
+      
+      <h2 class="graph__title" style="font-size: 28px;">📊 Historial Completo de Viajes Temporales</h2>
+      <p class="graph__description">
+        Este es el repositorio Git más complejo que verás: múltiples ramas, merges, y líneas temporales
+        que se cruzan exactamente como en las películas.
+      </p>
+      
+      <div class="graph__canvas" id="gitGraph" style="min-height: 600px;"></div>
+
+      <!-- Leyenda Completa -->
+      <div class="graph__legend">
+        <div class="graph__legend-item">
+          <div class="graph__legend-color graph__legend-color--master"></div>
+          <span>Timeline Principal (main)</span>
+        </div>
+        <div class="graph__legend-item">
+          <div class="graph__legend-color graph__legend-color--develop"></div>
+          <span>Clara Viva (1885)</span>
+        </div>
+        <div class="graph__legend-item">
+          <div class="graph__legend-color graph__legend-color--feature"></div>
+          <span>Biff Paradise (Distopía)</span>
+        </div>
+        <div class="graph__legend-item">
+          <div class="graph__legend-color graph__legend-color--hotfix"></div>
+          <span>Marty Calendario</span>
+        </div>
+        <div class="graph__legend-item">
+          <div class="graph__legend-color" style="background-color: #8bc34a;"></div>
+          <span>Marty Sin Papás</span>
+        </div>
+        <div class="graph__legend-item">
+          <div class="graph__legend-color" style="background-color: #7c4dff;"></div>
+          <span>Familia Feliz</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explicación de las Ramas -->
+    <section class="card card--secondary" style="margin-top: var(--spacing-xl);">
+      <h3>📖 Guía del Historial Git de Back to the Future</h3>
+      <div style="display: grid; gap: var(--spacing-md);">
+        <div>
+          <strong style="color: #2196f3;">🔵 Rama Main</strong>
+          <p class="text-muted text-sm">
+            La línea temporal principal que sigue a Marty desde 1985, pasando por 1955, 
+            hasta 2015 y eventualmente al Lejano Oeste (1885).
+          </p>
+        </div>
+        <div>
+          <strong style="color: #a1887f;">🟤 Rama Clara-Viva</strong>
+          <p class="text-muted text-sm">
+            La línea temporal donde Doc conoce a Clara en 1885 y forman una familia, 
+            cambiando su destino original.
+          </p>
+        </div>
+        <div>
+          <strong style="color: #ff4081;">🔴 Rama Biff-Paradise</strong>
+          <p class="text-muted text-sm">
+            La línea temporal distópica del 1985 alternativo donde Biff es millonario 
+            gracias al almanaque deportivo del futuro.
+          </p>
+        </div>
+        <div>
+          <strong style="color: #ff9100;">🟠 Rama Marty-Calendario</strong>
+          <p class="text-muted text-sm">
+            La rama donde Marty recupera el almanaque de Biff en 1955, 
+            corrigiendo la línea temporal corrupta.
+          </p>
+        </div>
+        <div>
+          <strong style="color: #8bc34a;">🟢 Rama Marty-Sin-Papás</strong>
+          <p class="text-muted text-sm">
+            La línea temporal donde Marty casi desaparece al interferir con el 
+            encuentro de sus padres en el baile de 1955.
+          </p>
+        </div>
+        <div>
+          <strong style="color: #7c4dff;">🟣 Rama Familia-Feliz</strong>
+          <p class="text-muted text-sm">
+            El final feliz: el 1985 mejorado donde la familia McFly es exitosa 
+            y Marty evita el accidente que arruinaría su futuro.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mensaje Final -->
+    <section class="card card--accent" style="margin-top: var(--spacing-xl); text-align: center; border: 3px solid #4caf50; background: rgba(76, 175, 80, 0.1);">
+      <div style="font-size: 64px; margin-bottom: var(--spacing-md);">🎓🚗⚡</div>
+      <h2 style="color: #4caf50; font-size: 32px;">¡Eres un Git Master!</h2>
+      <p style="font-size: 18px; max-width: 800px; margin: 0 auto var(--spacing-md) auto;">
+        Has completado exitosamente <strong>Git to the Future</strong>. Ahora tienes las habilidades
+        necesarias para manejar repositorios Git con confianza, crear ramas, fusionarlas, y
+        navegar por el historial como un verdadero viajero temporal.
+      </p>
+      <p class="text-muted" style="font-size: 16px;">
+        "El futuro no está escrito. El futuro es lo que tú hagas de él. 
+        Así que hazlo bueno." - Doc Brown
+      </p>
+      <div style="margin-top: var(--spacing-lg);">
+        <button class="btn btn--primary" id="shareBtn" style="font-size: 18px; padding: var(--spacing-md) var(--spacing-xl);">
+          🎉 Compartir mi Logro
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-muted" style="padding: var(--spacing-xl); margin-top: var(--spacing-xl);">
+    <p style="font-size: 18px;">🚗⚡ Git to the Future</p>
+    <p class="text-sm">Aprende Git usando Back to the Future | MS Projects 2025</p>
+    <p class="text-sm" style="margin-top: var(--spacing-sm);">
+      <a href="https://github.com/jeremiasMS/git-to-the-future" target="_blank" style="color: var(--color-accent); text-decoration: none;">
+        ⭐ GitHub Repository
+      </a>
+    </p>
+  </footer>
+
+  <!-- JavaScript Modular -->
+  <script type="module">
+    import { 
+      GitGraphController, 
+      ConsoleController, 
+      ScreenController,
+      UIController,
+      Logger,
+      Utils 
+    } from '../js/modules/index.js';
+
+    Logger.log('Iniciando Demo Completo BTTF');
+
+    const graph = new GitGraphController('gitGraph');
+    const consoleCtrl = new ConsoleController('consoleOutput', 'commandInput', graph);
+    const ui = new UIController();
+    const screenCtrl = new ScreenController();
+
+    // Cargar demo completo
+    graph.loadBTTFDemo();
+    consoleCtrl.state.initialized = true;
+    consoleCtrl.state.branches = ['main', 'clara-viva', 'biff-paradise', 'marty-calendario', 'marty-sin-papas', 'familia-feliz'];
+    ui.updateBranchIndicator('main (Demo BTTF)');
+
+    // Renderizar navegación
+    screenCtrl.renderNavigation('navigationContainer');
+
+    // Event listeners
+    document.getElementById('executeBtn').addEventListener('click', () => {
+      const input = document.getElementById('commandInput');
+      const command = input.value.trim();
+      if (command) {
+        consoleCtrl.executeCommand(command);
+        input.value = '';
+      }
+    });
+
+    document.getElementById('commandInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('executeBtn').click();
+      }
+    });
+
+    document.querySelectorAll('.console__cmd-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('commandInput').value = btn.getAttribute('data-command');
+        document.getElementById('commandInput').focus();
+      });
+    });
+
+    document.getElementById('reloadDemoBtn').addEventListener('click', () => {
+      location.reload();
+    });
+
+    document.getElementById('backToMenuBtn').addEventListener('click', () => {
+      window.location.href = '../index.html';
+    });
+
+    document.getElementById('shareBtn').addEventListener('click', () => {
+      const text = '🎓 ¡Acabo de completar Git to the Future! Aprendí Git usando Back to the Future 🚗⚡';
+      Utils.copyToClipboard(text).then(success => {
+        if (success) {
+          ui.showNotification('✅ Texto copiado al portapapeles', 'success');
+        } else {
+          ui.showNotification('Texto: ' + text, 'info', 8000);
+        }
+      });
+    });
+
+    // Actualizar indicador
+    const originalCheckout = graph.checkout.bind(graph);
+    graph.checkout = function(branchName) {
+      const result = originalCheckout(branchName);
+      if (result) {
+        ui.updateBranchIndicator(`${branchName} (Demo BTTF)`);
+      }
+      return result;
+    };
+
+    // Confetti de bienvenida
+    setTimeout(() => {
+      ui.createConfetti();
+    }, 500);
+
+    Logger.log('Demo completo cargado exitosamente');
+  </script>
+
+</body>
+</html>

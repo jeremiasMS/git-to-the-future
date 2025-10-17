@@ -1,0 +1,43 @@
+/* 📍 Branch Indicator Component */
+.branch-indicator {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-highlight));
+  border: var(--border-width) solid var(--color-secondary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.branch-indicator__label {
+  font-weight: bold;
+  color: var(--color-bg);
+  font-size: var(--font-size-lg);
+}
+
+.branch-indicator__value {
+  background-color: var(--color-bg);
+  color: var(--color-secondary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-family-code);
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  flex: 1;
+  text-align: center;
+  box-shadow: inset var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+@media (max-width: 768px) {
+  .branch-indicator {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .branch-indicator__value {
+    font-size: var(--font-size-base);
+  }
+}

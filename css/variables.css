@@ -1,0 +1,127 @@
+/* 🎨 Fuentes Back to the Future */
+@font-face {
+  font-family: 'BackToTheFuture';
+  src: url('../assets/fonts/BackToTheFuture-0WPX9.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Marty';
+  src: url('../assets/fonts/Marty-eZLAm.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 🎨 Variables Globales - Back to the Future Theme */
+:root {
+  /* Colores Base */
+  --color-bg: #0d0d0d;
+  --color-surface: #1a1a1a;
+  --color-primary: #ff2a00;
+  --color-secondary: #ffcc00;
+  --color-accent: #0077ff;
+  --color-highlight: #ff6ec7;
+  --color-text: #eeeeee;
+  --color-muted: #aaaaaa;
+  --color-success: #8bc34a;
+  
+  /* Espaciado */
+  --spacing-xs: 5px;
+  --spacing-sm: 10px;
+  --spacing-md: 15px;
+  --spacing-lg: 20px;
+  --spacing-xl: 30px;
+  
+  /* Bordes */
+  --border-radius-sm: 5px;
+  --border-radius-md: 10px;
+  --border-width: 2px;
+  
+  /* Tipografía */
+  --font-family-main: Arial, sans-serif;
+  --font-family-heading: 'BackToTheFuture', 'Marty', Arial, sans-serif;
+  --font-family-code: 'Courier New', monospace;
+  --font-size-sm: 0.8em;
+  --font-size-base: 0.9em;
+  --font-size-md: 1em;
+  --font-size-lg: 1.1em;
+  --font-size-xl: 1.3em;
+  
+  /* Sombras */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 6px 12px rgba(0, 0, 0, 0.5);
+  
+  /* Transiciones */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* Reset y Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-main);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+/* Utilidades de Texto */
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-accent { color: var(--color-accent); }
+.text-success { color: var(--color-success); }
+.text-muted { color: var(--color-muted); }
+.text-center { text-align: center; }
+.text-code { font-family: var(--font-family-code); }
+
+/* Utilidades de Espaciado */
+.m-0 { margin: 0; }
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+
+/* Flex Utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-center { justify-content: center; align-items: center; }
+.flex-between { justify-content: space-between; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+
+/* Animaciones Globales */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-pulse { animation: pulse var(--transition-slow) ease-in-out; }
+.animate-fadeIn { animation: fadeIn var(--transition-normal) ease; }
+.animate-slideIn { animation: slideInRight var(--transition-normal) ease; }
