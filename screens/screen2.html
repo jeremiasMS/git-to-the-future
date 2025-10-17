@@ -33,7 +33,7 @@
     <div class="container">
       <div id="breadcrumbContainer"></div>
       <h1 class="text-gradient">🚀 Pantalla 2: Time Travel (2015)</h1>
-      <p class="text-muted">Marty y Doc viajan al futuro para prevenir que el hijo de Marty sea arrestado</p>
+      <p class="text-muted">Viaja al futuro, enfrenta la paradoja de Biff y el almanaque deportivo, y prepara el viaje a 1885</p>
     </div>
   </header>
 
@@ -42,23 +42,28 @@
     
     <!-- Historia / Contexto -->
     <section class="card card--accent" style="margin-bottom: var(--spacing-lg);">
-      <h2>📖 Historia: Viaje al Futuro</h2>
+      <h2>📖 Historia: Viaje al Futuro y la Distopía de Biff (1985-2015-1955)</h2>
       <p>
-        Es el año <strong>1985</strong> y Marty ha logrado regresar del pasado. Pero el Doc aparece en el DeLorean 
-        desde el <strong>futuro (2015)</strong> con noticias alarmantes: ¡el hijo de Marty está en problemas!
+        Marty regresa a <strong>1985</strong> y forma una familia con Jennifer. Doc los lleva a <strong>2015</strong> 
+        para salvar a su hijo. Pero el viejo Biff roba el DeLorean, viaja a <strong>1955</strong> y le da el 
+        almanaque deportivo a su yo joven, creando un <strong>1985 distópico</strong> donde es millonario y poderoso.
       </p>
       <p>
-        En esta pantalla aprenderás sobre <strong>git checkout</strong> - el comando que te permite viajar entre 
-        diferentes ramas (líneas temporales):
+        En esta pantalla construirás <strong>la parte más compleja de la saga</strong>:
       </p>
       <ul>
-        <li><code>git checkout [rama]</code> - Cambiar de rama (viajar en el tiempo)</li>
-        <li><code>git checkout -b [rama]</code> - Crear y cambiar a una nueva rama</li>
-        <li>Entender cómo Git te permite moverse entre diferentes estados del código</li>
-        <li>Practicar viajes entre múltiples líneas temporales</li>
+        <li><code>git commit</code> - Registrar eventos del futuro (2015) y la distopía</li>
+        <li><code>git branch</code> - Crear "biff-paradise" (distopía) y "marty-calendario" (solución)</li>
+        <li><code>git checkout</code> - Navegar entre múltiples líneas temporales</li>
+        <li><code>git merge</code> - Integrar la solución del almanaque a la línea principal</li>
+        <li>Trabajar con ramas anidadas y paradojas temporales complejas</li>
       </ul>
+      <p class="text-muted" style="margin-top: var(--spacing-md);">
+        <strong>🎯 Objetivo:</strong> Completar 26 ejercicios que cubren el viaje a 2015, la distopía de Biff, 
+        la recuperación del almanaque y el accidente que envía a Doc a 1885.
+      </p>
       <div class="badge badge--warning" style="margin-top: var(--spacing-md);">
-        ⚠️ Recuerda: git checkout te permite viajar entre ramas, pero ten cuidado de no perder cambios sin hacer commit
+        ⚠️ Esta es la pantalla más larga - trabajarás con ramas complejas y múltiples merges
       </div>
     </section>
 
@@ -220,13 +225,8 @@
     const validator = new ExerciseValidator(consoleCtrl, graph);
     const ui = new UIController();
     const screenCtrl = new ScreenController();
-
     // Inicializar con repositorio base
     graph.initialize();
-    graph.commit('1985 - Presente');
-    consoleCtrl.state.initialized = true;
-    ui.updateBranchIndicator('main (1985)');
-
     // Configurar ejercicios de la pantalla 2
     validator.setExercises(SCREEN_EXERCISES.screen2);
 

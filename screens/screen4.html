@@ -43,7 +43,7 @@
     <div class="container">
       <div id="breadcrumbContainer"></div>
       <h1 class="text-gradient" style="color: #a1887f;">🤠 Pantalla 4: Wild West (1885)</h1>
-      <p class="text-muted">Doc está atrapado en el Lejano Oeste. Aprende git stash para guardar cambios temporalmente</p>
+      <p class="text-muted">El final épico: Doc en el Lejano Oeste, Clara, y el cierre de toda la saga de Back to the Future</p>
     </div>
   </header>
 
@@ -52,23 +52,29 @@
     
     <!-- Historia / Contexto -->
     <section class="card card--accent" style="margin-bottom: var(--spacing-lg); border-color: #a1887f;">
-      <h2>📖 Historia: Viaje Accidental al Pasado</h2>
+      <h2>📖 Historia: El Lejano Oeste y el Final Feliz (1885)</h2>
       <p>
-        Al intentar volver de 1955 a 1985, un rayo golpea el DeLorean enviando al Doc accidentalmente al 
-        <strong>Lejano Oeste (1885)</strong>. Marty encuentra una carta del Doc escondida durante 70 años.
+        Doc está varado en el <strong>Lejano Oeste (1885)</strong> tras ser golpeado por un rayo. Marty viaja al pasado 
+        para rescatarlo, pero Doc conoce a <strong>Clara Clayton</strong> y se enamora. En la línea temporal original, 
+        Clara muere, pero gracias a Doc, sobrevive y forman una familia viajera del tiempo.
       </p>
       <p>
-        En esta pantalla final aprenderás sobre <strong>git stash</strong> y comandos avanzados:
+        En esta pantalla final completarás <strong>toda la saga de BTTF</strong>:
       </p>
       <ul>
-        <li><code>git stash</code> - Guardar cambios temporalmente sin hacer commit</li>
-        <li><code>git stash pop</code> - Recuperar los cambios guardados</li>
-        <li><code>git stash list</code> - Ver todos los stashes guardados</li>
-        <li><code>git branch -d [rama]</code> - Eliminar ramas que ya no necesitas</li>
-        <li>Gestión de trabajo en progreso (WIP - Work In Progress)</li>
+        <li><code>git commit</code> - Registrar eventos del Lejano Oeste</li>
+        <li><code>git branch</code> - Crear "clara-viva" (romance de Doc)</li>
+        <li><code>git checkout</code> - Navegar entre la línea original y la de Clara</li>
+        <li><code>git merge</code> - Integrar la historia de Doc y Clara</li>
+        <li>Gestionar ramas paralelas con eventos alternativos</li>
+        <li>Cerrar el círculo temporal completo de la saga</li>
       </ul>
-      <div class="badge badge--warning" style="margin-top: var(--spacing-md); background: linear-gradient(135deg, #a1887f, #8d6e63);">
-        🤠 git stash es como guardar tus herramientas antes de cambiar de tarea
+      <p class="text-muted" style="margin-top: var(--spacing-md);">
+        <strong>🎯 Objetivo:</strong> Completar 18 ejercicios que culminan con Doc y Clara formando una familia 
+        y el cierre completo de la historia de Back to the Future.
+      </p>
+      <div class="badge badge--success" style="margin-top: var(--spacing-md); background: linear-gradient(135deg, #7c4dff, #9c27b0);">
+        🎉 ¡Pantalla final! Al completarla, habrás recreado toda la saga de BTTF con Git
       </div>
     </section>
 
@@ -261,11 +267,6 @@
 
     // Inicializar con escenario del Lejano Oeste
     graph.initialize();
-    graph.commit('1955 - Doc ayuda a Marty');
-    graph.commit('⚡ Rayo golpea el DeLorean');
-    
-    consoleCtrl.state.initialized = true;
-    ui.updateBranchIndicator('main (1955)');
 
     // Configurar ejercicios
     validator.setExercises(SCREEN_EXERCISES.screen4);

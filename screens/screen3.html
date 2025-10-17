@@ -43,7 +43,7 @@
     <div class="container">
       <div id="breadcrumbContainer"></div>
       <h1 class="text-gradient" style="color: #ff4081;">⚠️ Pantalla 3: Dystopia (1985A)</h1>
-      <p class="text-muted">Biff Tannen ha creado una línea temporal distópica. Aprende a arreglar historiales corruptos</p>
+      <p class="text-muted">Crea la rama "familia-feliz" y resuelve la paradoja de Biff con merges avanzados y cherry-picks</p>
     </div>
   </header>
 
@@ -52,22 +52,28 @@
     
     <!-- Historia / Contexto -->
     <section class="card card--accent" style="margin-bottom: var(--spacing-lg); border-color: #d32f2f;">
-      <h2>📖 Historia: La Línea Temporal Corrupta</h2>
+      <h2>📖 Historia: Familia Feliz y Cierre de la Distopía</h2>
       <p>
-        Al regresar de 2015, Marty y Doc descubren que están en un <strong>1985 alternativo distópico</strong>. 
-        Biff Tannen ha usado el almanaque deportivo para hacerse rico y poderoso, corrompiendo toda la línea temporal.
+        Después de recuperar el almanaque, la línea temporal se puede arreglar. Ahora crearás la rama 
+        <strong>"familia-feliz"</strong>, que representa el <strong>1985 mejorado</strong> donde los cambios 
+        de Marty en 1955 resultaron en una familia McFly exitosa: George es un escritor famoso y Biff lava autos.
       </p>
       <p>
-        En esta pantalla aprenderás comandos avanzados de Git para <strong>arreglar historiales corruptos</strong>:
+        En esta pantalla trabajarás con <strong>operaciones avanzadas de Git</strong>:
       </p>
       <ul>
-        <li><code>git reset --hard</code> - Deshacer cambios y volver a un estado anterior</li>
-        <li><code>git merge</code> - Fusionar líneas temporales correctas</li>
-        <li><code>git revert</code> - Revertir commits específicos sin perder historial</li>
-        <li>Entender cómo recuperarse de errores en Git</li>
+        <li><code>git branch</code> - Crear la rama "familia-feliz" (realidad mejorada)</li>
+        <li><code>git commit</code> - Registrar eventos de la nueva realidad</li>
+        <li><code>git merge</code> - Fusionar "biff-paradise" para cerrar la distopía</li>
+        <li><code>git checkout</code> - Navegar entre ramas para commits específicos</li>
+        <li>Simular cherry-picks con commits que rescatan a Jennifer</li>
+        <li>Cerrar ramas obsoletas con commits finales</li>
       </ul>
-      <div class="badge badge--error" style="margin-top: var(--spacing-md); background: linear-gradient(135deg, #d32f2f, #f44336);">
-        ⚠️ PELIGRO: git reset --hard elimina cambios permanentemente. Úsalo con precaución
+      <p class="text-muted" style="margin-top: var(--spacing-md);">
+        <strong>🎯 Objetivo:</strong> Completar 9 ejercicios que crean la mejor realidad posible y cierran la distopía de Biff.
+      </p>
+      <div class="badge badge--success" style="margin-top: var(--spacing-md); background: linear-gradient(135deg, #388e3c, #4caf50);">
+        ✨ Esta pantalla marca el triunfo sobre la distopía - ¡la familia McFly será exitosa!
       </div>
     </section>
 
@@ -236,16 +242,6 @@
     // Inicializar con escenario distópico
     graph.initialize();
     graph.commit('1985 - Presente Normal');
-    graph.createBranch('1985-dystopia');
-    graph.checkout('1985-dystopia');
-    graph.commit('⚠️ Biff obtiene el almanaque');
-    graph.commit('💰 Biff se hace millonario');
-    graph.commit('💀 George McFly muere');
-    
-    consoleCtrl.state.initialized = true;
-    consoleCtrl.state.branches.push('1985-dystopia');
-    consoleCtrl.state.currentBranch = '1985-dystopia';
-    ui.updateBranchIndicator('1985-dystopia');
 
     // Configurar ejercicios
     validator.setExercises(SCREEN_EXERCISES.screen3);
