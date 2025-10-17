@@ -143,7 +143,7 @@ export class ConsoleController {
       return;
     }
 
-    const commitId = Math.random().toString(36).substr(2, 7);
+    const commitId = Math.random().toString(36).slice(2, 9);
     
     // Extraer mensaje del commit
     let commitMsg = 'Changes committed';
