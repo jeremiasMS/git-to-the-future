@@ -1,153 +1,428 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Commit to the Future</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>
-  </head>
-  <body>
-    <header>
-      <h1>🚀 Commit to the Future</h1>
-      <p>
-        Una propuesta interactiva que explora las líneas temporales de
-        <em>Volver al Futuro</em> a través de ramas de Git. Cada commit
-        representa un evento clave y cada rama una historia alternativa. Ideal
-        para aprender Git de manera visual y divertida.
-      </p>
-    </header>
-    <div class="main-container">
-      <div class="graph-container">
-        <div class="branch-indicator">
-          <span class="indicator-label">📍 Rama actual:</span>
-          <span class="indicator-value" id="currentBranchIndicator">main (Demo BTTF)</span>
-        </div>
-        <main id="gitGraph"></main>
-      </div>
-      <div class="console-container">
-        <h2>🖥️ Git Interactive Console</h2>
-        <p>Aprende Git de forma interactiva con comandos paso a paso</p>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenido a Git to the Future</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/components/base.css">
+  <link rel="stylesheet" href="css/components/navigation.css">
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 50%, #16213e 100%);
+      background-attachment: fixed;
+      color: var(--color-text);
+      font-family: var(--font-family-main);
+      overflow-x: hidden;
+    }
 
-        <div class="console-output" id="consoleOutput">
-          <div class="output-line">
-            <span class="prompt">$</span> Bienvenido a la consola Git
-            interactiva
-          </div>
-          <div class="output-line">
-            <span class="prompt">$</span> Haz hover sobre los botones para ver
-            qué hacen
-          </div>
-          <div class="output-line">
-            <span class="prompt">$</span> Clic en un botón para escribir el
-            comando, luego Ejecutar
-          </div>
-        </div>
+    /* Header con animación */
+    .welcome-header {
+      text-align: center;
+      padding: var(--spacing-xl) var(--spacing-md);
+      position: relative;
+    }
 
-        <div class="command-buttons">
-          <button
-            class="cmd-btn"
-            data-command="init"
-            data-tooltip="Crea un nuevo repositorio Git"
-          >
-            git init
-          </button>
-          <button
-            class="cmd-btn"
-            data-command="status"
-            data-tooltip="Muestra el estado de los archivos"
-          >
-            git status
-          </button>
-          <button
-            class="cmd-btn"
-            data-command="add ."
-            data-tooltip="Prepara todos los archivos para commit"
-          >
-            git add .
-          </button>
-          <button
-            class="cmd-btn"
-            data-command="commit -m 'mensaje'"
-            data-tooltip="Guarda cambios con un mensaje"
-          >
-            git commit
-          </button>
-          <button
-            class="cmd-btn"
-            data-command="branch nueva-rama"
-            data-tooltip="Crea o lista ramas del proyecto"
-          >
-            git branch
-          </button>
-          <button
-            class="cmd-btn"
-            data-command="checkout rama"
-            data-tooltip="Cambia a otra rama o commit"
-          >
-            git checkout
-          </button>
-          <button
-            class="cmd-btn"
-            data-command="merge rama"
-            data-tooltip="Fusiona cambios de otra rama"
-          >
-            git merge
-          </button>
-          <button
-            class="cmd-btn"
-            data-command="log"
-            data-tooltip="Muestra historial de commits"
-          >
-            git log
-          </button>
-          <button
-            class="cmd-btn"
-            data-command="reset"
-            data-tooltip="Deshace cambios en staging"
-          >
-            git reset
-          </button>
-          <button
-            class="cmd-btn"
-            data-command="clear"
-            data-tooltip="Limpia la consola"
-          >
-            clear
-          </button>
-        </div>
+    .welcome-header__title {
+      font-family: var(--font-family-heading);
+      font-size: clamp(2.5em, 8vw, 5em);
+      font-weight: normal;
+      letter-spacing: 0.1em;
+      margin: 0 0 var(--spacing-sm) 0;
+      background: linear-gradient(135deg, #ff2a00 0%, #ffcc00 25%, #0077ff 50%, #ff6ec7 75%, #ff2a00 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 5s ease infinite, pulse 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px rgba(255, 204, 0, 0.6));
+    }
 
-        <div class="special-buttons">
-          <button
-            class="special-btn reset-btn"
-            id="resetGraphBtn"
-            data-tooltip="Reinicia el gráfico para empezar de cero"
-          >
-            🔄 Reiniciar Gráfico
-          </button>
-          <button
-            class="special-btn demo-btn"
-            id="loadDemoBtn"
-            data-tooltip="Carga el demo completo de Volver al Futuro"
-          >
-            🚗 Cargar Demo BTTF
-          </button>
-        </div>
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
 
-        <div class="console-input">
-          <span class="prompt">$</span>
-          <input
-            type="text"
-            id="commandInput"
-            placeholder="Escribe un comando git..."
-          />
-          <button id="executeBtn">Ejecutar</button>
-        </div>
+    .welcome-header__subtitle {
+      font-size: clamp(1em, 3vw, 1.5em);
+      color: var(--color-secondary);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    /* Container principal */
+    .welcome-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--spacing-xl) var(--spacing-md);
+    }
+
+    /* GIF Container */
+    .gif-container {
+      max-width: 800px;
+      margin: 0 auto var(--spacing-xl);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(255, 204, 0, 0.3), 
+                  0 0 80px rgba(0, 119, 255, 0.2);
+      border: 3px solid transparent;
+      background: linear-gradient(#0d0d0d, #0d0d0d) padding-box,
+                  linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent)) border-box;
+      position: relative;
+    }
+
+    .gif-container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent), var(--color-highlight));
+      border-radius: var(--border-radius-md);
+      opacity: 0.5;
+      filter: blur(10px);
+      z-index: -1;
+      animation: rotate 3s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .gif-wrapper {
+      padding-top: 56.267%;
+      position: relative;
+      background: #000;
+    }
+
+    .gif-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Sección de explicación */
+    .explanation-section {
+      background: rgba(26, 26, 26, 0.8);
+      border-radius: var(--border-radius-md);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+      border: 2px solid var(--color-accent);
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(10px);
+    }
+
+    .explanation-section h2 {
+      font-family: var(--font-family-heading);
+      font-size: clamp(1.8em, 4vw, 2.5em);
+      color: var(--color-secondary);
+      margin-top: 0;
+      margin-bottom: var(--spacing-md);
+      text-align: center;
+    }
+
+    .explanation-section h3 {
+      font-family: var(--font-family-heading);
+      font-size: clamp(1.3em, 3vw, 1.8em);
+      color: var(--color-accent);
+      margin-top: var(--spacing-lg);
+      margin-bottom: var(--spacing-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .explanation-section p {
+      font-size: clamp(1em, 2vw, 1.2em);
+      line-height: 1.8;
+      color: var(--color-muted);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .explanation-section ul {
+      list-style: none;
+      padding: 0;
+      margin: var(--spacing-md) 0;
+    }
+
+    .explanation-section li {
+      font-size: clamp(0.95em, 2vw, 1.1em);
+      padding: var(--spacing-sm) var(--spacing-md);
+      margin-bottom: var(--spacing-sm);
+      background: rgba(0, 119, 255, 0.1);
+      border-left: 4px solid var(--color-accent);
+      border-radius: var(--border-radius-sm);
+      color: var(--color-text);
+      transition: all 0.3s ease;
+    }
+
+    .explanation-section li:hover {
+      background: rgba(0, 119, 255, 0.2);
+      transform: translateX(10px);
+      border-left-color: var(--color-secondary);
+    }
+
+    .highlight {
+      color: var(--color-secondary);
+      font-weight: bold;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-lg);
+      margin: var(--spacing-xl) 0;
+    }
+
+    .feature-card {
+      background: rgba(0, 119, 255, 0.1);
+      border: 2px solid var(--color-accent);
+      border-radius: var(--border-radius-md);
+      padding: var(--spacing-lg);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 119, 255, 0.3);
+      border-color: var(--color-secondary);
+    }
+
+    .feature-card__icon {
+      font-size: 3em;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .feature-card__title {
+      font-family: var(--font-family-heading);
+      font-size: 1.3em;
+      color: var(--color-secondary);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .feature-card__description {
+      color: var(--color-muted);
+      font-size: 0.95em;
+      line-height: 1.6;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      text-align: center;
+      padding: var(--spacing-xl) 0;
+    }
+
+    .start-button {
+      display: inline-block;
+      padding: var(--spacing-lg) var(--spacing-xl);
+      font-family: var(--font-family-heading);
+      font-size: clamp(1.5em, 4vw, 2.5em);
+      font-weight: normal;
+      letter-spacing: 0.05em;
+      color: #000;
+      background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
+      border: none;
+      border-radius: var(--border-radius-md);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 30px rgba(255, 204, 0, 0.5),
+                  0 10px 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .start-button::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: rotate(45deg);
+      animation: buttonShine 3s infinite;
+    }
+
+    @keyframes buttonShine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      50%, 100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .start-button:hover {
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 0 50px rgba(255, 204, 0, 0.8),
+                  0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .start-button:active {
+      transform: scale(1.05) translateY(-2px);
+    }
+
+    /* Footer */
+    .welcome-footer {
+      text-align: center;
+      padding: var(--spacing-lg);
+      color: var(--color-muted);
+      font-size: 0.9em;
+      border-top: 1px solid rgba(255, 204, 0, 0.2);
+      margin-top: var(--spacing-xl);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .explanation-section {
+        padding: var(--spacing-lg);
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .start-button {
+        width: 90%;
+        max-width: 400px;
+      }
+    }
+
+    /* Animación de entrada */
+    .fade-in {
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="welcome-header fade-in">
+    <h1 class="welcome-header__title">GIT TO THE FUTURE</h1>
+    <p class="welcome-header__subtitle">⚡ Aprende Git Viajando en el Tiempo ⚡</p>
+  </header>
+
+  <!-- Contenedor Principal -->
+  <div class="welcome-container">
+    
+    <!-- GIF de BTTF -->
+    <div class="gif-container fade-in" style="animation-delay: 0.2s;">
+      <div class="gif-wrapper">
+        <iframe src="https://gifer.com/embed/781E" allowFullScreen></iframe>
       </div>
     </div>
 
-    <!-- Scripts externos -->
-    <script src="js/gitgraph.js"></script>
-    <script src="js/console.js"></script>
-  </body>
+    <!-- Explicación -->
+    <section class="explanation-section fade-in" style="animation-delay: 0.4s;">
+      <h2>🚗 ¿Qué es Git to the Future?</h2>
+      
+      <p>
+        Imagina aprender <span class="highlight">Git</span> de la forma más épica posible: 
+        viajando a través de las <span class="highlight">líneas temporales</span> de la legendaria 
+        trilogía <span class="highlight">Back to the Future</span>.
+      </p>
+
+      <h3>🎯 Objetivo del Curso</h3>
+      <p>
+        Este es un curso <span class="highlight">100% interactivo</span> donde aprenderás los conceptos 
+        fundamentales de Git mientras ayudas a Marty McFly y Doc Brown a navegar por las paradojas temporales.
+      </p>
+
+      <h3>📚 ¿Qué aprenderás?</h3>
+      <ul>
+        <li><strong>🔧 Git Init, Add, Commit</strong> - Los fundamentos para iniciar tu DeLorean temporal</li>
+        <li><strong>🌿 Branches y Checkout</strong> - Crear y navegar entre líneas temporales alternativas</li>
+        <li><strong>🔄 Merge y Rebase</strong> - Unificar timelines sin crear paradojas</li>
+        <li><strong>⏪ Reset y Revert</strong> - Corregir alteraciones en la línea temporal</li>
+        <li><strong>💾 Git Stash</strong> - Guardar cambios temporalmente (como un condensador de flujo)</li>
+        <li><strong>🎭 Resolución de conflictos</strong> - Prevenir que Biff arruine el futuro</li>
+      </ul>
+
+      <h3>✨ Características</h3>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-card__icon">🎮</div>
+          <h4 class="feature-card__title">Interactivo</h4>
+          <p class="feature-card__description">
+            Ejecuta comandos Git reales en una consola simulada
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">📊</div>
+          <h4 class="feature-card__title">Visual</h4>
+          <p class="feature-card__description">
+            Observa el árbol de Git en tiempo real con cada comando
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">💡</div>
+          <h4 class="feature-card__title">Sistema de Pistas</h4>
+          <p class="feature-card__description">
+            Tres niveles de ayuda progresiva para cada ejercicio
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">🎬</div>
+          <h4 class="feature-card__title">Narrativa BTTF</h4>
+          <p class="feature-card__description">
+            Cada screen sigue la historia de la trilogía
+          </p>
+        </div>
+      </div>
+
+      <h3>🗺️ Tu Viaje</h3>
+      <ul>
+        <li><strong>Pantalla 1: Origin (1985→1955)</strong> - Marty llega accidentalmente a 1955</li>
+        <li><strong>Pantalla 2: Time Travel (2015)</strong> - Viaje al futuro para salvar a la familia</li>
+        <li><strong>Pantalla 3: Dystopia (1985A)</strong> - Biff corrompe la línea temporal</li>
+        <li><strong>Pantalla 4: Wild West (1885)</strong> - Doc atrapado en el Lejano Oeste</li>
+        <li><strong>Demo Final</strong> - Visualización completa de todas las líneas temporales</li>
+      </ul>
+
+      <p style="margin-top: var(--spacing-lg); text-align: center; font-size: 1.3em; color: var(--color-secondary);">
+        <strong>💡 No necesitas saber Git para empezar, solo necesitas 1.21 gigawatts de curiosidad!</strong>
+      </p>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-section fade-in" style="animation-delay: 0.6s;">
+      <a href="index-menu.html" class="start-button">
+        🚀 EMPEZAR AVENTURA 🚀
+      </a>
+      <p style="margin-top: var(--spacing-md); color: var(--color-muted);">
+        <em>El futuro es lo que tú hagas de él, así que hazlo bueno!</em> - Doc Brown
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="welcome-footer fade-in" style="animation-delay: 0.8s;">
+    <p>
+      🎬 Un proyecto educativo inspirado en Back to the Future<br>
+      💻 Desarrollado con ❤️ para aprender Git de forma divertida
+    </p>
+  </footer>
+
+</body>
 </html>
