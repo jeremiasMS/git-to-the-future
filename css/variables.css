@@ -1,3 +1,20 @@
+/* 🎨 Fuentes Back to the Future */
+@font-face {
+  font-family: 'BackToTheFuture';
+  src: url('../assets/fonts/BackToTheFuture-0WPX9.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Marty';
+  src: url('../assets/fonts/Marty-eZLAm.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* 🎨 Variables Globales - Back to the Future Theme */
 :root {
   /* Colores Base */
@@ -25,6 +42,7 @@
   
   /* Tipografía */
   --font-family-main: Arial, sans-serif;
+  --font-family-heading: 'BackToTheFuture', 'Marty', Arial, sans-serif;
   --font-family-code: 'Courier New', monospace;
   --font-size-sm: 0.8em;
   --font-size-base: 0.9em;
