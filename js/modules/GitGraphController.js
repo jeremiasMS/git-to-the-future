@@ -114,6 +114,88 @@ export class GitGraphController {
     return true;
   }
 
+  // 🆕 Rebase - Reorganizar historia sobre otra rama
+  rebase(baseBranchName) {
+    if (!this.currentBranch) {
+      console.warn('No current branch selected');
+      return false;
+    }
+
+    if (!this.branches[baseBranchName]) {
+      console.warn(`Base branch ${baseBranchName} does not exist`);
+      return false;
+    }
+
+    // Visualizar rebase como un commit especial
+    this.currentBranch.commit({
+      subject: `🔥 Rebase sobre '${baseBranchName}'`,
+      style: {
+        dot: {
+          color: '#ff9100',
+          size: 12,
+          strokeWidth: 3,
+        },
+        message: {
+          color: '#ff9100',
+        },
+      },
+    });
+
+    return true;
+  }
+
+  // 🆕 Cherry-pick - Copiar commit específico de otra rama
+  cherryPick(sourceBranchName) {
+    if (!this.currentBranch) {
+      console.warn('No current branch selected');
+      return false;
+    }
+
+    if (!this.branches[sourceBranchName]) {
+      console.warn(`Source branch ${sourceBranchName} does not exist`);
+      return false;
+    }
+
+    // Visualizar cherry-pick como commit especial
+    this.currentBranch.commit({
+      subject: `🍒 Cherry-pick desde '${sourceBranchName}'`,
+      style: {
+        dot: {
+          color: '#ff4081',
+          size: 10,
+          strokeWidth: 2,
+        },
+        message: {
+          color: '#ff4081',
+        },
+      },
+    });
+
+    return true;
+  }
+
+  // 🆕 Deshacer último commit (para reset --soft)
+  undoLastCommit() {
+    // En GitGraph no podemos realmente deshacer, pero podemos visualizarlo
+    if (this.currentBranch) {
+      this.currentBranch.commit({
+        subject: `⚠️ Reset --soft (commit deshecho)`,
+        style: {
+          dot: {
+            color: '#ff5722',
+            size: 8,
+            strokeWidth: 2,
+            strokeColor: '#ff5722',
+          },
+          message: {
+            color: '#ff5722',
+          },
+        },
+      });
+    }
+    return true;
+  }
+
   // Obtener nombre de la rama actual
   getCurrentBranch() {
     return this.currentBranchName;

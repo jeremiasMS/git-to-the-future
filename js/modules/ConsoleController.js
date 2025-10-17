@@ -12,6 +12,8 @@ export class ConsoleController {
       branches: ['main'],
       currentBranch: 'main',
       commits: [],
+      stash: [], // 🆕 Para git stash
+      lastCommitMessage: '', // 🆕 Para revert
     };
 
     this.commands = {
@@ -24,6 +26,10 @@ export class ConsoleController {
       merge: this.gitMerge.bind(this),
       log: this.gitLog.bind(this),
       reset: this.gitReset.bind(this),
+      rebase: this.gitRebase.bind(this), // 🆕 Comando rebase
+      'cherry-pick': this.gitCherryPick.bind(this), // 🆕 Comando cherry-pick
+      stash: this.gitStash.bind(this), // 🆕 Comando stash
+      revert: this.gitRevert.bind(this), // 🆕 Comando revert
       clear: this.clearConsole.bind(this),
       hint: this.showHint.bind(this), // 🆕 Comando de ayuda
       ayuda: this.showHint.bind(this), // 🆕 Alias en español
@@ -297,9 +303,206 @@ export class ConsoleController {
       return;
     }
 
+    // Verificar si es reset --soft HEAD~1
+    if (args.includes('--soft') && args.some(arg => arg.includes('HEAD'))) {
+      if (this.state.commits.length === 0) {
+        this.addOutput('❌ No hay commits para deshacer', 'warning');
+        return;
+      }
+
+      const lastCommit = this.state.commits.pop();
+      this.state.staged = [...lastCommit.files];
+      
+      // Actualizar gráfico
+      if (this.graphController) {
+        this.graphController.undoLastCommit();
+      }
+
+      this.addOutput(`✅ Commit deshecho: "${lastCommit.message}"`, 'success');
+      this.addOutput('💾 Los cambios se mantienen en el área de preparación (staged)', 'info');
+      this.addOutput('📚 Explicación: reset --soft deshace commits pero mantiene los cambios', 'warning');
+      this.addOutput('⚠️ Este comando reescribe la historia (usar con cuidado)', 'warning');
+      return;
+    }
+
+    // Reset normal (limpiar staging)
     this.state.staged = [];
     this.addOutput('✅ Área de preparación limpiada', 'success');
     this.addOutput('📚 Explicación: git reset deshace cambios en el área de preparación', 'info');
+  }
+
+  // 🆕 Git Rebase - Reorganizar historia
+  gitRebase(args) {
+    if (!this.state.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    if (args.length === 0) {
+      this.addOutput('❌ Especifica una rama base para rebase', 'warning');
+      this.addOutput('💡 Ejemplo: git rebase main', 'info');
+      return;
+    }
+
+    const baseBranch = args[0];
+    if (!this.state.branches.includes(baseBranch)) {
+      this.addOutput(`❌ La rama '${baseBranch}' no existe`, 'warning');
+      return;
+    }
+
+    if (this.state.currentBranch === baseBranch) {
+      this.addOutput('❌ Ya estás en esa rama', 'warning');
+      return;
+    }
+
+    // Actualizar gráfico
+    if (this.graphController) {
+      this.graphController.rebase(baseBranch);
+    }
+
+    this.addOutput(`✅ Rebase completado: '${this.state.currentBranch}' ahora está sobre '${baseBranch}'`, 'success');
+    this.addOutput('🔥 Los commits han sido reorganizados para una historia más limpia', 'info');
+    this.addOutput('📚 Explicación: rebase mueve commits a un nuevo punto base', 'info');
+    this.addOutput('⚠️ Este comando reescribe la historia (usar con cuidado)', 'warning');
+    
+    if (this.graphController) {
+      this.addOutput('🎨 ¡Mira el gráfico! La línea temporal se ha reorganizado', 'info');
+    }
+  }
+
+  // 🆕 Git Cherry-Pick - Copiar commit específico
+  gitCherryPick(args) {
+    if (!this.state.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    if (args.length === 0) {
+      this.addOutput('❌ Especifica un commit o rama para cherry-pick', 'warning');
+      this.addOutput('💡 Ejemplo: git cherry-pick biff-paradise', 'info');
+      return;
+    }
+
+    const source = args[0];
+    
+    // Verificar si es una rama
+    if (this.state.branches.includes(source)) {
+      // Simular copiar el último commit de esa rama
+      if (this.graphController) {
+        this.graphController.cherryPick(source);
+      }
+
+      this.addOutput(`✅ Cherry-pick desde '${source}' aplicado`, 'success');
+      this.addOutput(`🍒 Commit específico copiado a '${this.state.currentBranch}'`, 'info');
+      this.addOutput('📚 Explicación: cherry-pick copia commits específicos entre ramas', 'info');
+      
+      if (this.graphController) {
+        this.addOutput('🎨 ¡Mira el gráfico! El commit se ha copiado a esta rama', 'info');
+      }
+    } else {
+      this.addOutput(`❌ No se encontró la rama o commit '${source}'`, 'warning');
+      this.addOutput('💡 Usa "git branch" para ver ramas disponibles', 'info');
+    }
+  }
+
+  // 🆕 Git Stash - Guardar trabajo temporal
+  gitStash(args) {
+    if (!this.state.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    const subcommand = args[0] || 'push';
+
+    if (subcommand === 'push' || args.length === 0) {
+      // Guardar cambios
+      if (this.state.staged.length === 0) {
+        this.addOutput('⚠️ No hay cambios para guardar en stash', 'warning');
+        return;
+      }
+
+      this.state.stash.push({
+        files: [...this.state.staged],
+        branch: this.state.currentBranch,
+        message: args[1] || 'WIP on ' + this.state.currentBranch
+      });
+      
+      this.state.staged = [];
+      
+      this.addOutput('✅ Cambios guardados en stash', 'success');
+      this.addOutput('💾 Tu trabajo está a salvo temporalmente', 'info');
+      this.addOutput('📚 Explicación: stash guarda cambios sin hacer commit', 'info');
+      this.addOutput('💡 Usa "git stash pop" para recuperarlos', 'info');
+      
+    } else if (subcommand === 'pop') {
+      // Recuperar cambios
+      if (this.state.stash.length === 0) {
+        this.addOutput('❌ No hay nada en el stash', 'warning');
+        return;
+      }
+
+      const stashed = this.state.stash.pop();
+      this.state.staged = [...stashed.files];
+      
+      this.addOutput('✅ Cambios recuperados desde stash', 'success');
+      this.addOutput('💾 Los cambios han vuelto al área de trabajo', 'info');
+      this.addOutput('📚 Explicación: stash pop recupera y elimina del stash', 'info');
+      
+    } else if (subcommand === 'list') {
+      // Listar stash
+      if (this.state.stash.length === 0) {
+        this.addOutput('No hay nada guardado en stash', 'info');
+      } else {
+        this.addOutput('📦 Elementos en stash:', 'info');
+        this.state.stash.forEach((item, i) => {
+          this.addOutput(`  stash@{${i}}: ${item.message}`, 'default');
+        });
+      }
+    }
+  }
+
+  // 🆕 Git Revert - Deshacer commit de forma segura
+  gitRevert(args) {
+    if (!this.state.initialized) {
+      this.addOutput('❌ No es un repositorio git', 'warning');
+      return;
+    }
+
+    if (this.state.commits.length === 0) {
+      this.addOutput('❌ No hay commits para revertir', 'warning');
+      return;
+    }
+
+    const target = args[0] || 'HEAD';
+    
+    if (target === 'HEAD' || target.includes('HEAD')) {
+      const lastCommit = this.state.commits[this.state.commits.length - 1];
+      
+      // Crear un nuevo commit que deshace el anterior
+      const revertCommitId = Math.random().toString(36).substr(2, 7);
+      const revertMsg = `Revert "${lastCommit.message}"`;
+      
+      this.state.commits.push({
+        id: revertCommitId,
+        message: revertMsg,
+        files: [],
+        isRevert: true
+      });
+
+      // Actualizar gráfico
+      if (this.graphController) {
+        this.graphController.commit(revertMsg);
+      }
+
+      this.addOutput(`✅ [${this.state.currentBranch} ${revertCommitId}] ${revertMsg}`, 'success');
+      this.addOutput('🔄 Cambios revertidos mediante un nuevo commit', 'info');
+      this.addOutput('📚 Explicación: revert deshace cambios sin reescribir historia', 'info');
+      this.addOutput('✅ Método seguro para colaboración (no cambia commits anteriores)', 'success');
+      
+      if (this.graphController) {
+        this.addOutput('🎨 ¡Mira el gráfico! Se agregó un commit de reversión', 'info');
+      }
+    }
   }
 
   clearConsole() {
@@ -334,7 +537,7 @@ export class ConsoleController {
 
   // 🆕 Mostrar ayuda general de comandos
   showHelp() {
-    this.addOutput('📚 Comandos Git disponibles:', 'info');
+    this.addOutput('📚 Comandos Git Básicos:', 'info');
     this.addOutput('  init - Inicializar repositorio', 'default');
     this.addOutput('  add . - Añadir archivos al staging', 'default');
     this.addOutput('  commit -m "msg" - Guardar cambios', 'default');
@@ -343,6 +546,14 @@ export class ConsoleController {
     this.addOutput('  merge <rama> - Fusionar ramas', 'default');
     this.addOutput('  status - Ver estado actual', 'default');
     this.addOutput('  log - Ver historial', 'default');
+    this.addOutput('', 'default');
+    this.addOutput('🔥 Comandos Avanzados:', 'warning');
+    this.addOutput('  rebase <rama> - Reorganizar historia', 'default');
+    this.addOutput('  cherry-pick <rama> - Copiar commit específico', 'default');
+    this.addOutput('  stash - Guardar trabajo temporal', 'default');
+    this.addOutput('  stash pop - Recuperar trabajo guardado', 'default');
+    this.addOutput('  reset --soft HEAD~1 - Deshacer último commit', 'default');
+    this.addOutput('  revert HEAD - Deshacer commit (seguro)', 'default');
     this.addOutput('', 'default');
     this.addOutput('🆘 Comandos de ayuda:', 'info');
     this.addOutput('  hint/ayuda - Pista del ejercicio actual', 'default');
@@ -358,6 +569,8 @@ export class ConsoleController {
       branches: ['main'],
       currentBranch: 'main',
       commits: [],
+      stash: [],
+      lastCommitMessage: '',
     };
 
     if (this.graphController) {
