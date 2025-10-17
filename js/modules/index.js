@@ -11,7 +11,7 @@ export const VERSION = '2.0.0';
 // Utilidades compartidas
 export const Utils = {
   // Generar ID aleatorio
-  generateId: () => Math.random().toString(36).substr(2, 9),
+  generateId: () => Math.random().toString(36).slice(2, 11),
   
   // Formatear fecha
   formatDate: (date = new Date()) => {
