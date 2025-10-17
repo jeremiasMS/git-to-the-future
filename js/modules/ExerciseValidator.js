@@ -109,6 +109,32 @@ export class ExerciseValidator {
       return cleanActual.startsWith('checkout') && cleanActual.includes(expectedBranch);
     }
 
+    // Para rebase, verificar comando + rama
+    if (cleanExpected.startsWith('rebase')) {
+      const expectedBranch = cleanExpected.split(' ')[1];
+      return cleanActual.startsWith('rebase') && cleanActual.includes(expectedBranch);
+    }
+
+    // Para cherry-pick, verificar comando + hash
+    if (cleanExpected.startsWith('cherry-pick')) {
+      return cleanActual.startsWith('cherry-pick');
+    }
+
+    // Para reset, verificar comando + modo
+    if (cleanExpected.startsWith('reset')) {
+      return cleanActual.startsWith('reset');
+    }
+
+    // Para revert, verificar comando
+    if (cleanExpected.startsWith('revert')) {
+      return cleanActual.startsWith('revert');
+    }
+
+    // Para stash, verificar comando
+    if (cleanExpected.startsWith('stash')) {
+      return cleanActual.startsWith('stash');
+    }
+
     // Coincidencia exacta para otros comandos
     return cleanActual === cleanExpected;
   }
@@ -216,7 +242,7 @@ export class ExerciseValidator {
 
 // Ejercicios predefinidos para cada pantalla
 export const SCREEN_EXERCISES = {
-  // Pantalla 1: Origin (1985→1955) - FUNDAMENTOS + INICIO DE LA HISTORIA
+  // Pantalla 1: Origin (1985→1955) - FUNDAMENTOS (6 ejercicios)
   screen1: [
     {
       id: 1,
@@ -234,78 +260,22 @@ export const SCREEN_EXERCISES = {
     },
     {
       id: 2,
-      title: '1985 normal y aburrido',
-      description: 'Primer commit: El inicio de la historia',
-      expectedCommand: 'git commit -m "1985 normal y aburrido"',
-      hint: '💡 Usa "git commit -m" con el mensaje exacto',
+      title: 'Primer commit: 1985',
+      description: 'Registra el inicio de la historia en 1985',
+      expectedCommand: 'git commit -m "1985: Marty conoce el DeLorean y viaja al pasado"',
+      hint: '💡 Usa "git commit -m" con un mensaje descriptivo',
       hints: [
-        'Necesitas hacer un commit con el mensaje exacto',
+        'Necesitas hacer un commit que resuma el inicio',
         'El formato es: git commit -m "mensaje"',
-        'Comando: git commit -m "1985 normal y aburrido"'
+        'Comando: git commit -m "1985: Marty conoce el DeLorean y viaja al pasado"'
       ],
-      successMessage: 'Punto de partida registrado: 1985',
+      successMessage: '¡Punto de partida registrado! Marty viaja a 1955',
       validation: { commitCount: 1 },
     },
     {
       id: 3,
-      title: 'Doc inventa la Máquina del tiempo',
-      description: 'Segundo commit: La invención del DeLorean',
-      expectedCommand: 'git commit -m "El Doc inventa la Máquina del tiempo"',
-      hint: '💡 Haz commit con el mensaje sobre el DeLorean',
-      hints: [
-        'Registra el momento en que Doc crea su invento',
-        'Usa git commit -m "El Doc inventa la Máquina del tiempo"',
-        'Comando: git commit -m "El Doc inventa la Máquina del tiempo"'
-      ],
-      successMessage: '¡El DeLorean está listo para viajar en el tiempo!',
-      validation: { commitCount: 2 },
-    },
-    {
-      id: 4,
-      title: 'Marty conoce la máquina del tiempo',
-      description: 'Tercer commit: El primer encuentro',
-      expectedCommand: 'git commit -m "Marty conoce la máquina del tiempo"',
-      hint: '💡 Registra el momento en que Marty ve el DeLorean',
-      hints: [
-        'Marty se encuentra con Doc y el DeLorean',
-        'Haz un commit con este momento importante',
-        'Comando: git commit -m "Marty conoce la máquina del tiempo"'
-      ],
-      successMessage: 'Marty ha conocido el secreto de Doc',
-      validation: { commitCount: 3 },
-    },
-    {
-      id: 5,
-      title: 'Los libios descubren al Doc y le disparan',
-      description: 'Cuarto commit: El evento que lo cambia todo',
-      expectedCommand: 'git commit -m "Los libios descubren al Doc y le disparan"',
-      hint: '💡 Registra el momento dramático con los libios',
-      hints: [
-        'Este es el momento que obliga a Marty a huir',
-        'Haz commit del ataque de los libios',
-        'Comando: git commit -m "Los libios descubren al Doc y le disparan"'
-      ],
-      successMessage: '¡Doc ha sido disparado! Marty debe escapar',
-      validation: { commitCount: 4 },
-    },
-    {
-      id: 6,
-      title: 'Marty tiene un accidente',
-      description: 'Quinto commit: El viaje accidental',
-      expectedCommand: 'git commit -m "Marty tiene un accidente"',
-      hint: '💡 Marty acelera a 88 mph por accidente',
-      hints: [
-        'Marty viaja al pasado sin querer',
-        'Registra el momento del accidente',
-        'Comando: git commit -m "Marty tiene un accidente"'
-      ],
-      successMessage: 'Marty ha viajado accidentalmente en el tiempo',
-      validation: { commitCount: 5 },
-    },
-    {
-      id: 7,
       title: 'Crear rama: marty-sin-papas',
-      description: 'Crea una rama para la paradoja temporal',
+      description: 'Crea una rama para la paradoja de los padres',
       expectedCommand: 'git branch marty-sin-papas',
       hint: '💡 Usa "git branch marty-sin-papas"',
       hints: [
@@ -317,8 +287,8 @@ export const SCREEN_EXERCISES = {
       validation: { hasBranch: 'marty-sin-papas' },
     },
     {
-      id: 8,
-      title: 'Viajar a la rama marty-sin-papas',
+      id: 4,
+      title: 'Viajar a marty-sin-papas',
       description: 'Cambia a la rama de la paradoja',
       expectedCommand: 'git checkout marty-sin-papas',
       hint: '💡 Usa "git checkout marty-sin-papas"',
@@ -331,856 +301,422 @@ export const SCREEN_EXERCISES = {
       validation: { currentBranch: 'marty-sin-papas' },
     },
     {
-      id: 9,
-      title: 'Marty interfiere en la cita de sus padres',
-      description: 'Commit en la rama: El problema comienza',
-      expectedCommand: 'git commit -m "Marty interfiere en la cita de sus padres"',
-      hint: '💡 Registra el momento en que Marty arruina todo',
-      hints: [
-        'Marty empuja a su padre y toma su lugar',
-        'Haz commit de este momento crucial',
-        'Comando: git commit -m "Marty interfiere en la cita de sus padres"'
-      ],
-      successMessage: 'Oh no, Marty ha cambiado el pasado',
-      validation: { commitCount: 6 },
-    },
-    {
-      id: 10,
-      title: 'Marty empieza a desaparecer',
-      description: 'Commit: La consecuencia de la paradoja',
-      expectedCommand: 'git commit -m "Marty empieza a desaparecer"',
-      hint: '💡 Marty se está borrando de la existencia',
-      hints: [
-        'La foto familiar muestra a Marty desapareciendo',
-        'Registra este momento de peligro',
-        'Comando: git commit -m "Marty empieza a desaparecer"'
-      ],
-      successMessage: 'Marty se está borrando... ¡hay que arreglarlo!',
-      validation: { commitCount: 7 },
-    },
-    {
-      id: 11,
-      title: 'Marty logra que sus padres se enamoren',
-      description: 'Commit: La solución de la paradoja',
-      expectedCommand: 'git commit -m "Marty logra que sus padres se enamoren"',
-      hint: '💡 Marty arregla lo que rompió',
-      hints: [
-        'Gracias al plan de Marty, George besa a Lorraine',
-        'Registra el momento en que se resuelve la paradoja',
-        'Comando: git commit -m "Marty logra que sus padres se enamoren"'
-      ],
-      successMessage: '¡La paradoja está resuelta! Marty volverá a existir',
-      validation: { commitCount: 8 },
-    },
-    {
-      id: 12,
-      title: 'Volver a la rama main',
-      description: 'Regresa a la línea temporal principal',
-      expectedCommand: 'git checkout main',
-      hint: '💡 Usa "git checkout main"',
-      hints: [
-        'Vuelve a la rama principal',
-        'Usa checkout para cambiar de rama',
-        'Comando: git checkout main'
-      ],
-      successMessage: 'Has vuelto a la línea temporal principal',
-      validation: { currentBranch: 'main' },
-    },
-    {
-      id: 13,
-      title: 'George McFly conoce a Lorraine',
-      description: 'Commit en main: La historia original',
-      expectedCommand: 'git commit -m "George McFly conoce a Lorraine"',
-      hint: '💡 Registra cómo se conocieron originalmente',
-      hints: [
-        'En la línea temporal original, George y Lorraine se conocen',
-        'Haz commit de este momento',
-        'Comando: git commit -m "George McFly conoce a Lorraine"'
-      ],
-      successMessage: 'El encuentro original ha sido registrado',
-      validation: { commitCount: 9 },
-    },
-    {
-      id: 14,
-      title: 'El Baile del Encanto Bajo el Mar',
-      description: 'Commit: El baile donde todo cambia',
-      expectedCommand: 'git commit -m "El Baile del Encanto Bajo el Mar"',
-      hint: '💡 El baile donde George y Lorraine se enamoran',
-      hints: [
-        'Este es el baile crucial de 1955',
-        'Registra este evento importante',
-        'Comando: git commit -m "El Baile del Encanto Bajo el Mar"'
-      ],
-      successMessage: 'El baile ha sido un éxito',
-      validation: { commitCount: 10 },
-    },
-    {
-      id: 15,
-      title: 'Fusionar la paradoja resuelta',
-      description: 'Merge: Integra los cambios de marty-sin-papas',
-      expectedCommand: 'git merge marty-sin-papas',
-      hint: '💡 Usa "git merge marty-sin-papas"',
-      hints: [
-        'Necesitas fusionar la rama de la paradoja con main',
-        'Esto integrará los cambios que Marty hizo',
-        'Comando: git merge marty-sin-papas'
-      ],
-      successMessage: '¡La paradoja ha sido integrada! La línea temporal está estable',
-      validation: { merged: 'marty-sin-papas' },
-    },
-  ],
-
-  // Pantalla 2: Time Travel (2015) - VIAJE AL FUTURO + PARADOJA DE BIFF
-  screen2: [
-    {
-      id: 1,
-      title: '12 Noviembre 22:04 hs Rayo en la torre del reloj',
-      description: 'Commit: El momento clave para volver a 1985',
-      expectedCommand: 'git commit -m "12 Noviembre 22:04 hs Rayo en la torre del reloj"',
-      hint: '💡 Registra el rayo que alimenta el DeLorean',
-      hints: [
-        'Este rayo es la fuente de energía para volver al futuro',
-        'Haz commit de este momento crucial',
-        'Comando: git commit -m "12 Noviembre 22:04 hs Rayo en la torre del reloj"'
-      ],
-      successMessage: '¡El rayo ha golpeado! Marty puede volver a casa',
-      validation: { commitCount: 11 },
-    },
-    {
-      id: 2,
-      title: 'Marty llega a 1985',
-      description: 'Commit: El regreso al futuro',
-      expectedCommand: 'git commit -m "Marty llega a 1985"',
-      hint: '💡 Marty vuelve a su época',
-      hints: [
-        'Marty ha regresado exitosamente a 1985',
-        'Registra su llegada',
-        'Comando: git commit -m "Marty llega a 1985"'
-      ],
-      successMessage: 'Marty está de vuelta en 1985',
-      validation: { commitCount: 12 },
-    },
-    {
-      id: 3,
-      title: 'Marty y Jennifer se casan',
-      description: 'Commit: La vida continúa',
-      expectedCommand: 'git commit -m "Marty y Jennifer se casan"',
-      hint: '💡 El futuro de Marty y Jennifer juntos',
-      hints: [
-        'Marty y Jennifer forman una familia',
-        'Registra este momento feliz',
-        'Comando: git commit -m "Marty y Jennifer se casan"'
-      ],
-      successMessage: 'Marty y Jennifer están casados',
-      validation: { commitCount: 13 },
-    },
-    {
-      id: 4,
-      title: '2015',
-      description: 'Commit: Viaje al futuro',
-      expectedCommand: 'git commit -m "2015"',
-      hint: '💡 Doc lleva a Marty al futuro',
-      hints: [
-        'Doc regresa y lleva a Marty y Jennifer a 2015',
-        'Haz commit del salto temporal',
-        'Comando: git commit -m "2015"'
-      ],
-      successMessage: '¡Bienvenido al futuro!',
-      validation: { commitCount: 14 },
-    },
-    {
       id: 5,
-      title: 'Despiden a marty del trabajo',
-      description: 'Commit: El problema en el futuro',
-      expectedCommand: 'git commit -m "Despiden a marty del trabajo"',
-      hint: '💡 Marty tiene problemas laborales en 2015',
+      title: 'Commit: Paradoja resuelta',
+      description: 'Marty logra que sus padres se enamoren en el baile',
+      expectedCommand: 'git commit -m "1955: Marty resuelve la paradoja en el baile"',
+      hint: '💡 Registra cómo Marty arregla el futuro',
       hints: [
-        'Marty Jr. causa problemas que afectan a su padre',
-        'Registra este evento',
-        'Comando: git commit -m "Despiden a marty del trabajo"'
+        'George y Lorraine se enamoran en el baile',
+        'Marty resuelve la paradoja y vuelve a existir',
+        'Comando: git commit -m "1955: Marty resuelve la paradoja en el baile"'
       ],
-      successMessage: 'Marty ha perdido su trabajo en el futuro',
-      validation: { commitCount: 15 },
+      successMessage: '¡La paradoja está resuelta! Marty salvó a sus padres',
+      validation: { commitCount: 2 },
     },
     {
       id: 6,
-      title: 'Biff descubre la verdad',
-      description: 'Commit: Biff encuentra el DeLorean',
-      expectedCommand: 'git commit -m "Biff descubre la verdad"',
-      hint: '💡 El viejo Biff encuentra la máquina del tiempo',
+      title: 'Fusionar la paradoja',
+      description: 'Merge: Integra la solución a la línea principal',
+      expectedCommand: 'git merge marty-sin-papas',
+      hint: '💡 Primero vuelve a main, luego haz merge',
       hints: [
-        'Biff escucha sobre los viajes en el tiempo',
-        'Registra su descubrimiento',
-        'Comando: git commit -m "Biff descubre la verdad"'
+        'Primero: git checkout main',
+        'Luego: git merge marty-sin-papas',
+        'Esto integrará los cambios de la paradoja'
       ],
-      successMessage: 'Oh no, Biff sabe del DeLorean',
-      validation: { commitCount: 16 },
+      successMessage: '¡Primera aventura completa! Marty regresa a 1985 exitosamente',
+      validation: { currentBranch: 'main', merged: 'marty-sin-papas' },
+    },
+  ],
+
+  // Pantalla 2: Time Travel (2015) - FUTURO + DISTOPÍA DE BIFF (6 ejercicios)
+  screen2: [
+    {
+      id: 1,
+      title: 'Commit: Viaje a 2015',
+      description: 'Doc lleva a Marty y Jennifer al futuro para salvar a su hijo',
+      expectedCommand: 'git commit -m "2015: Doc, Marty y Jennifer viajan al futuro"',
+      hint: '💡 Registra el viaje a 2015',
+      hints: [
+        'Doc regresa del futuro y los lleva a 2015',
+        'Hay problemas con Marty Jr.',
+        'Comando: git commit -m "2015: Doc, Marty y Jennifer viajan al futuro"'
+      ],
+      successMessage: '¡Bienvenidos al año 2015!',
+      validation: { commitCount: 3 },
     },
     {
-      id: 7,
-      title: 'Volver al pasado desde 2015',
-      description: 'Commit: Preparar el regreso',
-      expectedCommand: 'git commit -m "1955"',
-      hint: '💡 Necesitamos volver a 1955 en la línea principal',
+      id: 2,
+      title: 'Commit: Biff roba el DeLorean',
+      description: 'El viejo Biff descubre la máquina y viaja a 1955 con el almanaque',
+      expectedCommand: 'git commit -m "Biff roba el DeLorean y viaja a 1955 con el almanaque"',
+      hint: '💡 Biff crea una paradoja con el almanaque deportivo',
       hints: [
-        'Registra el punto temporal de 1955',
-        'Este será un punto importante',
-        'Comando: git commit -m "1955"'
+        'El viejo Biff escucha sobre el DeLorean',
+        'Le da el almanaque a su yo joven en 1955',
+        'Comando: git commit -m "Biff roba el DeLorean y viaja a 1955 con el almanaque"'
       ],
-      successMessage: 'Punto temporal 1955 establecido',
-      validation: { commitCount: 17 },
+      successMessage: 'Oh no... Biff ha corrompido el futuro',
+      validation: { commitCount: 4 },
     },
     {
-      id: 8,
-      title: 'Marty llega desde 1985',
-      description: 'Commit: Primera llegada de Marty a 1955',
-      expectedCommand: 'git commit -m "Marty llega desde 1985"',
-      hint: '💡 Marty llega a 1955 por primera vez (BTTF1)',
-      hints: [
-        'Este es el viaje original de Marty',
-        'Registra su llegada al pasado',
-        'Comando: git commit -m "Marty llega desde 1985"'
-      ],
-      successMessage: 'Marty ha llegado a 1955 (primera vez)',
-      validation: { commitCount: 18 },
-    },
-    {
-      id: 9,
-      title: 'Biff llega desde 1985 con el calendario',
-      description: 'Commit: El viejo Biff viaja al pasado',
-      expectedCommand: 'git commit -m "Biff llega desde 1985 con el calendario"',
-      hint: '💡 Biff roba el DeLorean y viaja a 1955',
-      hints: [
-        'El viejo Biff lleva el almanaque deportivo',
-        'Esto creará una paradoja',
-        'Comando: git commit -m "Biff llega desde 1985 con el calendario"'
-      ],
-      successMessage: 'Biff ha viajado con el almanaque... esto es malo',
-      validation: { commitCount: 19 },
-    },
-    {
-      id: 10,
+      id: 3,
       title: 'Crear rama: biff-paradise',
-      description: 'Rama de la línea temporal distópica',
+      description: 'Crea la línea temporal distópica donde Biff es millonario',
       expectedCommand: 'git branch biff-paradise',
       hint: '💡 Crea la rama "biff-paradise"',
       hints: [
         'Esta rama representa el 1985 alternativo corrupto',
-        'Biff se vuelve millonario con el almanaque',
+        'Biff es millonario y poderoso',
         'Comando: git branch biff-paradise'
       ],
       successMessage: 'Rama distópica creada',
       validation: { hasBranch: 'biff-paradise' },
     },
     {
-      id: 11,
+      id: 4,
       title: 'Viajar a biff-paradise',
-      description: 'Entra en la línea temporal corrupta',
+      description: 'Entra en la línea temporal distópica',
       expectedCommand: 'git checkout biff-paradise',
-      hint: '💡 Cambia a la rama "biff-paradise"',
+      hint: '💡 Cambia a "biff-paradise"',
       hints: [
-        'Entra en la realidad alternativa',
-        'Usa checkout para cambiar de rama',
+        'Entra en el 1985 alternativo',
+        'Verás un mundo corrupto',
         'Comando: git checkout biff-paradise'
       ],
       successMessage: 'Estás en el 1985 distópico de Biff',
       validation: { currentBranch: 'biff-paradise' },
     },
     {
-      id: 12,
-      title: 'Biff se entrega el calendario',
-      description: 'Commit: El joven Biff recibe el almanaque',
-      expectedCommand: 'git commit -m "Biff se entrega el calendario"',
-      hint: '💡 El viejo Biff le da el almanaque a su yo joven',
+      id: 5,
+      title: 'Commit: Marty recupera el almanaque',
+      description: 'Marty viaja a 1955 y le quita el almanaque al joven Biff',
+      expectedCommand: 'git commit -m "1955: Marty recupera el almanaque y lo destruye"',
+      hint: '💡 Marty arregla la línea temporal',
       hints: [
-        'Este es el momento que corrompe la línea temporal',
-        'Registra esta entrega fatal',
-        'Comando: git commit -m "Biff se entrega el calendario"'
+        'Marty persigue a Biff en 1955',
+        'Recupera el almanaque y lo quema',
+        'Comando: git commit -m "1955: Marty recupera el almanaque y lo destruye"'
       ],
-      successMessage: 'El almanaque está en manos del joven Biff',
-      validation: { commitCount: 20 },
+      successMessage: '¡Almanaque destruido! Pero un rayo golpea el DeLorean...',
+      validation: { commitCount: 5 },
     },
     {
-      id: 13,
-      title: 'George McFly muere',
-      description: 'Commit: Consecuencia de la línea distópica',
-      expectedCommand: 'git commit -m "George McFly muere"',
-      hint: '💡 En esta realidad, Biff mata a George',
+      id: 6,
+      title: 'Commit: Doc viaja a 1885',
+      description: 'Un rayo envía accidentalmente a Doc al Lejano Oeste',
+      expectedCommand: 'git commit -m "Doc es enviado a 1885 por un rayo"',
+      hint: '💡 Doc desaparece hacia el pasado',
       hints: [
-        'Biff rico y poderoso elimina a George',
-        'Registra este terrible evento',
-        'Comando: git commit -m "George McFly muere"'
+        'Un rayo golpea el DeLorean',
+        'Doc viaja 70 años al pasado',
+        'Comando: git commit -m "Doc es enviado a 1885 por un rayo"'
       ],
-      successMessage: 'En esta línea temporal, George ha muerto',
-      validation: { commitCount: 21 },
+      successMessage: 'Doc está varado en 1885... ¡Marty debe rescatarlo!',
+      validation: { commitCount: 6 },
     },
+  ],
+
+  // Pantalla 3: Dystopia (1985A) - COMANDOS AVANZADOS: REBASE & CHERRY-PICK (8 ejercicios)
+  screen3: [
     {
-      id: 14,
-      title: 'El Doc es encerrado en el manicomio',
-      description: 'Commit: Doc es institucionalizado',
-      expectedCommand: 'git commit -m "El Doc es encerrado en el manicomio"',
-      hint: '💡 Biff encarcela a Doc',
-      hints: [
-        'En esta realidad, Doc está en un psiquiátrico',
-        'Registra su encierro',
-        'Comando: git commit -m "El Doc es encerrado en el manicomio"'
-      ],
-      successMessage: 'Doc está atrapado en el manicomio',
-      validation: { commitCount: 22 },
-    },
-    {
-      id: 15,
-      title: 'Jennifer, Marty y el Doc llegan desde 2015',
-      description: 'Commit: Llegada al 1985 alternativo',
-      expectedCommand: 'git commit -m "Jennifer, Marty y el Doc llegan desde 2015"',
-      hint: '💡 Regresan de 2015 a un 1985 diferente',
-      hints: [
-        'Descubren que 1985 ha cambiado horriblemente',
-        'Registra su llegada sorpresiva',
-        'Comando: git commit -m "Jennifer, Marty y el Doc llegan desde 2015"'
-      ],
-      successMessage: 'Han llegado al 1985 distópico',
-      validation: { commitCount: 23 },
-    },
-    {
-      id: 16,
-      title: 'Marty enfrenta a Biff',
-      description: 'Commit: Confrontación en el casino',
-      expectedCommand: 'git commit -m "Marty enfrenta a Biff"',
-      hint: '💡 Marty descubre la verdad sobre Biff',
-      hints: [
-        'Marty confronta al Biff millonario',
-        'Registra este enfrentamiento',
-        'Comando: git commit -m "Marty enfrenta a Biff"'
-      ],
-      successMessage: 'Marty sabe que Biff tiene el almanaque',
-      validation: { commitCount: 24 },
-    },
-    {
-      id: 17,
-      title: 'Marty llega nuevamente a 1955',
-      description: 'Commit: Segundo viaje a 1955',
-      expectedCommand: 'git commit -m "Marty llega nuevamente a 1955"',
-      hint: '💡 Marty vuelve a 1955 para arreglar la línea temporal',
-      hints: [
-        'Deben volver a 1955 para detener a Biff',
-        'Registra este segundo viaje',
-        'Comando: git commit -m "Marty llega nuevamente a 1955"'
-      ],
-      successMessage: 'Marty ha vuelto a 1955',
-      validation: { commitCount: 25 },
-    },
-    {
-      id: 18,
-      title: 'Jennifer se queda en esta distopia',
-      description: 'Commit: Jennifer queda atrapada',
-      expectedCommand: 'git commit -m "Jennifer se queda en esta distopia"',
-      hint: '💡 Jennifer no puede volver con Marty',
-      hints: [
-        'Jennifer queda temporalmente en el 1985 corrupto',
-        'Registra su separación',
-        'Comando: git commit -m "Jennifer se queda en esta distopia"'
-      ],
-      successMessage: 'Jennifer está en el 1985 distópico',
-      validation: { commitCount: 26 },
-    },
-    {
-      id: 19,
-      title: 'Crear rama: marty-calendario',
-      description: 'Sub-rama para recuperar el almanaque',
-      expectedCommand: 'git branch marty-calendario',
-      hint: '💡 Crea "marty-calendario" desde biff-paradise',
-      hints: [
-        'Esta rama representa la misión de recuperar el almanaque',
-        'Es una sub-rama de biff-paradise',
-        'Comando: git branch marty-calendario'
-      ],
-      successMessage: 'Rama de la misión creada',
-      validation: { hasBranch: 'marty-calendario' },
-    },
-    {
-      id: 20,
-      title: 'Cambiar a marty-calendario',
-      description: 'Entra en la misión de recuperación',
-      expectedCommand: 'git checkout marty-calendario',
-      hint: '💡 Cambia a "marty-calendario"',
-      hints: [
-        'Entra en la rama de la misión',
-        'Usa checkout',
-        'Comando: git checkout marty-calendario'
-      ],
-      successMessage: 'Estás en la misión de recuperar el almanaque',
-      validation: { currentBranch: 'marty-calendario' },
-    },
-    {
-      id: 21,
-      title: 'Marty le quita el calendario a Biff (Joven)',
-      description: 'Commit: ¡Misión cumplida!',
-      expectedCommand: 'git commit -m "Marty le quita el calendario a Biff (Joven)"',
-      hint: '💡 Marty recupera el almanaque',
-      hints: [
-        'Marty logra quitarle el almanaque al joven Biff',
-        'Registra este momento crucial',
-        'Comando: git commit -m "Marty le quita el calendario a Biff (Joven)"'
-      ],
-      successMessage: '¡Marty tiene el almanaque!',
-      validation: { commitCount: 27 },
-    },
-    {
-      id: 22,
-      title: 'El Doc desaparece (viaja al pasado por accidente)',
-      description: 'Commit: El rayo golpea el DeLorean',
-      expectedCommand: 'git commit -m "El Doc desaparece (viaja al pasado por accidente)"',
-      hint: '💡 Un rayo envía a Doc a 1885',
-      hints: [
-        'El DeLorean es golpeado por un rayo',
-        'Doc viaja accidentalmente al Lejano Oeste',
-        'Comando: git commit -m "El Doc desaparece (viaja al pasado por accidente)"'
-      ],
-      successMessage: '¡Doc ha desaparecido hacia 1885!',
-      validation: { commitCount: 28 },
-    },
-    {
-      id: 23,
-      title: 'Marty recibe una carta de 1885',
-      description: 'Commit: La carta del viejo oeste',
-      expectedCommand: 'git commit -m "Marty recibe una carta de 1885"',
-      hint: '💡 Doc envió una carta desde 1885',
-      hints: [
-        'Marty encuentra la carta de Doc de hace 70 años',
-        'Registra este descubrimiento',
-        'Comando: git commit -m "Marty recibe una carta de 1885"'
-      ],
-      successMessage: 'Marty sabe que Doc está en 1885',
-      validation: { commitCount: 29 },
-    },
-    {
-      id: 24,
-      title: 'El doc ayuda a Marty a viajar al pasado',
-      description: 'Commit: El Doc de 1955 ayuda',
-      expectedCommand: 'git commit -m "El doc ayuda a Marty a viajar al pasado"',
-      hint: '💡 El joven Doc repara el DeLorean',
-      hints: [
-        'El Doc de 1955 prepara el DeLorean para ir a 1885',
-        'Registra esta ayuda',
-        'Comando: git commit -m "El doc ayuda a Marty a viajar al pasado"'
-      ],
-      successMessage: 'El DeLorean está listo para ir a 1885',
-      validation: { commitCount: 30 },
-    },
-    {
-      id: 25,
+      id: 1,
       title: 'Volver a main',
-      description: 'Regresa a la línea principal',
+      description: 'Sal de biff-paradise y regresa a la línea principal',
       expectedCommand: 'git checkout main',
-      hint: '💡 Vuelve a main',
+      hint: '💡 Usa "git checkout main"',
       hints: [
-        'Sal de marty-calendario',
-        'Vuelve a la rama principal',
+        'Sal de la rama distópica',
+        'Vuelve a main para continuar',
         'Comando: git checkout main'
       ],
       successMessage: 'De vuelta en main',
       validation: { currentBranch: 'main' },
     },
     {
-      id: 26,
-      title: 'Fusionar marty-calendario',
-      description: 'Merge: Integra la solución',
-      expectedCommand: 'git merge marty-calendario',
-      hint: '💡 Fusiona "marty-calendario" en main',
-      hints: [
-        'Integra la recuperación del almanaque',
-        'Usa git merge',
-        'Comando: git merge marty-calendario'
-      ],
-      successMessage: '¡La misión del almanaque se integra a la historia!',
-      validation: { merged: 'marty-calendario' },
-    },
-  ],
-
-  // Pantalla 3: Dystopia (1985A) - RAMA FAMILIA-FELIZ + RESOLUCIÓN
-  screen3: [
-    {
-      id: 1,
+      id: 2,
       title: 'Crear rama: familia-feliz',
-      description: 'Rama de la realidad mejorada',
+      description: 'Crea la rama de la mejor realidad posible',
       expectedCommand: 'git branch familia-feliz',
       hint: '💡 Crea la rama "familia-feliz"',
       hints: [
-        'Esta rama representa el mejor 1985 posible',
-        'Los cambios de Marty mejoraron el futuro',
+        'Esta rama representa el 1985 mejorado',
+        'George es escritor, Biff lava autos',
         'Comando: git branch familia-feliz'
       ],
       successMessage: 'Rama de la familia exitosa creada',
       validation: { hasBranch: 'familia-feliz' },
     },
     {
-      id: 2,
-      title: 'Cambiar a familia-feliz',
-      description: 'Entra en la línea temporal mejorada',
+      id: 3,
+      title: 'Viajar a familia-feliz',
+      description: 'Cambia a la línea temporal mejorada',
       expectedCommand: 'git checkout familia-feliz',
       hint: '💡 Cambia a "familia-feliz"',
       hints: [
-        'Entra en la mejor realidad posible',
-        'Usa checkout',
+        'Entra en la mejor realidad',
+        'Todo es mejor gracias a los cambios de Marty',
         'Comando: git checkout familia-feliz'
       ],
       successMessage: 'Estás en la línea temporal de la familia exitosa',
       validation: { currentBranch: 'familia-feliz' },
     },
     {
-      id: 3,
-      title: 'Jennifer vuelve a la rama principal (cherry-pick)',
-      description: 'Commit: Jennifer es rescatada',
-      expectedCommand: 'git commit -m "Jennifer vuelve a la rama principal (cherry-pick)"',
-      hint: '💡 Jennifer es traída de la distopía',
-      hints: [
-        'Jennifer regresa a la línea temporal correcta',
-        'Esto es como un cherry-pick de la distopía',
-        'Comando: git commit -m "Jennifer vuelve a la rama principal (cherry-pick)"'
-      ],
-      successMessage: 'Jennifer ha sido rescatada',
-      validation: { commitCount: 31 },
-    },
-    {
       id: 4,
-      title: 'Fusionar biff-paradise en familia-feliz',
-      description: 'Merge: Cierra la línea distópica',
-      expectedCommand: 'git merge biff-paradise',
-      hint: '💡 Fusiona "biff-paradise" en familia-feliz',
+      title: 'Commit: Familia McFly exitosa',
+      description: 'Registra la nueva realidad mejorada',
+      expectedCommand: 'git commit -m "1985: George es escritor exitoso"',
+      hint: '💡 El 1985 mejorado gracias a los cambios',
       hints: [
-        'Integra y cierra la línea temporal distópica',
-        'Esto marca el fin de esa realidad',
-        'Comando: git merge biff-paradise'
+        'George es escritor famoso',
+        'Su primer libro es un éxito',
+        'Comando: git commit -m "1985: George es escritor exitoso"'
       ],
-      successMessage: 'La distopía ha sido integrada y cerrada',
-      validation: { merged: 'biff-paradise' },
+      successMessage: '¡George es un autor publicado!',
+      validation: { commitCount: 7 },
     },
     {
       id: 5,
-      title: '1985 Familia McFly Exitosa',
-      description: 'Commit: La nueva realidad',
-      expectedCommand: 'git commit -m "1985 Familia McFly Exitosa"',
-      hint: '💡 El 1985 mejorado gracias a Marty',
+      title: '🔥 REBASE: Reorganizar historia',
+      description: 'Usa rebase para reescribir la historia de familia-feliz sobre main',
+      expectedCommand: 'git rebase main',
+      hint: '💡 Usa "git rebase main" para reorganizar commits',
       hints: [
-        'George es escritor exitoso, Biff lava autos',
-        'Registra esta realidad mejorada',
-        'Comando: git commit -m "1985 Familia McFly Exitosa"'
+        'Rebase reescribe la historia moviendo commits',
+        'Esto limpia la línea temporal',
+        'Comando: git rebase main'
       ],
-      successMessage: '¡La familia McFly es exitosa!',
-      validation: { commitCount: 32 },
+      successMessage: '¡Historia reorganizada! La línea temporal es más limpia',
+      validation: { currentBranch: 'familia-feliz' },
     },
     {
       id: 6,
-      title: 'Marty no tiene un accidente',
-      description: 'Commit: Marty aprende la lección',
-      expectedCommand: 'git commit -m "Marty no tiene un accidente"',
-      hint: '💡 Marty evita el accidente de auto',
+      title: 'Commit: Biff lava autos',
+      description: 'Añade el cambio en el destino de Biff',
+      expectedCommand: 'git commit -m "Biff ahora trabaja para los McFly"',
+      hint: '💡 Registra el nuevo trabajo de Biff',
       hints: [
-        'Marty no cae en la provocación de Needles',
-        'Su futuro mejora',
-        'Comando: git commit -m "Marty no tiene un accidente"'
+        'Biff ya no es el matón',
+        'Ahora lava los autos de la familia',
+        'Comando: git commit -m "Biff ahora trabaja para los McFly"'
       ],
-      successMessage: 'Marty ha aprendido a no ser impulsivo',
-      validation: { commitCount: 33 },
+      successMessage: '¡Biff ha cambiado completamente!',
+      validation: { commitCount: 8 },
     },
     {
       id: 7,
-      title: 'No despiden a Marty del trabajo',
-      description: 'Commit: Futuro laboral asegurado',
-      expectedCommand: 'git commit -m "No despiden a Marty del trabajo"',
-      hint: '💡 El futuro de Marty mejora',
+      title: '🍒 CHERRY-PICK: Rescatar cambio específico',
+      description: 'Usa cherry-pick para traer el commit de "almanaque destruido" desde biff-paradise',
+      expectedCommand: 'git cherry-pick biff-paradise',
+      hint: '💡 Usa "git cherry-pick" para copiar un commit específico',
       hints: [
-        'Sin el accidente, Marty mantiene su empleo',
-        'Registra esta mejora',
-        'Comando: git commit -m "No despiden a Marty del trabajo"'
+        'Cherry-pick copia commits específicos',
+        'Necesitas el commit donde se destruyó el almanaque',
+        'Comando: git cherry-pick biff-paradise (o el hash del commit)'
       ],
-      successMessage: 'El futuro de Marty está asegurado',
-      validation: { commitCount: 34 },
+      successMessage: '¡Cambio específico copiado! El almanaque está destruido en esta línea',
+      validation: { commitCount: 9 },
     },
     {
       id: 8,
-      title: 'Volver a biff-paradise',
-      description: 'Cierra la rama distópica',
-      expectedCommand: 'git checkout biff-paradise',
-      hint: '💡 Vuelve a "biff-paradise" para cerrarla',
+      title: 'Fusionar en main',
+      description: 'Merge final: Integra familia-feliz a la línea principal',
+      expectedCommand: 'git merge familia-feliz',
+      hint: '💡 Primero vuelve a main, luego haz merge',
       hints: [
-        'Regresa a la rama distópica',
-        'Vamos a marcarla como obsoleta',
-        'Comando: git checkout biff-paradise'
+        'Primero: git checkout main',
+        'Luego: git merge familia-feliz',
+        'Esto consolida la mejor realidad'
       ],
-      successMessage: 'En la rama distópica para cerrarla',
-      validation: { currentBranch: 'biff-paradise' },
-    },
-    {
-      id: 9,
-      title: 'Branch deprecada',
-      description: 'Commit final: Marca la rama como obsoleta',
-      expectedCommand: 'git commit -m "Branch deprecada"',
-      hint: '💡 Marca esta línea temporal como borrada',
-      hints: [
-        'Esta realidad ya no existe',
-        'Haz un commit final de cierre',
-        'Comando: git commit -m "Branch deprecada"'
-      ],
-      successMessage: 'La distopía ha sido marcada como obsoleta',
-      validation: { commitCount: 35 },
+      successMessage: '¡Realidad mejorada consolidada! Ahora a rescatar a Doc en 1885',
+      validation: { currentBranch: 'main', merged: 'familia-feliz' },
     },
   ],
 
-  // Pantalla 4: Wild West (1885) - LEJANO OESTE + DOC Y CLARA + FINAL
+  // Pantalla 4: Wild West (1885) - COMANDOS EXPERTOS: RESET, REVERT & STASH (10 ejercicios)
   screen4: [
     {
       id: 1,
-      title: 'Volver a main',
-      description: 'Regresa a la línea principal',
-      expectedCommand: 'git checkout main',
-      hint: '💡 Vuelve a main desde familia-feliz',
+      title: 'Commit: Marty viaja a 1885',
+      description: 'Marty viaja al Lejano Oeste para rescatar a Doc',
+      expectedCommand: 'git commit -m "1885: Marty llega al Lejano Oeste"',
+      hint: '💡 Marty llega al salvaje oeste',
       hints: [
-        'Sal de familia-feliz',
-        'Regresa a la rama principal',
-        'Comando: git checkout main'
+        'El Doc de 1955 ayuda a Marty a viajar a 1885',
+        'Marty debe rescatar a Doc',
+        'Comando: git commit -m "1885: Marty llega al Lejano Oeste"'
       ],
-      successMessage: 'De vuelta en la línea principal',
-      validation: { currentBranch: 'main' },
+      successMessage: '¡Bienvenido al salvaje oeste!',
+      validation: { commitCount: 8 },
     },
     {
       id: 2,
-      title: '1885 Lejano Oeste',
-      description: 'Commit: El inicio del Lejano Oeste',
-      expectedCommand: 'git commit -m "1885 Lejano Oeste"',
-      hint: '💡 Registra la época del salvaje oeste',
-      hints: [
-        'Estamos en 1885, la era de los vaqueros',
-        'Haz commit de este punto temporal',
-        'Comando: git commit -m "1885 Lejano Oeste"'
-      ],
-      successMessage: 'Bienvenido al Lejano Oeste',
-      validation: { commitCount: 36 },
-    },
-    {
-      id: 3,
-      title: 'Doc viaja por error (Checkout)',
-      description: 'Commit: El accidente temporal de Doc',
-      expectedCommand: 'git commit -m "Doc viaja por error (Checkout)"',
-      hint: '💡 Doc llega a 1885 por el rayo',
-      hints: [
-        'Doc fue enviado aquí accidentalmente',
-        'Registra su llegada forzada',
-        'Comando: git commit -m "Doc viaja por error (Checkout)"'
-      ],
-      successMessage: 'Doc está varado en 1885',
-      validation: { commitCount: 37 },
-    },
-    {
-      id: 4,
       title: 'Crear rama: clara-viva',
-      description: 'Rama del romance en el oeste',
+      description: 'Crea la rama donde Doc conoce a Clara',
       expectedCommand: 'git branch clara-viva',
       hint: '💡 Crea la rama "clara-viva"',
       hints: [
-        'Esta rama representa la línea donde Clara sobrevive',
-        'Doc conocerá a Clara',
+        'Esta rama representa donde Clara sobrevive',
+        'Doc se enamorará de ella',
         'Comando: git branch clara-viva'
       ],
-      successMessage: 'Rama de Clara creada',
+      successMessage: 'Rama del romance de Doc creada',
       validation: { hasBranch: 'clara-viva' },
     },
     {
-      id: 5,
-      title: 'Cambiar a clara-viva',
-      description: 'Entra en la línea de Clara',
+      id: 3,
+      title: 'Viajar a clara-viva',
+      description: 'Entra en la línea donde Doc y Clara se enamoran',
       expectedCommand: 'git checkout clara-viva',
       hint: '💡 Cambia a "clara-viva"',
       hints: [
-        'Entra en la rama donde Clara vive',
-        'Usa checkout',
+        'Entra en la línea temporal romántica',
+        'Doc salvará a Clara del barranco',
         'Comando: git checkout clara-viva'
       ],
       successMessage: 'Estás en la línea temporal de Clara',
       validation: { currentBranch: 'clara-viva' },
     },
     {
-      id: 6,
-      title: 'Doc conoce a Clara en 1885',
-      description: 'Commit: El romance comienza',
-      expectedCommand: 'git commit -m "Doc conoce a Clara en 1885"',
-      hint: '💡 Doc y Clara se conocen',
+      id: 4,
+      title: 'Commit: Doc conoce a Clara',
+      description: 'Doc salva a Clara del barranco',
+      expectedCommand: 'git commit -m "Doc salva a Clara del barranco"',
+      hint: '💡 El momento crucial',
       hints: [
-        'Doc salva a Clara del barranco',
-        'Se enamoran',
-        'Comando: git commit -m "Doc conoce a Clara en 1885"'
+        'Doc ve a Clara en peligro',
+        'La salva justo a tiempo',
+        'Comando: git commit -m "Doc salva a Clara del barranco"'
       ],
-      successMessage: 'Doc ha conocido al amor de su vida',
-      validation: { commitCount: 38 },
+      successMessage: '¡Clara está a salvo!',
+      validation: { commitCount: 9 },
+    },
+    {
+      id: 5,
+      title: '💾 STASH: Guardar trabajo temporal',
+      description: '¡Ataque indio! Usa stash para guardar cambios no comiteados',
+      expectedCommand: 'git stash',
+      hint: '💡 Usa "git stash" para guardar trabajo temporal',
+      hints: [
+        'Stash guarda cambios sin hacer commit',
+        'Útil cuando necesitas cambiar de rama rápido',
+        'Comando: git stash'
+      ],
+      successMessage: '¡Trabajo guardado! Puedes huir de los indios',
+      validation: { hasStash: true },
+    },
+    {
+      id: 6,
+      title: 'STASH POP: Recuperar trabajo',
+      description: 'Recupera los cambios guardados con stash pop',
+      expectedCommand: 'git stash pop',
+      hint: '💡 Usa "git stash pop" para recuperar cambios',
+      hints: [
+        'Stash pop recupera y elimina del stash',
+        'Los cambios vuelven a tu working directory',
+        'Comando: git stash pop'
+      ],
+      successMessage: '¡Cambios recuperados! De vuelta al romance',
+      validation: { hasStash: false },
     },
     {
       id: 7,
-      title: 'Volver a main temporalmente',
-      description: 'Regresa a main para continuar',
-      expectedCommand: 'git checkout main',
-      hint: '💡 Vuelve a main',
+      title: 'Commit: Doc y Clara se enamoran',
+      description: 'Registra el amor entre Doc y Clara',
+      expectedCommand: 'git commit -m "Doc y Clara se enamoran"',
+      hint: '💡 El romance florece',
       hints: [
-        'Regresa a la línea principal',
-        'Veremos qué pasa en la línea original',
-        'Comando: git checkout main'
+        'Doc y Clara se enamoran profundamente',
+        'Pasan tiempo juntos en el telescopio',
+        'Comando: git commit -m "Doc y Clara se enamoran"'
       ],
-      successMessage: 'En main de nuevo',
-      validation: { currentBranch: 'main' },
+      successMessage: '¡El amor ha llegado a la vida de Doc!',
+      validation: { commitCount: 10 },
     },
     {
       id: 8,
-      title: 'Clara muere en 1885',
-      description: 'Commit: La línea temporal original',
-      expectedCommand: 'git commit -m "Clara muere en 1885"',
-      hint: '💡 En la línea original, Clara muere',
+      title: '⚠️ RESET SOFT: Deshacer commit (mantener cambios)',
+      description: '¡Doc duda! Usa reset --soft para deshacer el último commit pero mantener cambios',
+      expectedCommand: 'git reset --soft HEAD~1',
+      hint: '💡 Usa "git reset --soft HEAD~1" para deshacer commit',
       hints: [
-        'Sin la intervención de Doc, Clara cae al barranco',
-        'Registra este evento trágico',
-        'Comando: git commit -m "Clara muere en 1885"'
+        'Reset --soft deshace commit pero mantiene cambios staged',
+        'HEAD~1 significa "un commit atrás"',
+        'Comando: git reset --soft HEAD~1'
       ],
-      successMessage: 'En la línea original, Clara murió',
-      validation: { commitCount: 39 },
+      successMessage: '¡Commit deshecho! Doc puede repensar su decisión',
+      validation: { commitCount: 9 },
     },
     {
       id: 9,
-      title: 'Volver a clara-viva',
-      description: 'Regresa a la línea de Clara',
-      expectedCommand: 'git checkout clara-viva',
-      hint: '💡 Vuelve a "clara-viva"',
+      title: 'COMMIT: Doc elige el amor',
+      description: 'Doc decide quedarse con Clara',
+      expectedCommand: 'git commit -m "Doc elige quedarse con Clara en 1885"',
+      hint: '💡 Doc toma su decisión final',
       hints: [
-        'Regresa a la rama donde Clara vive',
-        'Usa checkout',
-        'Comando: git checkout clara-viva'
+        'Doc decide que el amor es más importante',
+        'Se quedará en 1885 con Clara',
+        'Comando: git commit -m "Doc elige quedarse con Clara en 1885"'
       ],
-      successMessage: 'De vuelta con Clara viva',
-      validation: { currentBranch: 'clara-viva' },
+      successMessage: '¡Doc ha elegido el amor sobre todo!',
+      validation: { commitCount: 10 },
     },
     {
       id: 10,
-      title: 'Marty se mete en problemas',
-      description: 'Commit: Problemas con Buford',
-      expectedCommand: 'git commit -m "Marty se mete en problemas"',
-      hint: '💡 Marty provoca a Buford "Mad Dog" Tannen',
+      title: '🔄 REVERT: Deshacer sin reescribir',
+      description: 'Usa revert para deshacer el commit anterior SIN reescribir historia',
+      expectedCommand: 'git revert HEAD',
+      hint: '💡 Usa "git revert HEAD" para crear commit inverso',
       hints: [
-        'Marty tiene un duelo con el antepasado de Biff',
-        'Registra este conflicto',
-        'Comando: git commit -m "Marty se mete en problemas"'
+        'Revert crea un nuevo commit que deshace cambios',
+        'No reescribe historia (seguro para ramas compartidas)',
+        'Comando: git revert HEAD'
       ],
-      successMessage: 'Marty está en problemas con Buford',
-      validation: { commitCount: 40 },
+      successMessage: '¡Momento! Marty y Doc construyen la locomotora del tiempo',
+      validation: { commitCount: 11 },
     },
     {
       id: 11,
-      title: 'Roban locomotora',
-      description: 'Commit: El plan para volver al futuro',
-      expectedCommand: 'git commit -m "Roban locomotora"',
-      hint: '💡 Marty y Doc roban un tren',
+      title: 'COMMIT: Locomotora del tiempo',
+      description: 'Doc convierte la locomotora en máquina del tiempo',
+      expectedCommand: 'git commit -m "Doc construye locomotora del tiempo"',
+      hint: '💡 La ingeniosa solución de Doc',
       hints: [
-        'Necesitan la locomotora para alcanzar 88 mph',
-        'Registra este robo épico',
-        'Comando: git commit -m "Roban locomotora"'
+        'Doc usa una locomotora en vez del DeLorean',
+        'Ahora pueden viajar juntos',
+        'Comando: git commit -m "Doc construye locomotora del tiempo"'
       ],
-      successMessage: 'Han robado la locomotora',
-      validation: { commitCount: 41 },
+      successMessage: '¡Doc ha creado una nueva máquina del tiempo!',
+      validation: { commitCount: 12 },
     },
     {
       id: 12,
-      title: 'Marty viaja al futuro (1985)',
-      description: 'Commit: Marty regresa a casa',
-      expectedCommand: 'git commit -m "Marty viaja al futuro (1985)"',
-      hint: '💡 Marty vuelve a 1985',
+      title: 'Commit: Familia Doc Brown',
+      description: 'Doc y Clara tienen hijos: Jules y Verne',
+      expectedCommand: 'git commit -m "Doc y Clara tienen a Jules y Verne"',
+      hint: '💡 La familia viajera del tiempo',
       hints: [
-        'Marty empuja el DeLorean con la locomotora',
-        'Regresa a su época',
-        'Comando: git commit -m "Marty viaja al futuro (1985)"'
+        'Doc y Clara forman una hermosa familia',
+        'Sus hijos se llaman Jules y Verne',
+        'Comando: git commit -m "Doc y Clara tienen a Jules y Verne"'
       ],
-      successMessage: 'Marty ha vuelto a 1985',
-      validation: { commitCount: 42 },
+      successMessage: '¡Familia completa! Doc es feliz',
+      validation: { commitCount: 13 },
     },
     {
       id: 13,
-      title: 'Volver a main para merge',
-      description: 'Prepara el merge final',
-      expectedCommand: 'git checkout main',
-      hint: '💡 Vuelve a main',
-      hints: [
-        'Regresa a la línea principal',
-        'Vamos a fusionar clara-viva',
-        'Comando: git checkout main'
-      ],
-      successMessage: 'En main para el merge',
-      validation: { currentBranch: 'main' },
-    },
-    {
-      id: 14,
-      title: 'Fusionar clara-viva',
-      description: 'Merge: Integra la historia de Clara',
+      title: 'Merge final: Integrar la historia',
+      description: 'Fusiona clara-viva en main para completar la saga',
       expectedCommand: 'git merge clara-viva',
-      hint: '💡 Fusiona "clara-viva" en main',
+      hint: '💡 Primero vuelve a main, luego haz merge',
       hints: [
-        'Integra la línea temporal donde Clara vive',
-        'Usa git merge',
-        'Comando: git merge clara-viva'
+        'Primero: git checkout main',
+        'Luego: git merge clara-viva',
+        'Esto cierra el círculo temporal completo'
       ],
-      successMessage: 'La historia de Clara está integrada',
-      validation: { merged: 'clara-viva' },
-    },
-    {
-      id: 15,
-      title: 'Volver a clara-viva para el final',
-      description: 'Regresa para el final feliz',
-      expectedCommand: 'git checkout clara-viva',
-      hint: '💡 Vuelve a "clara-viva"',
-      hints: [
-        'Regresa a la rama de Clara',
-        'Vamos a ver el final',
-        'Comando: git checkout clara-viva'
-      ],
-      successMessage: 'En la rama de Clara para el final',
-      validation: { currentBranch: 'clara-viva' },
-    },
-    {
-      id: 16,
-      title: 'Doc y Clara forman familia',
-      description: 'Commit: El final feliz',
-      expectedCommand: 'git commit -m "Doc y Clara forman familia"',
-      hint: '💡 Doc y Clara tienen hijos y viajan en el tiempo',
-      hints: [
-        'Doc construye una locomotora del tiempo',
-        'Tienen dos hijos: Jules y Verne',
-        'Comando: git commit -m "Doc y Clara forman familia"'
-      ],
-      successMessage: '¡Doc tiene su final feliz con Clara y sus hijos!',
-      validation: { commitCount: 43 },
-    },
-    {
-      id: 17,
-      title: 'Volver a main - Final',
-      description: 'Regresa a la línea principal',
-      expectedCommand: 'git checkout main',
-      hint: '💡 Vuelve a main una última vez',
-      hints: [
-        'Regresa a la rama principal',
-        'La aventura está completa',
-        'Comando: git checkout main'
-      ],
-      successMessage: 'De vuelta en main - Historia completa',
-      validation: { currentBranch: 'main' },
-    },
-    {
-      id: 18,
-      title: 'El Doc escribe una nota para Marty',
-      description: 'Commit final: Cierre del círculo',
-      expectedCommand: 'git commit -m "El Doc escribe una nota para Marty"',
-      hint: '💡 La carta que esperó 70 años',
-      hints: [
-        'Doc escribe la carta en 1885 que Marty lee en 1955',
-        'El círculo temporal se cierra',
-        'Comando: git commit -m "El Doc escribe una nota para Marty"'
-      ],
-      successMessage: '🎉 ¡HISTORIA COMPLETA! Has recreado toda la saga de Back to the Future con Git',
-      validation: { commitCount: 44 },
+      successMessage: '🎉 ¡SAGA COMPLETA! Has dominado Git recreando Back to the Future',
+      validation: { currentBranch: 'main', merged: 'clara-viva' },
     },
   ],
 };
