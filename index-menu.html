@@ -1,508 +1,775 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Git to the Future - Aprende Git con Back to the Future</title>
-  
-  <!-- CSS Modular -->
-  <link rel="stylesheet" href="css/variables.css">
-  <link rel="stylesheet" href="css/components/base.css">
-  <link rel="stylesheet" href="css/components/navigation.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git to the Future - Aprende Git con Back to the Future</title>
 
-  <style>
-    body {
-      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #2196f3 100%);
-      background-attachment: fixed;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    <!-- CSS Modular -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/components/base.css" />
+    <link rel="stylesheet" href="css/components/navigation.css" />
 
-    .hero {
-      text-align: center;
-      padding: var(--spacing-xl) var(--spacing-md);
-      margin: var(--spacing-xl) 0;
-    }
+    <style>
+      body {
+        background: linear-gradient(
+          135deg,
+          #0f0f1e 0%,
+          #1a1a2e 50%,
+          #2196f3 100%
+        );
+        background-attachment: fixed;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
 
-    .hero__title {
-      font-size: 64px;
-      margin: 0;
-      background: linear-gradient(135deg, #2196f3, #ff9100, #ff4081);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: pulse 3s infinite;
-      text-shadow: 0 0 40px rgba(33, 150, 243, 0.5);
-    }
+      .hero {
+        text-align: center;
+        padding: var(--spacing-xl) var(--spacing-md);
+        margin: var(--spacing-xl) 0;
+      }
 
-    .hero__subtitle {
-      font-size: 24px;
-      color: var(--color-muted);
-      margin-top: var(--spacing-md);
-    }
+      .hero__title {
+        font-size: 64px;
+        margin: 0;
+        background: linear-gradient(135deg, #2196f3, #ff9100, #ff4081);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: pulse 3s infinite;
+        text-shadow: 0 0 40px rgba(33, 150, 243, 0.5);
+      }
 
-    .hero__logo {
-      font-size: 120px;
-      margin: var(--spacing-lg) 0;
-      animation: float 3s ease-in-out infinite;
-    }
+      .hero__subtitle {
+        font-size: 24px;
+        color: var(--color-muted);
+        margin-top: var(--spacing-md);
+      }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
-    }
+      .hero__logo {
+        font-size: 120px;
+        margin: var(--spacing-lg) 0;
+        animation: float 3s ease-in-out infinite;
+      }
 
-    .screens-menu {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: var(--spacing-xl) var(--spacing-md);
-    }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
 
-    .screen-card {
-      background: var(--color-surface);
-      border: 2px solid var(--color-primary);
-      border-radius: var(--border-radius-lg);
-      padding: var(--spacing-xl);
-      margin-bottom: var(--spacing-lg);
-      transition: all var(--transition-normal);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
+      .screens-menu {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: var(--spacing-xl) var(--spacing-md);
+      }
 
-    .screen-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #2196f3, #ff9100, #ff4081);
-      transform: scaleX(0);
-      transition: transform var(--transition-normal);
-    }
+      .screen-card {
+        background: var(--color-surface);
+        border: 2px solid var(--color-primary);
+        border-radius: var(--border-radius-lg);
+        padding: var(--spacing-xl);
+        margin-bottom: var(--spacing-lg);
+        transition: all var(--transition-normal);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
 
-    .screen-card:hover::before {
-      transform: scaleX(1);
-    }
+      .screen-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #2196f3, #ff9100, #ff4081);
+        transform: scaleX(0);
+        transition: transform var(--transition-normal);
+      }
 
-    .screen-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 40px rgba(33, 150, 243, 0.3);
-      border-color: #ff9100;
-    }
+      .screen-card:hover::before {
+        transform: scaleX(1);
+      }
 
-    .screen-card--locked {
-      opacity: 0.5;
-      cursor: not-allowed;
-      filter: grayscale(80%);
-    }
+      .screen-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(33, 150, 243, 0.3);
+        border-color: #ff9100;
+      }
 
-    .screen-card--locked:hover {
-      transform: none;
-      box-shadow: none;
-    }
+      .screen-card--locked {
+        opacity: 0.5;
+        cursor: not-allowed;
+        filter: grayscale(80%);
+      }
 
-    .screen-card--completed {
-      border-color: #4caf50;
-      background: rgba(76, 175, 80, 0.1);
-    }
+      .screen-card--locked:hover {
+        transform: none;
+        box-shadow: none;
+      }
 
-    .screen-card__header {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-md);
-      margin-bottom: var(--spacing-md);
-    }
+      .screen-card--completed {
+        border-color: #4caf50;
+        background: rgba(76, 175, 80, 0.1);
+      }
 
-    .screen-card__icon {
-      font-size: 48px;
-    }
+      .screen-card__header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+      }
 
-    .screen-card__number {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #2196f3, #ff9100);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      font-weight: bold;
-    }
+      .screen-card__icon {
+        font-size: 48px;
+      }
 
-    .screen-card__title {
-      flex: 1;
-      margin: 0;
-      color: var(--color-accent);
-      font-size: 28px;
-    }
+      .screen-card__number {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2196f3, #ff9100);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+      }
 
-    .screen-card__description {
-      color: var(--color-muted);
-      margin-bottom: var(--spacing-md);
-      line-height: 1.6;
-    }
+      .screen-card__title {
+        flex: 1;
+        margin: 0;
+        color: var(--color-accent);
+        font-size: 28px;
+      }
 
-    .screen-card__commands {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--spacing-xs);
-      margin-top: var(--spacing-md);
-    }
+      .screen-card__description {
+        color: var(--color-muted);
+        margin-bottom: var(--spacing-md);
+        line-height: 1.6;
+      }
 
-    .screen-card__command {
-      background: rgba(33, 150, 243, 0.2);
-      padding: var(--spacing-xs) var(--spacing-sm);
-      border-radius: var(--border-radius-sm);
-      font-family: var(--font-family-code);
-      font-size: 14px;
-      color: var(--color-highlight);
-    }
+      .screen-card__commands {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xs);
+        margin-top: var(--spacing-md);
+      }
 
-    .screen-card__badge {
-      position: absolute;
-      top: var(--spacing-md);
-      right: var(--spacing-md);
-      background: #4caf50;
-      color: white;
-      padding: var(--spacing-xs) var(--spacing-sm);
-      border-radius: var(--border-radius-md);
-      font-size: 14px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-xs);
-    }
+      .screen-card__command {
+        background: rgba(33, 150, 243, 0.2);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--border-radius-sm);
+        font-family: var(--font-family-code);
+        font-size: 14px;
+        color: var(--color-highlight);
+      }
 
-    .screen-card__lock {
-      position: absolute;
-      top: var(--spacing-md);
-      right: var(--spacing-md);
-      font-size: 32px;
-    }
+      .screen-card__badge {
+        position: absolute;
+        top: var(--spacing-md);
+        right: var(--spacing-md);
+        background: #4caf50;
+        color: white;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--border-radius-md);
+        font-size: 14px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+      }
 
-    .progress-section {
-      max-width: 800px;
-      margin: var(--spacing-xl) auto;
-      text-align: center;
-    }
+      .screen-card__lock {
+        position: absolute;
+        top: var(--spacing-md);
+        right: var(--spacing-md);
+        font-size: 32px;
+      }
 
-    .progress-bar-container {
-      background: var(--color-bg);
-      border-radius: var(--border-radius-lg);
-      height: 32px;
-      margin: var(--spacing-lg) 0;
-      overflow: hidden;
-      position: relative;
-    }
+      .progress-section {
+        max-width: 800px;
+        margin: var(--spacing-xl) auto;
+        text-align: center;
+      }
 
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #2196f3, #ff9100);
-      transition: width var(--transition-slow);
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: var(--spacing-md);
-      color: white;
-      font-weight: bold;
-    }
+      .progress-bar-container {
+        background: var(--color-bg);
+        border-radius: var(--border-radius-lg);
+        height: 32px;
+        margin: var(--spacing-lg) 0;
+        overflow: hidden;
+        position: relative;
+      }
 
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: var(--spacing-lg);
-      max-width: 1200px;
-      margin: var(--spacing-xl) auto;
-      padding: 0 var(--spacing-md);
-    }
+      .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #2196f3, #ff9100);
+        transition: width var(--transition-slow);
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: var(--spacing-md);
+        color: white;
+        font-weight: bold;
+      }
 
-    .feature-card {
-      background: var(--color-surface);
-      border: 2px solid var(--color-highlight);
-      border-radius: var(--border-radius-lg);
-      padding: var(--spacing-lg);
-      text-align: center;
-      transition: all var(--transition-normal);
-    }
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--spacing-lg);
+        max-width: 1200px;
+        margin: var(--spacing-xl) auto;
+        padding: 0 var(--spacing-md);
+      }
 
-    .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 24px rgba(33, 150, 243, 0.3);
-    }
+      .feature-card {
+        background: var(--color-surface);
+        border: 2px solid var(--color-highlight);
+        border-radius: var(--border-radius-lg);
+        padding: var(--spacing-lg);
+        text-align: center;
+        transition: all var(--transition-normal);
+      }
 
-    .feature-card__icon {
-      font-size: 56px;
-      margin-bottom: var(--spacing-md);
-    }
-  </style>
-</head>
-<body>
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(33, 150, 243, 0.3);
+      }
 
-  <!-- Header Principal -->
-  <header class="app-header">
-    <a href="index.html" style="text-decoration: none;">
-      <h1 class="app-header__title">GIT TO THE FUTURE</h1>
-      <p class="app-header__subtitle">⚡ Aprende Git a través del tiempo ⚡</p>
-    </a>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero">
-    <img class="hero__logo"src="assets/fonts/img/DeLorean Animation.gif"/>
-  </section>
-
-  <!-- Progress Section -->
-  <section class="progress-section">
-    <h2 style="color: var(--color-accent); margin-bottom: var(--spacing-md);">Tu Progreso</h2>
-    <div class="progress-bar-container">
-      <div class="progress-bar-fill" id="progressBar" style="width: 0%">
-        <span id="progressText">0%</span>
-      </div>
-    </div>
-    <p style="color: var(--color-muted);" id="progressDescription">
-      Comienza tu viaje temporal aprendiendo Git
-    </p>
-  </section>
-
-  <!-- Screens Menu -->
-  <main class="screens-menu">
-    <h2 style="text-align: center; color: var(--color-primary); margin-bottom: var(--spacing-xl); font-size: 32px;">
-      🎬 Pantallas de Aprendizaje
-    </h2>
-
-    <!-- Screen 1 -->
-    <div class="screen-card" data-screen-id="1" id="screen1">
-      <div class="screen-card__header">
-        <div class="screen-card__icon">📅</div>
-        <div class="screen-card__number">1</div>
-        <h3 class="screen-card__title">Origin (1985→1955)</h3>
-      </div>
-      <p class="screen-card__description">
-        Aprende los fundamentos de Git. Marty viaja accidentalmente a 1955 y debe aprender a navegar
-        por el tiempo (y por Git) para regresar a casa.
-      </p>
-      <strong style="color: var(--color-accent);">Conceptos:</strong>
-      <div class="screen-card__commands">
-        <code class="screen-card__command">git init</code>
-        <code class="screen-card__command">git add</code>
-        <code class="screen-card__command">git commit</code>
-        <code class="screen-card__command">git branch</code>
-        <code class="screen-card__command">git checkout</code>
-      </div>
-    </div>
-
-    <!-- Screen 2 -->
-    <div class="screen-card screen-card--locked" data-screen-id="2" id="screen2">
-      <div class="screen-card__lock">🔒</div>
-      <div class="screen-card__header">
-        <div class="screen-card__icon">🚀</div>
-        <div class="screen-card__number">2</div>
-        <h3 class="screen-card__title">Time Travel (2015)</h3>
-      </div>
-      <p class="screen-card__description">
-        Domina git checkout para viajar entre ramas. Marty y Doc viajan al futuro (2015) para salvar
-        a la familia McFly de la ruina.
-      </p>
-      <strong style="color: var(--color-accent);">Conceptos:</strong>
-      <div class="screen-card__commands">
-        <code class="screen-card__command">git checkout [rama]</code>
-        <code class="screen-card__command">git checkout -b [rama]</code>
-        <code class="screen-card__command">Navegación entre ramas</code>
-      </div>
-    </div>
-
-    <!-- Screen 3 -->
-    <div class="screen-card screen-card--locked" data-screen-id="3" id="screen3">
-      <div class="screen-card__lock">🔒</div>
-      <div class="screen-card__header">
-        <div class="screen-card__icon">⚠️</div>
-        <div class="screen-card__number">3</div>
-        <h3 class="screen-card__title">Dystopia (1985A)</h3>
-      </div>
-      <p class="screen-card__description">
-        Aprende a arreglar historiales corruptos. Biff ha creado una línea temporal distópica y
-        debes usar comandos avanzados para restaurar la realidad correcta.
-      </p>
-      <strong style="color: var(--color-accent);">Conceptos:</strong>
-      <div class="screen-card__commands">
-        <code class="screen-card__command">git reset --hard</code>
-        <code class="screen-card__command">git revert</code>
-        <code class="screen-card__command">git merge</code>
-        <code class="screen-card__command">Recuperación de errores</code>
-      </div>
-    </div>
-
-    <!-- Screen 4 -->
-    <div class="screen-card screen-card--locked" data-screen-id="4" id="screen4">
-      <div class="screen-card__lock">🔒</div>
-      <div class="screen-card__header">
-        <div class="screen-card__icon">🤠</div>
-        <div class="screen-card__number">4</div>
-        <h3 class="screen-card__title">Wild West (1885)</h3>
-      </div>
-      <p class="screen-card__description">
-        Domina git stash y comandos avanzados. Doc está atrapado en el Lejano Oeste y Marty debe
-        rescatarlo mientras maneja múltiples cambios temporales.
-      </p>
-      <strong style="color: var(--color-accent);">Conceptos:</strong>
-      <div class="screen-card__commands">
-        <code class="screen-card__command">git stash</code>
-        <code class="screen-card__command">git stash pop</code>
-        <code class="screen-card__command">git branch -d</code>
-        <code class="screen-card__command">Gestión WIP</code>
-      </div>
-    </div>
-
-    <!-- Demo Final -->
-    <div class="screen-card screen-card--locked" data-screen-id="5" id="screen5" style="border: 3px solid #7c4dff; background: rgba(124, 77, 255, 0.1);">
-      <div class="screen-card__lock">🔒</div>
-      <div class="screen-card__header">
-        <div class="screen-card__icon">🎬</div>
-        <div class="screen-card__number">🏆</div>
-        <h3 class="screen-card__title">Demo Completo BTTF</h3>
-      </div>
-      <p class="screen-card__description">
-        ¡El premio final! Visualiza toda la historia de Back to the Future como un repositorio Git completo.
-        Todas las ramas, merges y líneas temporales de la trilogía en un solo gráfico épico.
-      </p>
-      <strong style="color: #7c4dff;">🎉 Desbloquea completando las 4 pantallas</strong>
-    </div>
-
-  </main>
-
-  <!-- Features Section -->
-  <section style="padding: var(--spacing-xl) 0; background: rgba(0, 0, 0, 0.3);">
-    <h2 style="text-align: center; color: var(--color-primary); margin-bottom: var(--spacing-xl); font-size: 32px;">
-      ✨ Características
-    </h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-card__icon">🎓</div>
-        <h3 style="color: var(--color-accent); margin-bottom: var(--spacing-sm);">Aprende Haciendo</h3>
-        <p style="color: var(--color-muted); font-size: 14px;">
-          Ejercicios interactivos con validación en tiempo real
+      .feature-card__icon {
+        font-size: 56px;
+        margin-bottom: var(--spacing-md);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header Principal -->
+    <header class="app-header">
+      <a href="index.html" style="text-decoration: none">
+        <h1 class="app-header__title">GIT TO THE FUTURE</h1>
+        <p class="app-header__subtitle">
+          ⚡ Aprende Git a través del tiempo ⚡
         </p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-card__icon">📊</div>
-        <h3 style="color: var(--color-accent); margin-bottom: var(--spacing-sm);">Visualización</h3>
-        <p style="color: var(--color-muted); font-size: 14px;">
-          Gráficos GitGraph que muestran cada commit y rama
-        </p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-card__icon">🚀</div>
-        <h3 style="color: var(--color-accent); margin-bottom: var(--spacing-sm);">Progreso Guardado</h3>
-        <p style="color: var(--color-muted); font-size: 14px;">
-          Tu avance se guarda automáticamente
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer style="text-align: center; padding: var(--spacing-xl); color: var(--color-muted); margin-top: auto;">
-    <p style="font-size: 18px; margin-bottom: var(--spacing-sm);">🚗⚡ Git to the Future</p>
-    <p style="font-size: 14px;">Creado con ❤️ para aprender Git de forma divertida</p>
-    <p style="font-size: 14px; margin-top: var(--spacing-sm);">
-      <a href="https://github.com/jeremiasMS/git-to-the-future" target="_blank" 
-         style="color: var(--color-accent); text-decoration: none;">
-        ⭐ Star en GitHub
       </a>
-    </p>
-  </footer>
+    </header>
 
-  <!-- JavaScript -->
-  <script type="module">
-    import { ScreenController, UIController, Logger } from './js/modules/index.js';
+    <!-- Hero Section -->
+    <section class="hero">
+      <img class="hero__logo" src="assets/fonts/img/DeLorean Animation.gif" />
+    </section>
 
-    Logger.log('Iniciando menú principal');
+    <!-- Progress Section -->
+    <section class="progress-section">
+      <h2 style="color: var(--color-accent); margin-bottom: var(--spacing-md)">
+        Tu Progreso
+      </h2>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progressBar" style="width: 0%">
+          <span id="progressText">0%</span>
+        </div>
+      </div>
+      <p style="color: var(--color-muted)" id="progressDescription">
+        Comienza tu viaje temporal aprendiendo Git
+      </p>
+    </section>
 
-    const screenCtrl = new ScreenController();
-    const ui = new UIController();
+    <!-- Screens Menu -->
+    <main class="screens-menu">
+      <h2
+        style="
+          text-align: center;
+          color: var(--color-primary);
+          margin-bottom: var(--spacing-xl);
+          font-size: 32px;
+        "
+      >
+        🎬 Pantallas de Aprendizaje
+      </h2>
 
-    // Actualizar UI basado en progreso
-    function updateUI() {
-      const progress = screenCtrl.getProgressPercentage();
-      const progressBar = document.getElementById('progressBar');
-      const progressText = document.getElementById('progressText');
-      const progressDesc = document.getElementById('progressDescription');
+      <!-- Screen 1 -->
+      <div class="screen-card" data-screen-id="1" id="screen1">
+        <div class="screen-card__header">
+          <div class="screen-card__icon">📅</div>
+          <div class="screen-card__number">1</div>
+          <h3 class="screen-card__title">Origin (1985→1955)</h3>
+        </div>
+        <p class="screen-card__description">
+          Aprende los fundamentos de Git. Marty viaja accidentalmente a 1955 y
+          debe aprender a navegar por el tiempo (y por Git) para regresar a
+          casa.
+        </p>
+        <strong style="color: var(--color-accent)">Conceptos:</strong>
+        <div class="screen-card__commands">
+          <code class="screen-card__command">git init</code>
+          <code class="screen-card__command">git add</code>
+          <code class="screen-card__command">git commit</code>
+          <code class="screen-card__command">git branch</code>
+          <code class="screen-card__command">git checkout</code>
+        </div>
+      </div>
 
-      progressBar.style.width = `${progress}%`;
-      progressText.textContent = `${progress}%`;
+      <!-- Screen 2 -->
+      <div
+        class="screen-card screen-card--locked"
+        data-screen-id="2"
+        id="screen2"
+      >
+        <div class="screen-card__lock">🔒</div>
+        <div class="screen-card__header">
+          <div class="screen-card__icon">🚀</div>
+          <div class="screen-card__number">2</div>
+          <h3 class="screen-card__title">Time Travel (2015)</h3>
+        </div>
+        <p class="screen-card__description">
+          Domina git checkout para viajar entre ramas. Marty y Doc viajan al
+          futuro (2015) para salvar a la familia McFly de la ruina.
+        </p>
+        <strong style="color: var(--color-accent)">Conceptos:</strong>
+        <div class="screen-card__commands">
+          <code class="screen-card__command">git checkout [rama]</code>
+          <code class="screen-card__command">git checkout -b [rama]</code>
+          <code class="screen-card__command">Navegación entre ramas</code>
+        </div>
+      </div>
 
-      // Solo contar pantallas principales (1-4, excluyendo demo)
-      const mainScreens = screenCtrl.screens.filter(s => s.id <= 4);
-      const completed = mainScreens.filter(s => s.completed).length;
-      
-      if (completed === 0) {
-        progressDesc.textContent = 'Comienza tu viaje temporal aprendiendo Git';
-      } else if (completed < 4) {
-        progressDesc.textContent = `${completed} de 4 pantallas completadas - ¡Sigue así!`;
-      } else if (completed === 4) {
-        progressDesc.textContent = '🎉 ¡Todas las pantallas completadas! Ahora puedes ver el demo final';
-      }
+      <!-- Screen 3 -->
+      <div
+        class="screen-card screen-card--locked"
+        data-screen-id="3"
+        id="screen3"
+      >
+        <div class="screen-card__lock">🔒</div>
+        <div class="screen-card__header">
+          <div class="screen-card__icon">⚠️</div>
+          <div class="screen-card__number">3</div>
+          <h3 class="screen-card__title">Dystopia (1985A)</h3>
+        </div>
+        <p class="screen-card__description">
+          Aprende a arreglar historiales corruptos. Biff ha creado una línea
+          temporal distópica y debes usar comandos avanzados para restaurar la
+          realidad correcta.
+        </p>
+        <strong style="color: var(--color-accent)">Conceptos:</strong>
+        <div class="screen-card__commands">
+          <code class="screen-card__command">git reset --hard</code>
+          <code class="screen-card__command">git revert</code>
+          <code class="screen-card__command">git merge</code>
+          <code class="screen-card__command">Recuperación de errores</code>
+        </div>
+      </div>
 
-      // Actualizar cada card
-      screenCtrl.screens.forEach(screen => {
-        const card = document.getElementById(`screen${screen.id}`);
-        if (!card) return;
+      <!-- Screen 4 -->
+      <div
+        class="screen-card screen-card--locked"
+        data-screen-id="4"
+        id="screen4"
+      >
+        <div class="screen-card__lock">🔒</div>
+        <div class="screen-card__header">
+          <div class="screen-card__icon">🤠</div>
+          <div class="screen-card__number">4</div>
+          <h3 class="screen-card__title">Wild West (1885)</h3>
+        </div>
+        <p class="screen-card__description">
+          Domina git stash y comandos avanzados. Doc está atrapado en el Lejano
+          Oeste y Marty debe rescatarlo mientras maneja múltiples cambios
+          temporales.
+        </p>
+        <strong style="color: var(--color-accent)">Conceptos:</strong>
+        <div class="screen-card__commands">
+          <code class="screen-card__command">git stash</code>
+          <code class="screen-card__command">git stash pop</code>
+          <code class="screen-card__command">git branch -d</code>
+          <code class="screen-card__command">Gestión WIP</code>
+        </div>
+      </div>
 
-        // Remover clases
-        card.classList.remove('screen-card--locked', 'screen-card--completed');
+      <!-- Demo Final -->
+      <div
+        class="screen-card screen-card--locked"
+        data-screen-id="5"
+        id="screen5"
+        style="border: 3px solid #7c4dff; background: rgba(124, 77, 255, 0.1)"
+      >
+        <div class="screen-card__lock">🔒</div>
+        <div class="screen-card__header">
+          <div class="screen-card__icon">🎬</div>
+          <div class="screen-card__number">🏆</div>
+          <h3 class="screen-card__title">Demo Completo BTTF</h3>
+        </div>
+        <p class="screen-card__description">
+          ¡El premio final! Visualiza toda la historia de Back to the Future
+          como un repositorio Git completo. Todas las ramas, merges y líneas
+          temporales de la trilogía en un solo gráfico épico.
+        </p>
+        <strong style="color: #7c4dff"
+          >🎉 Desbloquea completando las 4 pantallas</strong
+        >
+      </div>
+    </main>
 
-        // Aplicar estado
-        if (screen.completed) {
-          card.classList.add('screen-card--completed');
-          const lock = card.querySelector('.screen-card__lock');
-          if (lock) lock.remove();
-          
-          // Agregar badge de completado
-          if (!card.querySelector('.screen-card__badge')) {
-            const badge = document.createElement('div');
-            badge.className = 'screen-card__badge';
-            badge.innerHTML = '<span>✓</span> Completada';
-            card.appendChild(badge);
+    <!-- Features Section -->
+    <section
+      style="padding: var(--spacing-xl) 0; background: rgba(0, 0, 0, 0.3)"
+    >
+      <h2
+        style="
+          text-align: center;
+          color: var(--color-primary);
+          margin-bottom: var(--spacing-xl);
+          font-size: 32px;
+        "
+      >
+        ✨ Características
+      </h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-card__icon">🎓</div>
+          <h3
+            style="color: var(--color-accent); margin-bottom: var(--spacing-sm)"
+          >
+            Aprende Haciendo
+          </h3>
+          <p style="color: var(--color-muted); font-size: 14px">
+            Ejercicios interactivos con validación en tiempo real
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">📊</div>
+          <h3
+            style="color: var(--color-accent); margin-bottom: var(--spacing-sm)"
+          >
+            Visualización
+          </h3>
+          <p style="color: var(--color-muted); font-size: 14px">
+            Gráficos GitGraph que muestran cada commit y rama
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">🚀</div>
+          <h3
+            style="color: var(--color-accent); margin-bottom: var(--spacing-sm)"
+          >
+            Progreso Guardado
+          </h3>
+          <p style="color: var(--color-muted); font-size: 14px">
+            Tu avance se guarda automáticamente
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+      style="
+        text-align: center;
+        padding: var(--spacing-xl);
+        color: var(--color-muted);
+        margin-top: auto;
+      "
+    >
+      <p style="font-size: 18px; margin-bottom: var(--spacing-sm)">
+        🚗⚡ Git to the Future
+      </p>
+      <p style="font-size: 14px">
+        Creado con ❤️ para aprender Git de forma divertida
+      </p>
+      <p style="font-size: 14px; margin-top: var(--spacing-sm)">
+        <a
+          href="https://github.com/jeremiasMS/git-to-the-future"
+          target="_blank"
+          style="color: var(--color-accent); text-decoration: none"
+        >
+          ⭐ Star en GitHub
+        </a>
+      </p>
+    </footer>
+
+    <!-- JavaScript (Sin módulos ES6) -->
+    <script>
+      // Logger simple
+      const Logger = {
+        log: (message, data = null) =>
+          console.log(`[Git-BTTF] ${message}`, data || ''),
+        warn: (message, data = null) =>
+          console.warn(`[Git-BTTF WARNING] ${message}`, data || ''),
+        error: (message, error = null) =>
+          console.error(`[Git-BTTF ERROR] ${message}`, error || ''),
+      };
+
+      // ScreenController simplificado
+      class ScreenController {
+        constructor() {
+          this.screens = [
+            {
+              id: 1,
+              name: 'Origin',
+              path: 'screen1.html',
+              completed: false,
+              locked: false,
+            },
+            {
+              id: 2,
+              name: 'Time Travel',
+              path: 'screen2.html',
+              completed: false,
+              locked: true,
+            },
+            {
+              id: 3,
+              name: 'Dystopia',
+              path: 'screen3.html',
+              completed: false,
+              locked: true,
+            },
+            {
+              id: 4,
+              name: 'Wild West',
+              path: 'screen4.html',
+              completed: false,
+              locked: true,
+            },
+            {
+              id: 5,
+              name: 'Demo BTTF',
+              path: 'demo.html',
+              completed: false,
+              locked: true,
+            },
+          ];
+          this.loadProgress();
+        }
+
+        loadProgress() {
+          const savedProgress = localStorage.getItem('git-bttf-progress');
+          if (savedProgress) {
+            try {
+              const progress = JSON.parse(savedProgress);
+              this.screens = this.screens.map((screen) => {
+                const saved = progress.find((s) => s.id === screen.id);
+                return saved
+                  ? {
+                      ...screen,
+                      completed: saved.completed,
+                      locked: saved.locked,
+                    }
+                  : screen;
+              });
+            } catch (e) {
+              Logger.error('Error loading progress', e);
+            }
           }
-        } else if (screen.locked) {
-          card.classList.add('screen-card--locked');
-        } else {
-          const lock = card.querySelector('.screen-card__lock');
-          if (lock) lock.remove();
         }
-      });
-    }
 
-    // Event listeners para las cards
-    document.querySelectorAll('.screen-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const screenId = parseInt(card.getAttribute('data-screen-id'));
-        const screen = screenCtrl.screens.find(s => s.id === screenId);
-
-        if (screen && !screen.locked) {
-          window.location.href = `screens/${screen.path}`;
-        } else {
-          ui.showNotification('🔒 Completa la pantalla anterior primero', 'warning');
+        getProgressPercentage() {
+          const mainScreens = this.screens.filter((s) => s.id <= 4);
+          const completed = mainScreens.filter((s) => s.completed).length;
+          return Math.round((completed / mainScreens.length) * 100);
         }
-      });
-    });
-
-    // Inicializar UI
-    updateUI();
-
-    // Mensaje de bienvenida
-    setTimeout(() => {
-      if (screenCtrl.getProgressPercentage() === 0) {
-        ui.showNotification('👋 ¡Bienvenido a Git to the Future!', 'info', 4000);
       }
-    }, 500);
 
-    Logger.log('Menú principal cargado');
-  </script>
+      // UIController simplificado
+      class UIController {
+        constructor() {
+          this.initializeNotificationContainer();
+        }
 
-</body>
+        initializeNotificationContainer() {
+          if (!document.getElementById('notification-container')) {
+            const container = document.createElement('div');
+            container.id = 'notification-container';
+            container.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+          `;
+            document.body.appendChild(container);
+          }
+        }
+
+        showNotification(message, type = 'info', duration = 3000) {
+          const container = document.getElementById('notification-container');
+          const notification = document.createElement('div');
+
+          const icons = {
+            success: '✅',
+            error: '❌',
+            warning: '⚠️',
+            info: 'ℹ️',
+          };
+
+          const colors = {
+            success: 'linear-gradient(135deg, #4caf50, #66bb6a)',
+            error: 'linear-gradient(135deg, #f44336, #e57373)',
+            warning: 'linear-gradient(135deg, #ff9800, #ffb74d)',
+            info: 'linear-gradient(135deg, #2196f3, #64b5f6)',
+          };
+
+          notification.innerHTML = `
+          <span style="font-size: 16px;">${icons[type] || icons.info}</span>
+          <span>${message}</span>
+        `;
+
+          notification.style.cssText = `
+          background: ${colors[type] || colors.info};
+          color: white;
+          padding: 16px 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 14px;
+          font-weight: 500;
+          animation: slideInRight 0.3s ease-out;
+        `;
+
+          container.appendChild(notification);
+
+          if (duration > 0) {
+            setTimeout(() => {
+              notification.style.animation = 'fadeOut 0.3s ease-out';
+              setTimeout(() => notification.remove(), 300);
+            }, duration);
+          }
+        }
+      }
+
+      Logger.log('Iniciando menú principal');
+
+      const screenCtrl = new ScreenController();
+      const ui = new UIController();
+
+      // Actualizar UI basado en progreso
+      function updateUI() {
+        const progress = screenCtrl.getProgressPercentage();
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressDesc = document.getElementById('progressDescription');
+
+        progressBar.style.width = `${progress}%`;
+        progressText.textContent = `${progress}%`;
+
+        // Solo contar pantallas principales (1-4, excluyendo demo)
+        const mainScreens = screenCtrl.screens.filter((s) => s.id <= 4);
+        const completed = mainScreens.filter((s) => s.completed).length;
+
+        if (completed === 0) {
+          progressDesc.textContent =
+            'Comienza tu viaje temporal aprendiendo Git';
+        } else if (completed < 4) {
+          progressDesc.textContent = `${completed} de 4 pantallas completadas - ¡Sigue así!`;
+        } else if (completed === 4) {
+          progressDesc.textContent =
+            '🎉 ¡Todas las pantallas completadas! Ahora puedes ver el demo final';
+        }
+
+        // Actualizar cada card
+        screenCtrl.screens.forEach((screen) => {
+          const card = document.getElementById(`screen${screen.id}`);
+          if (!card) return;
+
+          // Remover clases
+          card.classList.remove(
+            'screen-card--locked',
+            'screen-card--completed'
+          );
+
+          // Aplicar estado
+          if (screen.completed) {
+            card.classList.add('screen-card--completed');
+            const lock = card.querySelector('.screen-card__lock');
+            if (lock) lock.remove();
+
+            // Agregar badge de completado
+            if (!card.querySelector('.screen-card__badge')) {
+              const badge = document.createElement('div');
+              badge.className = 'screen-card__badge';
+              badge.innerHTML = '<span>✓</span> Completada';
+              card.appendChild(badge);
+            }
+          } else if (screen.locked) {
+            card.classList.add('screen-card--locked');
+          } else {
+            const lock = card.querySelector('.screen-card__lock');
+            if (lock) lock.remove();
+          }
+        });
+      }
+
+      // Inicializar cuando el DOM esté listo
+      document.addEventListener('DOMContentLoaded', function () {
+        // Event listeners para las cards
+        document.querySelectorAll('.screen-card').forEach((card) => {
+          card.addEventListener('click', () => {
+            const screenId = parseInt(card.getAttribute('data-screen-id'));
+            const screen = screenCtrl.screens.find((s) => s.id === screenId);
+
+            if (screen && !screen.locked) {
+              window.location.href = `screens/${screen.path}`;
+            } else {
+              ui.showNotification(
+                '🔒 Completa la pantalla anterior primero',
+                'warning'
+              );
+            }
+          });
+        });
+
+        // Inicializar UI
+        updateUI();
+
+        // Mensaje de bienvenida
+        setTimeout(() => {
+          if (screenCtrl.getProgressPercentage() === 0) {
+            ui.showNotification(
+              '👋 ¡Bienvenido a Git to the Future!',
+              'info',
+              4000
+            );
+          }
+        }, 500);
+
+        Logger.log('Menú principal cargado');
+      });
+
+      // Agregar estilos para las animaciones
+      const style = document.createElement('style');
+      style.textContent = `
+      @keyframes slideInRight {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+    `;
+      document.head.appendChild(style);
+    </script>
+  </body>
 </html>
