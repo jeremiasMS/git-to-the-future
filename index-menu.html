@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="css/components/navigation.css" />
 
     <style>
+      /* ============================================
+         BASE STYLES
+         ============================================ */
       body {
         background: linear-gradient(
           135deg,
@@ -19,199 +22,91 @@
           #2196f3 100%
         );
         background-attachment: fixed;
-        min-height: 100vh;
+        height: 100vh;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
-      }
-
-      .hero {
-        text-align: center;
-        padding: var(--spacing-xl) var(--spacing-md);
-        margin: var(--spacing-xl) 0;
-      }
-
-      .hero__title {
-        font-size: 64px;
         margin: 0;
-        background: linear-gradient(135deg, #2196f3, #ff9100, #ff4081);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        animation: pulse 3s infinite;
-        text-shadow: 0 0 40px rgba(33, 150, 243, 0.5);
+        padding: 0;
       }
 
-      .hero__subtitle {
-        font-size: 24px;
-        color: var(--color-muted);
-        margin-top: var(--spacing-md);
-      }
-
-      .hero__logo {
-        font-size: 120px;
-        margin: var(--spacing-lg) 0;
-        animation: float 3s ease-in-out infinite;
-      }
-
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0px);
-        }
-        50% {
-          transform: translateY(-20px);
-        }
-      }
-
-      .screens-menu {
-        max-width: 1200px;
+      /* ============================================
+         LAYOUT
+         ============================================ */
+      .main-layout {
+        max-width: 1400px;
         margin: 0 auto;
-        padding: var(--spacing-xl) var(--spacing-md);
-      }
-
-      .screen-card {
-        background: var(--color-surface);
-        border: 2px solid var(--color-primary);
-        border-radius: var(--border-radius-lg);
-        padding: var(--spacing-xl);
-        margin-bottom: var(--spacing-lg);
-        transition: all var(--transition-normal);
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .screen-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #2196f3, #ff9100, #ff4081);
-        transform: scaleX(0);
-        transition: transform var(--transition-normal);
-      }
-
-      .screen-card:hover::before {
-        transform: scaleX(1);
-      }
-
-      .screen-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 40px rgba(33, 150, 243, 0.3);
-        border-color: #ff9100;
-      }
-
-      .screen-card--locked {
-        opacity: 0.5;
-        cursor: not-allowed;
-        filter: grayscale(80%);
-      }
-
-      .screen-card--locked:hover {
-        transform: none;
-        box-shadow: none;
-      }
-
-      .screen-card--completed {
-        border-color: #4caf50;
-        background: rgba(76, 175, 80, 0.1);
-      }
-
-      .screen-card__header {
         display: flex;
-        align-items: center;
-        gap: var(--spacing-md);
-        margin-bottom: var(--spacing-md);
-      }
-
-      .screen-card__icon {
-        font-size: 48px;
-      }
-
-      .screen-card__number {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #2196f3, #ff9100);
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
-      }
-
-      .screen-card__title {
+        padding-top: 35px;
+        gap: var(--spacing-lg);
+        align-items: stretch;
         flex: 1;
-        margin: 0;
-        color: var(--color-accent);
-        font-size: 28px;
+        min-height: 0;
+        height: 100%;
       }
 
-      .screen-card__description {
-        color: var(--color-muted);
-        margin-bottom: var(--spacing-md);
-        line-height: 1.6;
-      }
-
-      .screen-card__commands {
+      /* ============================================
+         PROGRESS SECTION (LEFT)
+         ============================================ */
+      .progress-sidebar {
+        flex: 0 0 350px;
         display: flex;
-        flex-wrap: wrap;
-        gap: var(--spacing-xs);
-        margin-top: var(--spacing-md);
-      }
-
-      .screen-card__command {
-        background: rgba(33, 150, 243, 0.2);
-        padding: var(--spacing-xs) var(--spacing-sm);
-        border-radius: var(--border-radius-sm);
-        font-family: var(--font-family-code);
-        font-size: 14px;
-        color: var(--color-highlight);
-      }
-
-      .screen-card__badge {
-        position: absolute;
-        top: var(--spacing-md);
-        right: var(--spacing-md);
-        background: #4caf50;
-        color: white;
-        padding: var(--spacing-xs) var(--spacing-sm);
-        border-radius: var(--border-radius-md);
-        font-size: 14px;
-        font-weight: bold;
-        display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: var(--spacing-xs);
+        justify-content: flex-start;
+        height: 100%;
+        padding: 0 var(--spacing-md) var(--spacing-md);
       }
 
-      .screen-card__lock {
-        position: absolute;
-        top: var(--spacing-md);
-        right: var(--spacing-md);
-        font-size: 32px;
+      .brand-logo {
+        max-width: 350px;
+        width: 100%;
+        height: auto;
+        margin-top: 50px;
+        filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.5));
+      }
+
+      .brand-logo-link {
+        text-decoration: none;
+        display: block;
+        margin-bottom: var(--spacing-md);
+        margin-top: 0;
       }
 
       .progress-section {
-        max-width: 800px;
-        margin: var(--spacing-xl) auto;
+        width: 100%;
+        padding: var(--spacing-md);
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
-      .progress-bar-container {
+      .progress-title {
+        color: var(--color-accent);
+        margin-bottom: var(--spacing-md);
+      }
+
+      .delorean-animation {
+        width: 100%;
+        max-width: 320px;
+        margin: var(--spacing-sm) 0;
+      }
+
+      .progress-bar {
         background: var(--color-bg);
         border-radius: var(--border-radius-lg);
         height: 32px;
-        margin: var(--spacing-lg) 0;
+        margin-bottom: 15px;
         overflow: hidden;
         position: relative;
+        width: 100%;
+        max-width: 360px;
       }
 
-      .progress-bar-fill {
+      .progress-bar__fill {
         height: 100%;
-        background: linear-gradient(90deg, #2196f3, #ff9100);
+        background: #2196f3;
         transition: width var(--transition-slow);
         display: flex;
         align-items: center;
@@ -221,281 +116,524 @@
         font-weight: bold;
       }
 
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: var(--spacing-lg);
-        max-width: 1200px;
-        margin: var(--spacing-xl) auto;
-        padding: 0 var(--spacing-md);
+      .progress-description {
+        color: var(--color-muted);
       }
 
-      .feature-card {
-        background: var(--color-surface);
-        border: 2px solid var(--color-highlight);
-        border-radius: var(--border-radius-lg);
+      /* ============================================
+         LEVELS MENU (RIGHT)
+         ============================================ */
+      .levels-menu {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .levels-menu__header {
+        padding: 0 var(--spacing-md) var(--spacing-md);
+        flex-shrink: 0;
+        padding-top: 50px;
+      }
+
+      .levels-menu__title {
+        text-align: left;
+        color: #ffffff;
+        margin: 0 0 var(--spacing-md) 0;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      }
+
+      .levels-menu__content {
+        flex: 1;
+        padding: 0 var(--spacing-md) var(--spacing-md);
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        scroll-behavior: smooth;
+        position: relative;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .levels-menu__content::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* ============================================
+         LEVEL CARDS
+         ============================================ */
+      .level-card {
+        background: linear-gradient(
+          135deg,
+          rgba(26, 26, 46, 0.95),
+          rgba(15, 15, 30, 0.98)
+        );
+        border: 1px solid rgba(33, 150, 243, 0.3);
+        border-radius: 16px;
         padding: var(--spacing-lg);
-        text-align: center;
-        transition: all var(--transition-normal);
-      }
-
-      .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 24px rgba(33, 150, 243, 0.3);
-      }
-
-      .feature-card__icon {
-        font-size: 56px;
         margin-bottom: var(--spacing-md);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .level-card:hover {
+        box-shadow: 0 8px 32px rgba(33, 150, 243, 0.4);
+        border-color: rgba(33, 150, 243, 0.6);
+      }
+
+      .level-card--locked {
+        opacity: 0.4;
+        cursor: not-allowed;
+        filter: grayscale(90%);
+        background: linear-gradient(
+          135deg,
+          rgba(20, 20, 35, 0.95),
+          rgba(15, 15, 25, 0.98)
+        );
+      }
+
+      .level-card--locked:hover {
+        transform: none;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .level-card--completed {
+        border-color: rgba(76, 175, 80, 0.5);
+        background: linear-gradient(
+          135deg,
+          rgba(26, 46, 26, 0.95),
+          rgba(15, 30, 15, 0.98)
+        );
+      }
+
+      .level-card--active {
+        border-color: rgba(255, 193, 7, 0.6);
+        background: linear-gradient(
+          135deg,
+          rgba(46, 38, 26, 0.95),
+          rgba(30, 25, 15, 0.98)
+        );
+        box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3),
+          0 0 0 2px rgba(255, 193, 7, 0.2);
+        animation: pulse-border 2s ease-in-out infinite;
+        margin-top: var(--spacing-lg);
+        margin-bottom: var(--spacing-lg);
+      }
+
+      .level-card--active:hover {
+        box-shadow: 0 8px 32px rgba(255, 193, 7, 0.5),
+          0 0 0 2px rgba(255, 193, 7, 0.3);
+        border-color: rgba(255, 193, 7, 0.8);
+        transform: translateY(-4px);
+        cursor: pointer;
+      }
+
+      .level-card--active .level-card__number {
+        background: rgba(255, 193, 7, 0.2);
+        border-color: rgba(255, 193, 7, 0.5);
+        color: #ffc107;
+      }
+
+      .level-card--active::before {
+        content: '▶ CONTINUAR';
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(90deg, #ffc107, #ffb300);
+        color: #1a1a2e;
+        padding: 8px 18px;
+        border-radius: 25px; /* Más redondeado que las pills de comando */
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.5),
+          0 0 20px rgba(255, 193, 7, 0.3);
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+      }
+
+      .level-card--active:hover::before {
+        transform: scale(1.05);
+        box-shadow: 0 6px 16px rgba(255, 193, 7, 0.6),
+          0 0 30px rgba(255, 193, 7, 0.4);
+      }
+
+      @keyframes pulse-border {
+        0%,
+        100% {
+          box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3),
+            0 0 0 2px rgba(255, 193, 7, 0.2);
+        }
+        50% {
+          box-shadow: 0 4px 20px rgba(255, 193, 7, 0.5),
+            0 0 0 2px rgba(255, 193, 7, 0.4);
+        }
+      }
+
+      .level-card__header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+      }
+
+      .level-card__number {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        background: rgba(33, 150, 243, 0.15);
+        border: 1px solid rgba(33, 150, 243, 0.4);
+        color: #2196f3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .level-card--completed .level-card__number {
+        background: rgba(76, 175, 80, 0.15);
+        border-color: rgba(76, 175, 80, 0.4);
+        color: #4caf50;
+      }
+
+      .level-card__title {
+        flex: 1;
+        margin: 0;
+        color: #ffffff;
+        font-size: 24px;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .level-card__description {
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: var(--spacing-md);
+        line-height: 1.7;
+        font-size: 15px;
+      }
+
+      .level-card__label {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: var(--spacing-xs);
+        display: block;
+      }
+
+      .level-card__commands {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: var(--spacing-md);
+      }
+
+      .level-card__command {
+        background: rgba(33, 150, 243, 0.15);
+        border: 1px solid rgba(33, 150, 243, 0.25);
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-size: 12px;
+        color: #64b5f6;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+      }
+
+      .level-card__badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(76, 175, 80, 0.2);
+        border: 1px solid rgba(76, 175, 80, 0.4);
+        color: #4caf50;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        font-size: 18px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .level-card__lock {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        opacity: 0.6;
+      }
+
+      /* Demo Level Modifier */
+      .level-card--demo {
+        border: 1px solid rgba(124, 77, 255, 0.4);
+        background: linear-gradient(
+          135deg,
+          rgba(40, 26, 66, 0.95),
+          rgba(25, 15, 45, 0.98)
+        );
+      }
+
+      .level-card__number--demo {
+        background: rgba(124, 77, 255, 0.15);
+        border-color: rgba(124, 77, 255, 0.4);
+        color: #9c7bff;
+      }
+
+      .level-card__label--demo {
+        color: rgba(156, 123, 255, 0.8);
+      }
+
+      /* ============================================
+         FOOTER
+         ============================================ */
+      .app-footer {
+        text-align: center;
+        padding: var(--spacing-md) var(--spacing-md);
+        background: linear-gradient(
+          135deg,
+          rgba(20, 20, 35, 0.95),
+          rgba(15, 15, 30, 0.98)
+        );
+        border-top: 2px solid transparent;
+        border-image: linear-gradient(
+            90deg,
+            rgba(255, 153, 0, 0.3),
+            rgba(33, 150, 243, 0.4),
+            rgba(255, 153, 0, 0.3)
+          )
+          1;
+        color: rgba(255, 255, 255, 0.7);
+        flex-shrink: 0;
+        font-size: 12px;
+        position: relative;
+        z-index: 100;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .app-footer p {
+        font-size: 12px;
+        margin: 0;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      }
+
+      /* ============================================
+         RESPONSIVE
+         ============================================ */
+      @media (max-width: 1024px) {
+        .main-layout {
+          flex-direction: column;
+        }
+
+        .progress-sidebar {
+          flex: 0 0 auto;
+          width: 100%;
+        }
+
+        .delorean-animation {
+          max-width: 300px;
+        }
+
+        .levels-menu {
+          max-height: none;
+          overflow-y: visible;
+        }
       }
     </style>
   </head>
   <body>
-    <!-- Header Principal -->
-    <header class="app-header">
-      <a href="index.html" style="text-decoration: none">
-        <h1 class="app-header__title">GIT TO THE FUTURE</h1>
-        <p class="app-header__subtitle">
-          ⚡ Aprende Git a través del tiempo ⚡
-        </p>
-      </a>
-    </header>
+    <!-- Main Content -->
+    <main class="main-layout">
+      <!-- Progress Sidebar (Left) -->
+      <aside class="progress-sidebar">
+        <!-- Brand Logo -->
+        <a href="index.html" class="brand-logo-link">
+          <img
+            src="assets/fonts/img/GItToTheFuture.png"
+            alt="Git to the Future"
+            class="brand-logo"
+          />
+        </a>
 
-    <!-- Hero Section -->
-    <section class="hero">
-      <img class="hero__logo" src="assets/fonts/img/DeLorean Animation.gif" />
-    </section>
+        <!-- Progress Section -->
+        <section class="progress-section">
+          <h2 class="progress-title">Tu Progreso</h2>
+          <img
+            class="delorean-animation"
+            src="assets/fonts/img/DeLoreanAnimation.gif"
+            alt="DeLorean Animation"
+          />
+          <div class="progress-bar">
+            <div class="progress-bar__fill" id="progressBar" style="width: 0%">
+              <span id="progressText">0%</span>
+            </div>
+          </div>
+          <p class="progress-description" id="progressDescription">
+            Comienza tu viaje temporal aprendiendo Git
+          </p>
+        </section>
+      </aside>
 
-    <!-- Progress Section -->
-    <section class="progress-section">
-      <h2 style="color: var(--color-accent); margin-bottom: var(--spacing-md)">
-        Tu Progreso
-      </h2>
-      <div class="progress-bar-container">
-        <div class="progress-bar-fill" id="progressBar" style="width: 0%">
-          <span id="progressText">0%</span>
+      <!-- Levels Menu (Right) -->
+      <div class="levels-menu">
+        <div class="levels-menu__header">
+          <h2 class="levels-menu__title">Pantallas de Aprendizaje</h2>
         </div>
-      </div>
-      <p style="color: var(--color-muted)" id="progressDescription">
-        Comienza tu viaje temporal aprendiendo Git
-      </p>
-    </section>
 
-    <!-- Screens Menu -->
-    <main class="screens-menu">
-      <h2
-        style="
-          text-align: center;
-          color: var(--color-primary);
-          margin-bottom: var(--spacing-xl);
-          font-size: 32px;
-        "
-      >
-        🎬 Pantallas de Aprendizaje
-      </h2>
+        <div class="levels-menu__content" id="levelsMenuContent">
+          <!-- Level 1 -->
+          <div class="level-card" data-level-id="1" id="level1">
+            <div class="level-card__header">
+              <div class="level-card__number">1</div>
+              <h3 class="level-card__title">Origin (1985→1955)</h3>
+            </div>
+            <p class="level-card__description">
+              Aprende los fundamentos de Git. Marty viaja accidentalmente a 1955
+              y debe aprender a navegar por el tiempo (y por Git) para regresar
+              a casa.
+            </p>
+            <span class="level-card__label">Comandos Git</span>
+            <div class="level-card__commands">
+              <code class="level-card__command">git init</code>
+              <code class="level-card__command">git add</code>
+              <code class="level-card__command">git commit</code>
+              <code class="level-card__command">git branch</code>
+              <code class="level-card__command">git checkout</code>
+            </div>
+          </div>
 
-      <!-- Screen 1 -->
-      <div class="screen-card" data-screen-id="1" id="screen1">
-        <div class="screen-card__header">
-          <div class="screen-card__icon">📅</div>
-          <div class="screen-card__number">1</div>
-          <h3 class="screen-card__title">Origin (1985→1955)</h3>
-        </div>
-        <p class="screen-card__description">
-          Aprende los fundamentos de Git. Marty viaja accidentalmente a 1955 y
-          debe aprender a navegar por el tiempo (y por Git) para regresar a
-          casa.
-        </p>
-        <strong style="color: var(--color-accent)">Conceptos:</strong>
-        <div class="screen-card__commands">
-          <code class="screen-card__command">git init</code>
-          <code class="screen-card__command">git add</code>
-          <code class="screen-card__command">git commit</code>
-          <code class="screen-card__command">git branch</code>
-          <code class="screen-card__command">git checkout</code>
-        </div>
-      </div>
+          <!-- Level 2 -->
+          <div
+            class="level-card level-card--locked"
+            data-level-id="2"
+            id="level2"
+          >
+            <div class="level-card__lock">🔒</div>
+            <div class="level-card__header">
+              <div class="level-card__number">2</div>
+              <h3 class="level-card__title">Time Travel (2015)</h3>
+            </div>
+            <p class="level-card__description">
+              Domina git checkout para viajar entre ramas. Marty y Doc viajan al
+              futuro (2015) para salvar a la familia McFly de la ruina.
+            </p>
+            <span class="level-card__label">Comandos Git</span>
+            <div class="level-card__commands">
+              <code class="level-card__command">git checkout [rama]</code>
+              <code class="level-card__command">git checkout -b</code>
+              <code class="level-card__command">navegación</code>
+            </div>
+          </div>
 
-      <!-- Screen 2 -->
-      <div
-        class="screen-card screen-card--locked"
-        data-screen-id="2"
-        id="screen2"
-      >
-        <div class="screen-card__lock">🔒</div>
-        <div class="screen-card__header">
-          <div class="screen-card__icon">🚀</div>
-          <div class="screen-card__number">2</div>
-          <h3 class="screen-card__title">Time Travel (2015)</h3>
-        </div>
-        <p class="screen-card__description">
-          Domina git checkout para viajar entre ramas. Marty y Doc viajan al
-          futuro (2015) para salvar a la familia McFly de la ruina.
-        </p>
-        <strong style="color: var(--color-accent)">Conceptos:</strong>
-        <div class="screen-card__commands">
-          <code class="screen-card__command">git checkout [rama]</code>
-          <code class="screen-card__command">git checkout -b [rama]</code>
-          <code class="screen-card__command">Navegación entre ramas</code>
-        </div>
-      </div>
+          <!-- Level 3 -->
+          <div
+            class="level-card level-card--locked"
+            data-level-id="3"
+            id="level3"
+          >
+            <div class="level-card__lock">🔒</div>
+            <div class="level-card__header">
+              <div class="level-card__number">3</div>
+              <h3 class="level-card__title">Dystopia (1985A)</h3>
+            </div>
+            <p class="level-card__description">
+              Aprende a arreglar historiales corruptos. Biff ha creado una línea
+              temporal distópica y debes usar comandos avanzados para restaurar
+              la realidad correcta.
+            </p>
+            <span class="level-card__label">Comandos Git</span>
+            <div class="level-card__commands">
+              <code class="level-card__command">git reset --hard</code>
+              <code class="level-card__command">git revert</code>
+              <code class="level-card__command">git merge</code>
+              <code class="level-card__command">recuperación</code>
+            </div>
+          </div>
 
-      <!-- Screen 3 -->
-      <div
-        class="screen-card screen-card--locked"
-        data-screen-id="3"
-        id="screen3"
-      >
-        <div class="screen-card__lock">🔒</div>
-        <div class="screen-card__header">
-          <div class="screen-card__icon">⚠️</div>
-          <div class="screen-card__number">3</div>
-          <h3 class="screen-card__title">Dystopia (1985A)</h3>
-        </div>
-        <p class="screen-card__description">
-          Aprende a arreglar historiales corruptos. Biff ha creado una línea
-          temporal distópica y debes usar comandos avanzados para restaurar la
-          realidad correcta.
-        </p>
-        <strong style="color: var(--color-accent)">Conceptos:</strong>
-        <div class="screen-card__commands">
-          <code class="screen-card__command">git reset --hard</code>
-          <code class="screen-card__command">git revert</code>
-          <code class="screen-card__command">git merge</code>
-          <code class="screen-card__command">Recuperación de errores</code>
-        </div>
-      </div>
+          <!-- Level 4 -->
+          <div
+            class="level-card level-card--locked"
+            data-level-id="4"
+            id="level4"
+          >
+            <div class="level-card__lock">🔒</div>
+            <div class="level-card__header">
+              <div class="level-card__number">4</div>
+              <h3 class="level-card__title">Wild West (1885)</h3>
+            </div>
+            <p class="level-card__description">
+              Domina git stash y comandos avanzados. Doc está atrapado en el
+              Lejano Oeste y Marty debe rescatarlo mientras maneja múltiples
+              cambios temporales.
+            </p>
+            <span class="level-card__label">Comandos Git</span>
+            <div class="level-card__commands">
+              <code class="level-card__command">git stash</code>
+              <code class="level-card__command">git stash pop</code>
+              <code class="level-card__command">git branch -d</code>
+              <code class="level-card__command">gestión WIP</code>
+            </div>
+          </div>
 
-      <!-- Screen 4 -->
-      <div
-        class="screen-card screen-card--locked"
-        data-screen-id="4"
-        id="screen4"
-      >
-        <div class="screen-card__lock">🔒</div>
-        <div class="screen-card__header">
-          <div class="screen-card__icon">🤠</div>
-          <div class="screen-card__number">4</div>
-          <h3 class="screen-card__title">Wild West (1885)</h3>
+          <!-- Demo Level -->
+          <div
+            class="level-card level-card--locked level-card--demo"
+            data-level-id="5"
+            id="level5"
+          >
+            <div class="level-card__lock">🔒</div>
+            <div class="level-card__header">
+              <div class="level-card__number level-card__number--demo">
+                DEMO
+              </div>
+              <h3 class="level-card__title">Visualización Completa BTTF</h3>
+            </div>
+            <p class="level-card__description">
+              El premio final. Visualiza toda la historia de Back to the Future
+              como un repositorio Git completo. Todas las ramas, merges y líneas
+              temporales de la trilogía en un solo gráfico épico.
+            </p>
+            <span class="level-card__label level-card__label--demo"
+              >Desbloquea completando las 4 pantallas</span
+            >
+          </div>
         </div>
-        <p class="screen-card__description">
-          Domina git stash y comandos avanzados. Doc está atrapado en el Lejano
-          Oeste y Marty debe rescatarlo mientras maneja múltiples cambios
-          temporales.
-        </p>
-        <strong style="color: var(--color-accent)">Conceptos:</strong>
-        <div class="screen-card__commands">
-          <code class="screen-card__command">git stash</code>
-          <code class="screen-card__command">git stash pop</code>
-          <code class="screen-card__command">git branch -d</code>
-          <code class="screen-card__command">Gestión WIP</code>
-        </div>
-      </div>
-
-      <!-- Demo Final -->
-      <div
-        class="screen-card screen-card--locked"
-        data-screen-id="5"
-        id="screen5"
-        style="border: 3px solid #7c4dff; background: rgba(124, 77, 255, 0.1)"
-      >
-        <div class="screen-card__lock">🔒</div>
-        <div class="screen-card__header">
-          <div class="screen-card__icon">🎬</div>
-          <div class="screen-card__number">🏆</div>
-          <h3 class="screen-card__title">Demo Completo BTTF</h3>
-        </div>
-        <p class="screen-card__description">
-          ¡El premio final! Visualiza toda la historia de Back to the Future
-          como un repositorio Git completo. Todas las ramas, merges y líneas
-          temporales de la trilogía en un solo gráfico épico.
-        </p>
-        <strong style="color: #7c4dff"
-          >🎉 Desbloquea completando las 4 pantallas</strong
-        >
       </div>
     </main>
 
-    <!-- Features Section -->
-    <section
-      style="padding: var(--spacing-xl) 0; background: rgba(0, 0, 0, 0.3)"
-    >
-      <h2
-        style="
-          text-align: center;
-          color: var(--color-primary);
-          margin-bottom: var(--spacing-xl);
-          font-size: 32px;
-        "
-      >
-        ✨ Características
-      </h2>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-card__icon">🎓</div>
-          <h3
-            style="color: var(--color-accent); margin-bottom: var(--spacing-sm)"
-          >
-            Aprende Haciendo
-          </h3>
-          <p style="color: var(--color-muted); font-size: 14px">
-            Ejercicios interactivos con validación en tiempo real
-          </p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-card__icon">📊</div>
-          <h3
-            style="color: var(--color-accent); margin-bottom: var(--spacing-sm)"
-          >
-            Visualización
-          </h3>
-          <p style="color: var(--color-muted); font-size: 14px">
-            Gráficos GitGraph que muestran cada commit y rama
-          </p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-card__icon">🚀</div>
-          <h3
-            style="color: var(--color-accent); margin-bottom: var(--spacing-sm)"
-          >
-            Progreso Guardado
-          </h3>
-          <p style="color: var(--color-muted); font-size: 14px">
-            Tu avance se guarda automáticamente
-          </p>
-        </div>
-      </div>
-    </section>
-
     <!-- Footer -->
-    <footer
-      style="
-        text-align: center;
-        padding: var(--spacing-xl);
-        color: var(--color-muted);
-        margin-top: auto;
-      "
-    >
-      <p style="font-size: 18px; margin-bottom: var(--spacing-sm)">
-        🚗⚡ Git to the Future
-      </p>
-      <p style="font-size: 14px">
-        Creado con ❤️ para aprender Git de forma divertida
-      </p>
-      <p style="font-size: 14px; margin-top: var(--spacing-sm)">
-        <a
-          href="https://github.com/jeremiasMS/git-to-the-future"
-          target="_blank"
-          style="color: var(--color-accent); text-decoration: none"
-        >
-          ⭐ Star en GitHub
-        </a>
+    <footer class="app-footer">
+      <p>
+        Creado con ❤️ por @jeremiasMS, @DaniDeRuvo y @Facuamores para aprender
+        Git de forma divertida
       </p>
     </footer>
 
     <!-- JavaScript (Sin módulos ES6) -->
     <script>
-      // Logger simple
+      // Logger utility
       const Logger = {
         log: (message, data = null) =>
           console.log(`[Git-BTTF] ${message}`, data || ''),
@@ -505,10 +643,10 @@
           console.error(`[Git-BTTF ERROR] ${message}`, error || ''),
       };
 
-      // ScreenController simplificado
-      class ScreenController {
+      // LevelController (renamed from ScreenController)
+      class LevelController {
         constructor() {
-          this.screens = [
+          this.levels = [
             {
               id: 1,
               name: 'Origin',
@@ -553,15 +691,15 @@
           if (savedProgress) {
             try {
               const progress = JSON.parse(savedProgress);
-              this.screens = this.screens.map((screen) => {
-                const saved = progress.find((s) => s.id === screen.id);
+              this.levels = this.levels.map((level) => {
+                const saved = progress.find((s) => s.id === level.id);
                 return saved
                   ? {
-                      ...screen,
+                      ...level,
                       completed: saved.completed,
                       locked: saved.locked,
                     }
-                  : screen;
+                  : level;
               });
             } catch (e) {
               Logger.error('Error loading progress', e);
@@ -570,9 +708,9 @@
         }
 
         getProgressPercentage() {
-          const mainScreens = this.screens.filter((s) => s.id <= 4);
-          const completed = mainScreens.filter((s) => s.completed).length;
-          return Math.round((completed / mainScreens.length) * 100);
+          const mainLevels = this.levels.filter((l) => l.id <= 4);
+          const completed = mainLevels.filter((l) => l.completed).length;
+          return Math.round((completed / mainLevels.length) * 100);
         }
       }
 
@@ -650,12 +788,12 @@
 
       Logger.log('Iniciando menú principal');
 
-      const screenCtrl = new ScreenController();
+      const levelCtrl = new LevelController();
       const ui = new UIController();
 
-      // Actualizar UI basado en progreso
+      // Update UI based on progress
       function updateUI() {
-        const progress = screenCtrl.getProgressPercentage();
+        const progress = levelCtrl.getProgressPercentage();
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
         const progressDesc = document.getElementById('progressDescription');
@@ -663,9 +801,9 @@
         progressBar.style.width = `${progress}%`;
         progressText.textContent = `${progress}%`;
 
-        // Solo contar pantallas principales (1-4, excluyendo demo)
-        const mainScreens = screenCtrl.screens.filter((s) => s.id <= 4);
-        const completed = mainScreens.filter((s) => s.completed).length;
+        // Count only main levels (1-4, excluding demo)
+        const mainLevels = levelCtrl.levels.filter((l) => l.id <= 4);
+        const completed = mainLevels.filter((l) => l.completed).length;
 
         if (completed === 0) {
           progressDesc.textContent =
@@ -677,49 +815,52 @@
             '🎉 ¡Todas las pantallas completadas! Ahora puedes ver el demo final';
         }
 
-        // Actualizar cada card
-        screenCtrl.screens.forEach((screen) => {
-          const card = document.getElementById(`screen${screen.id}`);
+        // Update each level card
+        levelCtrl.levels.forEach((level) => {
+          const card = document.getElementById(`level${level.id}`);
           if (!card) return;
 
-          // Remover clases
+          // Remove state classes
           card.classList.remove(
-            'screen-card--locked',
-            'screen-card--completed'
+            'level-card--locked',
+            'level-card--completed',
+            'level-card--active'
           );
 
-          // Aplicar estado
-          if (screen.completed) {
-            card.classList.add('screen-card--completed');
-            const lock = card.querySelector('.screen-card__lock');
+          // Apply state
+          if (level.completed) {
+            card.classList.add('level-card--completed');
+            const lock = card.querySelector('.level-card__lock');
             if (lock) lock.remove();
 
-            // Agregar badge de completado
-            if (!card.querySelector('.screen-card__badge')) {
+            // Add completed badge (only checkmark)
+            if (!card.querySelector('.level-card__badge')) {
               const badge = document.createElement('div');
-              badge.className = 'screen-card__badge';
-              badge.innerHTML = '<span>✓</span> Completada';
+              badge.className = 'level-card__badge';
+              badge.innerHTML = '✓';
               card.appendChild(badge);
             }
-          } else if (screen.locked) {
-            card.classList.add('screen-card--locked');
+          } else if (level.locked) {
+            card.classList.add('level-card--locked');
           } else {
-            const lock = card.querySelector('.screen-card__lock');
+            // This is the active level (not completed and not locked)
+            card.classList.add('level-card--active');
+            const lock = card.querySelector('.level-card__lock');
             if (lock) lock.remove();
           }
         });
       }
 
-      // Inicializar cuando el DOM esté listo
+      // Initialize when DOM is ready
       document.addEventListener('DOMContentLoaded', function () {
-        // Event listeners para las cards
-        document.querySelectorAll('.screen-card').forEach((card) => {
+        // Event listeners for level cards
+        document.querySelectorAll('.level-card').forEach((card) => {
           card.addEventListener('click', () => {
-            const screenId = parseInt(card.getAttribute('data-screen-id'));
-            const screen = screenCtrl.screens.find((s) => s.id === screenId);
+            const levelId = parseInt(card.getAttribute('data-level-id'));
+            const level = levelCtrl.levels.find((l) => l.id === levelId);
 
-            if (screen && !screen.locked) {
-              window.location.href = `screens/${screen.path}`;
+            if (level && !level.locked) {
+              window.location.href = `screens/${level.path}`;
             } else {
               ui.showNotification(
                 '🔒 Completa la pantalla anterior primero',
@@ -729,12 +870,12 @@
           });
         });
 
-        // Inicializar UI
+        // Initialize UI
         updateUI();
 
-        // Mensaje de bienvenida
+        // Welcome message
         setTimeout(() => {
-          if (screenCtrl.getProgressPercentage() === 0) {
+          if (levelCtrl.getProgressPercentage() === 0) {
             ui.showNotification(
               '👋 ¡Bienvenido a Git to the Future!',
               'info',
@@ -746,7 +887,7 @@
         Logger.log('Menú principal cargado');
       });
 
-      // Agregar estilos para las animaciones
+      // Add animation styles
       const style = document.createElement('style');
       style.textContent = `
       @keyframes slideInRight {

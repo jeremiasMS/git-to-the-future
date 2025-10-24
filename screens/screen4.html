@@ -27,6 +27,21 @@
     </style>
   </head>
   <body class="screen-body">
+    <!-- Botón de Volver -->
+    <a href="../index-menu.html" title="Volver al menú principal">
+      <img
+        src="../assets/fonts/img/Back.png"
+        alt="Volver"
+        style="
+          position: fixed;
+          top: 20px;
+          left: 20px;
+          height: 40px;
+          cursor: pointer;
+          z-index: 1000;
+        "
+      />
+    </a>
     <!-- Header Principal de la App -->
     <header class="app-header">
       <a href="../index.html" style="text-decoration: none">
@@ -193,12 +208,9 @@
             <button class="console__cmd-btn" data-command="checkout 1885">
               checkout 1885
             </button>
-            <button class="console__cmd-btn" data-command="merge">
-              merge
-            </button>
-            <button class="console__cmd-btn" data-command="rebase">
-              rebase
-            </button>
+            <button class="console__cmd-btn" data-command="merge">merge</button>
+            <button class="console__cmd-btn" data-command="pull">pull</button>
+            <button class="console__cmd-btn" data-command="push">push</button>
           </div>
 
           <!-- Input de Comando -->
@@ -420,6 +432,15 @@
         },
         {
           id: 8,
+          title: 'Sincronizar con otras líneas temporales',
+          description:
+            'Descarga cambios del repositorio remoto con git pull antes de regresar',
+          expectedCommand: 'git pull',
+          successMessage: '📡 Cambios de otras líneas temporales integrados',
+          hint: "Usa 'git pull' para descargar cambios del remoto",
+        },
+        {
+          id: 9,
           title: 'Regresar al presente',
           description: 'Vuelve al presente (rama main) con Doc a salvo',
           expectedCommand: 'git checkout main',
@@ -427,7 +448,7 @@
           hint: "Usa 'git checkout main'",
         },
         {
-          id: 9,
+          id: 10,
           title: 'Fusionar líneas temporales',
           description: 'Fusiona la rama del Oeste para completar la saga',
           expectedCommand: 'git merge 1885',

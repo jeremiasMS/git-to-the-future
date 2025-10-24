@@ -1,428 +1,557 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bienvenido a Git to the Future</title>
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/variables.css">
-  <link rel="stylesheet" href="css/components/base.css">
-  <link rel="stylesheet" href="css/components/navigation.css">
-  
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 50%, #16213e 100%);
-      background-attachment: fixed;
-      color: var(--color-text);
-      font-family: var(--font-family-main);
-      overflow-x: hidden;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git to the Future - Aprende Git Viajando en el Tiempo</title>
 
-    /* Header con animación */
-    .welcome-header {
-      text-align: center;
-      padding: var(--spacing-xl) var(--spacing-md);
-      position: relative;
-    }
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/components/base.css" />
+    <link rel="stylesheet" href="css/components/navigation.css" />
 
-    .welcome-header__title {
-      font-family: var(--font-family-heading);
-      font-size: clamp(2.5em, 8vw, 5em);
-      font-weight: normal;
-      letter-spacing: 0.1em;
-      margin: 0 0 var(--spacing-sm) 0;
-      background: linear-gradient(135deg, #ff2a00 0%, #ffcc00 25%, #0077ff 50%, #ff6ec7 75%, #ff2a00 100%);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: gradientShift 5s ease infinite, pulse 2s ease-in-out infinite;
-      filter: drop-shadow(0 0 30px rgba(255, 204, 0, 0.6));
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-
-    .welcome-header__subtitle {
-      font-size: clamp(1em, 3vw, 1.5em);
-      color: var(--color-secondary);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin: 0;
-      opacity: 0.9;
-    }
-
-    /* Container principal */
-    .welcome-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: var(--spacing-xl) var(--spacing-md);
-    }
-
-    /* GIF Container */
-    .gif-container {
-      max-width: 800px;
-      margin: 0 auto var(--spacing-xl);
-      border-radius: var(--border-radius-md);
-      overflow: hidden;
-      box-shadow: 0 0 40px rgba(255, 204, 0, 0.3), 
-                  0 0 80px rgba(0, 119, 255, 0.2);
-      border: 3px solid transparent;
-      background: linear-gradient(#0d0d0d, #0d0d0d) padding-box,
-                  linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent)) border-box;
-      position: relative;
-    }
-
-    .gif-container::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent), var(--color-highlight));
-      border-radius: var(--border-radius-md);
-      opacity: 0.5;
-      filter: blur(10px);
-      z-index: -1;
-      animation: rotate 3s linear infinite;
-    }
-
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .gif-wrapper {
-      padding-top: 56.267%;
-      position: relative;
-      background: #000;
-    }
-
-    .gif-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    /* Sección de explicación */
-    .explanation-section {
-      background: rgba(26, 26, 26, 0.8);
-      border-radius: var(--border-radius-md);
-      padding: var(--spacing-xl);
-      margin-bottom: var(--spacing-xl);
-      border: 2px solid var(--color-accent);
-      box-shadow: var(--shadow-lg);
-      backdrop-filter: blur(10px);
-    }
-
-    .explanation-section h2 {
-      font-family: var(--font-family-heading);
-      font-size: clamp(1.8em, 4vw, 2.5em);
-      color: var(--color-secondary);
-      margin-top: 0;
-      margin-bottom: var(--spacing-md);
-      text-align: center;
-    }
-
-    .explanation-section h3 {
-      font-family: var(--font-family-heading);
-      font-size: clamp(1.3em, 3vw, 1.8em);
-      color: var(--color-accent);
-      margin-top: var(--spacing-lg);
-      margin-bottom: var(--spacing-sm);
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-sm);
-    }
-
-    .explanation-section p {
-      font-size: clamp(1em, 2vw, 1.2em);
-      line-height: 1.8;
-      color: var(--color-muted);
-      margin-bottom: var(--spacing-md);
-    }
-
-    .explanation-section ul {
-      list-style: none;
-      padding: 0;
-      margin: var(--spacing-md) 0;
-    }
-
-    .explanation-section li {
-      font-size: clamp(0.95em, 2vw, 1.1em);
-      padding: var(--spacing-sm) var(--spacing-md);
-      margin-bottom: var(--spacing-sm);
-      background: rgba(0, 119, 255, 0.1);
-      border-left: 4px solid var(--color-accent);
-      border-radius: var(--border-radius-sm);
-      color: var(--color-text);
-      transition: all 0.3s ease;
-    }
-
-    .explanation-section li:hover {
-      background: rgba(0, 119, 255, 0.2);
-      transform: translateX(10px);
-      border-left-color: var(--color-secondary);
-    }
-
-    .highlight {
-      color: var(--color-secondary);
-      font-weight: bold;
-    }
-
-    /* Features Grid */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: var(--spacing-lg);
-      margin: var(--spacing-xl) 0;
-    }
-
-    .feature-card {
-      background: rgba(0, 119, 255, 0.1);
-      border: 2px solid var(--color-accent);
-      border-radius: var(--border-radius-md);
-      padding: var(--spacing-lg);
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 30px rgba(0, 119, 255, 0.3);
-      border-color: var(--color-secondary);
-    }
-
-    .feature-card__icon {
-      font-size: 3em;
-      margin-bottom: var(--spacing-sm);
-    }
-
-    .feature-card__title {
-      font-family: var(--font-family-heading);
-      font-size: 1.3em;
-      color: var(--color-secondary);
-      margin-bottom: var(--spacing-sm);
-    }
-
-    .feature-card__description {
-      color: var(--color-muted);
-      font-size: 0.95em;
-      line-height: 1.6;
-    }
-
-    /* CTA Section */
-    .cta-section {
-      text-align: center;
-      padding: var(--spacing-xl) 0;
-    }
-
-    .start-button {
-      display: inline-block;
-      padding: var(--spacing-lg) var(--spacing-xl);
-      font-family: var(--font-family-heading);
-      font-size: clamp(1.5em, 4vw, 2.5em);
-      font-weight: normal;
-      letter-spacing: 0.05em;
-      color: #000;
-      background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
-      border: none;
-      border-radius: var(--border-radius-md);
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 30px rgba(255, 204, 0, 0.5),
-                  0 10px 20px rgba(0, 0, 0, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .start-button::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transform: rotate(45deg);
-      animation: buttonShine 3s infinite;
-    }
-
-    @keyframes buttonShine {
-      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-      50%, 100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-    }
-
-    .start-button:hover {
-      transform: scale(1.1) translateY(-5px);
-      box-shadow: 0 0 50px rgba(255, 204, 0, 0.8),
-                  0 20px 40px rgba(0, 0, 0, 0.5);
-    }
-
-    .start-button:active {
-      transform: scale(1.05) translateY(-2px);
-    }
-
-    /* Footer */
-    .welcome-footer {
-      text-align: center;
-      padding: var(--spacing-lg);
-      color: var(--color-muted);
-      font-size: 0.9em;
-      border-top: 1px solid rgba(255, 204, 0, 0.2);
-      margin-top: var(--spacing-xl);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .explanation-section {
-        padding: var(--spacing-lg);
+    <style>
+      /* ============================================
+       BASE STYLES
+       ============================================ */
+      body {
+        background: linear-gradient(
+          135deg,
+          #0f0f1e 0%,
+          #1a1a2e 50%,
+          #2196f3 100%
+        );
+        background-attachment: fixed;
+        min-height: 100vh;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
       }
 
+      /* ============================================
+       HEADER
+       ============================================ */
+      .app-header {
+        background: rgba(15, 15, 30, 0.5);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: var(--spacing-md) var(--spacing-xl);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .app-header__title {
+        font-family: var(--font-family-heading);
+        font-size: 16px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+        text-align: center;
+        letter-spacing: 3px;
+      }
+
+      /* ============================================
+       LAYOUT
+       ============================================ */
+      .main-layout {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        padding: 35px 0;
+        gap: var(--spacing-xl);
+        align-items: stretch;
+        flex: 1;
+        position: relative;
+      }
+
+      /* ============================================
+       LOGO SECTION (LEFT)
+       ============================================ */
+      .logo-sidebar {
+        flex: 0 0 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-xl);
+        height: 100vh;
+        position: fixed;
+        left: 50%;
+        top: 0;
+        margin-left: calc(-1400px / 2);
+        padding: 0 var(--spacing-md) var(--spacing-md);
+      }
+
+      .brand-logo {
+        max-width: 500px;
+        width: 100%;
+        height: auto;
+        filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.5));
+      }
+
+      .logo-sidebar .start-button {
+        margin-top: var(--spacing-md);
+      }
+
+      /* ============================================
+       CONTENT SECTION (RIGHT)
+       ============================================ */
+      .content-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin-left: 550px;
+      }
+
+      .content-section__scroll {
+        padding: var(--spacing-md);
+        padding-top: 50px;
+      }
+
+      /* ============================================
+       CONTENT CARDS
+       ============================================ */
+      .content-card {
+        padding: var(--spacing-lg);
+        margin-bottom: var(--spacing-lg);
+        min-height: 50vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+      }
+
+      .content-card:first-child {
+        min-height: 70vh;
+        padding-top: 0;
+        display: flex;
+        justify-content: center;
+        padding-bottom: 0;
+      }
+
+      .content-card:not(:last-child)::after {
+        content: '↓';
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 32px;
+        color: var(--secondary-color);
+        opacity: 0.4;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        40% {
+          transform: translateX(-50%) translateY(-10px);
+        }
+        60% {
+          transform: translateX(-50%) translateY(-5px);
+        }
+      }
+
+      .content-card::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(33, 150, 243, 0.3) 50%,
+          transparent
+        );
+      }
+
+      .content-card:last-child::before {
+        display: none;
+      }
+
+      .content-card h2 {
+        color: #ffffff;
+        font-size: 36px;
+        font-weight: 700;
+        margin: 0 0 var(--spacing-md) 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        line-height: 1.3;
+      }
+
+      .content-card h3 {
+        color: #2196f3;
+        font-size: 28px;
+        font-weight: 600;
+        margin: var(--spacing-md) 0 var(--spacing-md) 0;
+      }
+
+      .content-card p {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.7;
+        margin-bottom: var(--spacing-md);
+        font-size: 16px;
+      }
+
+      .content-card .subtitle {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 18px;
+        line-height: 1.6;
+        margin-top: var(--spacing-md);
+      }
+
+      .content-card ul {
+        list-style: none;
+        padding: 0;
+        margin: var(--spacing-md) 0;
+      }
+
+      .content-card li {
+        padding: var(--spacing-sm) 0;
+        margin-bottom: var(--spacing-xs);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .content-card li strong {
+        color: #ffc107;
+        font-size: 17px;
+      }
+
+      .highlight {
+        color: #ffc107;
+        font-weight: 600;
+      }
+
+      /* Features Grid */
       .features-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+        margin: var(--spacing-md) 0;
+      }
+
+      .feature-box {
+        background: rgba(33, 150, 243, 0.1);
+        border: 1px solid rgba(33, 150, 243, 0.3);
+        border-radius: 12px;
+        padding: var(--spacing-md);
+        text-align: center;
+      }
+
+      .feature-box__icon {
+        font-size: 2em;
+        margin-bottom: var(--spacing-xs);
+      }
+
+      .feature-box__title {
+        color: #2196f3;
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: var(--spacing-xs);
+      }
+
+      .feature-box__description {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      /* CTA Button */
+      .cta-card {
+        text-align: center;
+        padding: var(--spacing-md);
       }
 
       .start-button {
-        width: 90%;
-        max-width: 400px;
+        display: inline-block;
+        padding: 20px 40px;
+        font-family: var(--font-family-heading);
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #1a1a2e;
+        background: linear-gradient(135deg, #ffc107, #ffb300);
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(255, 193, 7, 0.5);
       }
-    }
 
-    /* Animación de entrada */
-    .fade-in {
-      animation: fadeIn 1s ease-in;
-    }
+      .start-button:hover {
+        transform: scale(1.05) translateY(-3px);
+        box-shadow: 0 8px 30px rgba(255, 193, 7, 0.7);
+      }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
-</head>
-<body>
+      /* Footer */
+      .app-footer {
+        text-align: center;
+        padding: var(--spacing-md);
+        background: linear-gradient(
+          135deg,
+          rgba(20, 20, 35, 0.95),
+          rgba(15, 15, 30, 0.98)
+        );
+        border-top: 2px solid transparent;
+        border-image: linear-gradient(
+            90deg,
+            rgba(255, 153, 0, 0.3),
+            rgba(33, 150, 243, 0.4),
+            rgba(255, 153, 0, 0.3)
+          )
+          1;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 12px;
+        position: sticky;
+        bottom: 0;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+      }
 
-  <!-- Header -->
-  <header class="welcome-header fade-in">
-    <h1 class="welcome-header__title">GIT TO THE FUTURE</h1>
-    <p class="welcome-header__subtitle">⚡ Aprende Git Viajando en el Tiempo ⚡</p>
-  </header>
+      .delorean {
+        position: fixed;
+        bottom: 35px;
+        left: -150px;
+        height: 60px;
+        width: auto;
+        animation: driveThrough 15s linear infinite;
+        z-index: 1001;
+        filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.5));
+      }
 
-  <!-- Contenedor Principal -->
-  <div class="welcome-container">
-    
-    <!-- GIF de BTTF -->
-    <div class="gif-container fade-in" style="animation-delay: 0.2s;">
-      <div class="gif-wrapper">
-        <iframe src="https://gifer.com/embed/781E" allowFullScreen></iframe>
+      @keyframes driveThrough {
+        0% {
+          left: -150px;
+        }
+        35% {
+          left: calc(100% + 150px);
+        }
+        100% {
+          left: calc(100% + 150px);
+        }
+      }      /* Responsive */
+      @media (max-width: 1024px) {
+        .main-layout {
+          flex-direction: column;
+        }
+
+        .logo-sidebar {
+          flex: 0 0 auto;
+          width: 100%;
+        }
+
+        .brand-logo {
+          max-width: 300px;
+        }
+
+        .content-section {
+          max-height: none;
+          overflow-y: visible;
+        }
+
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="app-header">
+      <nav
+        style="
+          display: flex;
+          gap: 40px;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+        "
+      >
+        <a
+          href="#intro"
+          style="
+            font-size: 18px;
+            font-family: var(--font-family-heading);
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            opacity: 0.8;
+            text-decoration: none;
+            transition: opacity 0.3s;
+          "
+          onmouseover="this.style.opacity='1'"
+          onmouseout="this.style.opacity='0.8'"
+          >Introducción</a
+        >
+        <a
+          href="#comandos"
+          style="
+            font-size: 18px;
+            font-family: var(--font-family-heading);
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            opacity: 0.8;
+            text-decoration: none;
+            transition: opacity 0.3s;
+          "
+          onmouseover="this.style.opacity='1'"
+          onmouseout="this.style.opacity='0.8'"
+          >Comandos</a
+        >
+        <a
+          href="#caracteristicas"
+          style="
+            font-size: 18px;
+            font-family: var(--font-family-heading);
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            opacity: 0.8;
+            text-decoration: none;
+            transition: opacity 0.3s;
+          "
+          onmouseover="this.style.opacity='1'"
+          onmouseout="this.style.opacity='0.8'"
+          >Características</a
+        >
+        <a
+          href="#viaje"
+          style="
+            font-size: 18px;
+            font-family: var(--font-family-heading);
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            opacity: 0.8;
+            text-decoration: none;
+            transition: opacity 0.3s;
+          "
+          onmouseover="this.style.opacity='1'"
+          onmouseout="this.style.opacity='0.8'"
+          >El Viaje</a
+        >
+      </nav>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="main-layout">
+      <!-- Logo Sidebar (Left) -->
+      <aside class="logo-sidebar">
+        <img
+          src="assets/fonts/img/GItToTheFuture.png"
+          alt="Git to the Future"
+          class="brand-logo"
+        />
+        <a href="index-menu.html" class="start-button"> EMPEZAR AVENTURA </a>
+      </aside>
+
+      <!-- Content Section (Right) -->
+      <div class="content-section">
+        <div class="content-section__scroll">
+          <!-- Sección 1: Introducción -->
+          <div id="intro" class="content-card">
+            <h2>El Único Juego Interactivo<br />Para Dominar Git Desde Cero</h2>
+            <p class="subtitle">
+              ¿Cansado de tutoriales aburridos? Aprende Git jugando. Viaja en el tiempo con el DeLorean, 
+              ejecuta comandos reales en una consola interactiva y observa cómo tu código cambia 
+              la historia. Sin instalaciones. Sin miedo. Solo aprendizaje práctico.
+            </p>
+          </div>
+
+          <!-- Sección 2: ¿Qué aprenderás? -->
+          <div id="comandos" class="content-card">
+            <h3>Domina Git Como Un Pro</h3>
+            <ul>
+              <li><strong>init, add, commit</strong> — Tu primer viaje temporal: crea tu línea de tiempo</li>
+              <li>
+                <strong>branch, checkout</strong> — Salta entre realidades alternativas sin romper nada
+              </li>
+              <li>
+                <strong>merge, rebase</strong> — Fusiona universos paralelos como Doc Brown
+              </li>
+              <li>
+                <strong>reset, revert</strong> — Arregla paradojas temporales antes de que sea tarde
+              </li>
+              <li><strong>stash</strong> — Guarda tus cambios en el flujo del tiempo</li>
+            </ul>
+          </div>
+
+          <!-- Sección 3: Características -->
+          <div id="caracteristicas" class="content-card">
+            <h3>Por Qué Este Juego Funciona</h3>
+            <div class="features-grid">
+              <div class="feature-box">
+                <div class="feature-box__icon">🎮</div>
+                <h4 class="feature-box__title">100% Interactivo</h4>
+                <p class="feature-box__description">Escribe comandos reales en la consola del juego</p>
+              </div>
+
+              <div class="feature-box">
+                <div class="feature-box__icon">📊</div>
+                <h4 class="feature-box__title">Feedback Visual</h4>
+                <p class="feature-box__description">Ve tu árbol Git crecer en tiempo real</p>
+              </div>
+
+              <div class="feature-box">
+                <div class="feature-box__icon">💡</div>
+                <h4 class="feature-box__title">Nunca Te Quedas Atascado</h4>
+                <p class="feature-box__description">
+                  Sistema de pistas que te guía paso a paso
+                </p>
+              </div>
+
+              <div class="feature-box">
+                <div class="feature-box__icon">🎬</div>
+                <h4 class="feature-box__title">Historia Épica</h4>
+                <p class="feature-box__description">Inspirado en Back to the Future</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sección 4: Tu Viaje -->
+          <div id="viaje" class="content-card">
+            <h3>Tu Misión: 4 Épocas + Desafío Final</h3>
+            <ul>
+              <li><strong>Nivel 1: 1955</strong> — Tus primeros comandos Git. Ayuda a Doc a volver al futuro</li>
+              <li>
+                <strong>Nivel 2: 2015</strong> — Domina branches como Marty McFly navega realidades
+              </li>
+              <li>
+                <strong>Nivel 3: 1985-A</strong> — Merge conflicts en la línea temporal oscura de Biff
+              </li>
+              <li>
+                <strong>Nivel 4: 1885</strong> — Git stash en el Salvaje Oeste. El desafío definitivo
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </div>
+    </main>
 
-    <!-- Explicación -->
-    <section class="explanation-section fade-in" style="animation-delay: 0.4s;">
-      <h2>🚗 ¿Qué es Git to the Future?</h2>
-      
+    <!-- Footer -->
+    <footer class="app-footer">
+      <img
+        src="assets/fonts/img/DeLoreanAnimation.gif"
+        alt="DeLorean"
+        class="delorean"
+      />
       <p>
-        Imagina aprender <span class="highlight">Git</span> de la forma más épica posible: 
-        viajando a través de las <span class="highlight">líneas temporales</span> de la legendaria 
-        trilogía <span class="highlight">Back to the Future</span>.
+        Creado con ❤️ por @jeremiasMS, @DaniDeRuvo y @Facuamores para aprender
+        Git de forma divertida
       </p>
-
-      <h3>🎯 Objetivo del Curso</h3>
-      <p>
-        Este es un curso <span class="highlight">100% interactivo</span> donde aprenderás los conceptos 
-        fundamentales de Git mientras ayudas a Marty McFly y Doc Brown a navegar por las paradojas temporales.
-      </p>
-
-      <h3>📚 ¿Qué aprenderás?</h3>
-      <ul>
-        <li><strong>🔧 Git Init, Add, Commit</strong> - Los fundamentos para iniciar tu DeLorean temporal</li>
-        <li><strong>🌿 Branches y Checkout</strong> - Crear y navegar entre líneas temporales alternativas</li>
-        <li><strong>🔄 Merge y Rebase</strong> - Unificar timelines sin crear paradojas</li>
-        <li><strong>⏪ Reset y Revert</strong> - Corregir alteraciones en la línea temporal</li>
-        <li><strong>💾 Git Stash</strong> - Guardar cambios temporalmente (como un condensador de flujo)</li>
-        <li><strong>🎭 Resolución de conflictos</strong> - Prevenir que Biff arruine el futuro</li>
-      </ul>
-
-      <h3>✨ Características</h3>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-card__icon">🎮</div>
-          <h4 class="feature-card__title">Interactivo</h4>
-          <p class="feature-card__description">
-            Ejecuta comandos Git reales en una consola simulada
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-card__icon">📊</div>
-          <h4 class="feature-card__title">Visual</h4>
-          <p class="feature-card__description">
-            Observa el árbol de Git en tiempo real con cada comando
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-card__icon">💡</div>
-          <h4 class="feature-card__title">Sistema de Pistas</h4>
-          <p class="feature-card__description">
-            Tres niveles de ayuda progresiva para cada ejercicio
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-card__icon">🎬</div>
-          <h4 class="feature-card__title">Narrativa BTTF</h4>
-          <p class="feature-card__description">
-            Cada screen sigue la historia de la trilogía
-          </p>
-        </div>
-      </div>
-
-      <h3>🗺️ Tu Viaje</h3>
-      <ul>
-        <li><strong>Pantalla 1: Origin (1985→1955)</strong> - Marty llega accidentalmente a 1955</li>
-        <li><strong>Pantalla 2: Time Travel (2015)</strong> - Viaje al futuro para salvar a la familia</li>
-        <li><strong>Pantalla 3: Dystopia (1985A)</strong> - Biff corrompe la línea temporal</li>
-        <li><strong>Pantalla 4: Wild West (1885)</strong> - Doc atrapado en el Lejano Oeste</li>
-        <li><strong>Demo Final</strong> - Visualización completa de todas las líneas temporales</li>
-      </ul>
-
-      <p style="margin-top: var(--spacing-lg); text-align: center; font-size: 1.3em; color: var(--color-secondary);">
-        <strong>💡 No necesitas saber Git para empezar, solo necesitas 1.21 gigawatts de curiosidad!</strong>
-      </p>
-    </section>
-
-    <!-- CTA -->
-    <div class="cta-section fade-in" style="animation-delay: 0.6s;">
-      <a href="index-menu.html" class="start-button">
-        🚀 EMPEZAR AVENTURA 🚀
-      </a>
-      <p style="margin-top: var(--spacing-md); color: var(--color-muted);">
-        <em>El futuro es lo que tú hagas de él, así que hazlo bueno!</em> - Doc Brown
-      </p>
-    </div>
-
-  </div>
-
-  <!-- Footer -->
-  <footer class="welcome-footer fade-in" style="animation-delay: 0.8s;">
-    <p>
-      🎬 Un proyecto educativo inspirado en Back to the Future<br>
-      💻 Desarrollado con ❤️ para aprender Git de forma divertida
-    </p>
-  </footer>
-
-</body>
+    </footer>
+  </body>
 </html>

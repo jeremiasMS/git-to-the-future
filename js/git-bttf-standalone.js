@@ -166,16 +166,100 @@ class UIController {
 
     const percentage = Math.round((current / total) * 100);
     
-    container.innerHTML = `
-      <div style="background: rgba(33,150,243,0.1); padding: 16px; border-radius: 8px; margin: 16px 0;">
-        <div style="color: #ff9100; font-weight: bold; margin-bottom: 8px;">
-          Ejercicio ${current}/${total} (${percentage}%)
+    // Crear línea temporal horizontal
+    let timelineHTML = '<div style="background: rgba(33,150,243,0.1); padding: 20px; border-radius: 12px; margin: 16px 0; overflow-x: auto;">';
+    timelineHTML += '<div style="display: flex; align-items: center; min-width: max-content; gap: 12px; padding: 8px 0;">';
+    
+    for (let i = 1; i <= total; i++) {
+      const isCompleted = i < current;
+      const isCurrent = i === current;
+      const isPending = i > current;
+      
+      let circleColor = '#666';
+      let circleSize = '32px';
+      let icon = i;
+      
+      if (isCompleted) {
+        circleColor = '#4caf50';
+        icon = '✓';
+      } else if (isCurrent) {
+        circleColor = '#ff9100';
+        circleSize = '40px';
+        icon = i;
+      } else {
+        circleColor = '#424242';
+        icon = i;
+      }
+      
+      // Círculo del ejercicio
+      timelineHTML += `
+        <div style="display: flex; flex-direction: column; align-items: center; position: relative;">
+          <div style="
+            width: ${circleSize}; 
+            height: ${circleSize}; 
+            border-radius: 50%; 
+            background: ${circleColor}; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-weight: bold; 
+            font-size: ${isCurrent ? '18px' : '14px'};
+            box-shadow: ${isCurrent ? '0 0 20px rgba(255,145,0,0.6)' : 'none'};
+            transition: all 0.3s ease;
+            ${isCurrent ? 'animation: pulse 2s infinite;' : ''}
+          ">
+            ${icon}
+          </div>
+          <div style="
+            margin-top: 8px; 
+            font-size: 11px; 
+            color: ${isCurrent ? '#ff9100' : isCompleted ? '#4caf50' : '#888'}; 
+            font-weight: ${isCurrent ? 'bold' : 'normal'};
+            white-space: nowrap;
+          ">
+            ${isCompleted ? 'Completado' : isCurrent ? 'En progreso' : 'Pendiente'}
+          </div>
         </div>
-        <div style="background: rgba(33,150,243,0.2); border-radius: 8px; height: 24px; overflow: hidden;">
-          <div style="background: linear-gradient(90deg, #2196f3, #ff9100); height: 100%; width: ${percentage}%; transition: width 0.3s ease; border-radius: 8px;"></div>
-        </div>
+      `;
+      
+      // Línea conectora (excepto después del último)
+      if (i < total) {
+        const lineColor = i < current ? '#4caf50' : '#424242';
+        timelineHTML += `
+          <div style="
+            flex: 1; 
+            height: 3px; 
+            background: ${lineColor}; 
+            min-width: 40px;
+            margin: 0 4px;
+            align-self: center;
+            margin-bottom: 28px;
+          "></div>
+        `;
+      }
+    }
+    
+    timelineHTML += '</div>';
+    timelineHTML += `
+      <div style="text-align: center; margin-top: 16px; color: #e0e0e0;">
+        <strong style="color: #ff9100;">${current}/${total} ejercicios</strong> 
+        <span style="color: #888;">• ${percentage}% completado</span>
       </div>
     `;
+    timelineHTML += '</div>';
+    
+    // Agregar animación de pulso
+    timelineHTML += `
+      <style>
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+      </style>
+    `;
+    
+    container.innerHTML = timelineHTML;
   }
 
   showExerciseInstructions(exercise, containerId = 'exerciseInstructions') {
@@ -548,6 +632,12 @@ class ConsoleController {
       case 'rebase':
         this.gitRebase(args);
         break;
+      case 'pull':
+        this.gitPull(args);
+        break;
+      case 'push':
+        this.gitPush(args);
+        break;
       case 'log':
         this.gitLog();
         break;
@@ -842,6 +932,78 @@ class ConsoleController {
     }
   }
 
+  gitPull(args) {
+    if (!this.state.initialized) {
+      this.addOutput('fatal: not a git repository', 'error');
+      return;
+    }
+
+    // Simular git pull (fetch + merge)
+    const remote = args[0] || 'origin';
+    const branch = args[1] || this.state.currentBranch;
+
+    this.addOutput(`🌐 Conectando con remoto '${remote}'...`, 'info');
+    this.addOutput(`From ${remote}`, 'info');
+    this.addOutput(` * branch            ${branch} -> FETCH_HEAD`, 'info');
+    
+    // Simular que hay cambios nuevos
+    const hasChanges = Math.random() > 0.3; // 70% de probabilidad de tener cambios
+    
+    if (hasChanges) {
+      this.addOutput(`Updating ${this.generateHash()}..${this.generateHash()}`, 'info');
+      this.addOutput(`Fast-forward`, 'success');
+      
+      // Crear un commit automático para representar los cambios descargados
+      if (this.graphController) {
+        this.graphController.commit(`📥 Pull from ${remote}/${branch}`);
+      }
+      
+      const filesChanged = Math.floor(Math.random() * 5) + 1;
+      const insertions = Math.floor(Math.random() * 50) + 10;
+      this.addOutput(` ${filesChanged} file(s) changed, ${insertions} insertions(+)`, 'success');
+      this.addOutput(`✅ Cambios del repositorio remoto integrados`, 'success');
+    } else {
+      this.addOutput(`Already up to date.`, 'info');
+      this.addOutput(`💡 Tu rama está sincronizada con '${remote}/${branch}'`, 'info');
+    }
+  }
+
+  gitPush(args) {
+    if (!this.state.initialized) {
+      this.addOutput('fatal: not a git repository', 'error');
+      return;
+    }
+
+    if (this.state.commits.length === 0) {
+      this.addOutput('No hay commits para enviar', 'warning');
+      this.addOutput('💡 Usa "git commit" para crear commits antes de hacer push', 'info');
+      return;
+    }
+
+    // Simular git push
+    const remote = args[0] || 'origin';
+    const branch = args[1] || this.state.currentBranch;
+
+    this.addOutput(`🚀 Enviando cambios a '${remote}'...`, 'info');
+    this.addOutput(`Enumerating objects: ${this.state.commits.length}, done.`, 'info');
+    this.addOutput(`Counting objects: 100% (${this.state.commits.length}/${this.state.commits.length}), done.`, 'info');
+    
+    // Simular compresión
+    const deltaObjects = Math.min(this.state.commits.length, 3);
+    this.addOutput(`Delta compression using up to 8 threads`, 'info');
+    this.addOutput(`Compressing objects: 100% (${deltaObjects}/${deltaObjects}), done.`, 'info');
+    this.addOutput(`Writing objects: 100% (${deltaObjects}/${deltaObjects}), ${(Math.random() * 5 + 1).toFixed(2)} KiB | ${(Math.random() * 2 + 0.5).toFixed(2)} MiB/s, done.`, 'info');
+    this.addOutput(`Total ${deltaObjects} (delta ${Math.max(0, deltaObjects - 1)}), reused 0 (delta 0)`, 'info');
+    
+    // Mensaje de éxito
+    this.addOutput(`remote: Resolving deltas: 100% (${Math.max(0, deltaObjects - 1)}/${Math.max(0, deltaObjects - 1)}), done.`, 'info');
+    this.addOutput(`To ${remote}`, 'success');
+    const oldHash = this.generateHash().substring(0, 7);
+    const newHash = this.generateHash().substring(0, 7);
+    this.addOutput(`   ${oldHash}..${newHash}  ${branch} -> ${branch}`, 'success');
+    this.addOutput(`✅ Cambios enviados exitosamente a ${remote}/${branch}`, 'success');
+  }
+
   gitLog() {
     if (!this.state.initialized) {
       this.addOutput('fatal: not a git repository', 'error');
@@ -905,6 +1067,8 @@ class ConsoleController {
     this.addOutput('  git checkout <rama>      - Cambiar de rama', 'info');
     this.addOutput('  git merge <rama>         - Fusionar rama', 'info');
     this.addOutput('  git rebase <rama>        - Rebasar rama actual sobre otra', 'info');
+    this.addOutput('  git pull [origin] [rama] - Descargar cambios del remoto', 'info');
+    this.addOutput('  git push [origin] [rama] - Enviar commits al remoto', 'info');
     this.addOutput('  git log                  - Ver historial', 'info');
     this.addOutput('  clear                    - Limpiar consola', 'info');
   }

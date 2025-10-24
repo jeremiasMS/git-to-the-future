@@ -55,22 +55,27 @@
 }
 
 .console__cmd-btn {
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-primary);
-  color: var(--color-text);
+  background: linear-gradient(135deg, rgba(30, 30, 50, 0.6), rgba(20, 20, 35, 0.8));
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  color: rgba(33, 150, 243, 0.9);
   padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-sm);
+  border-radius: 6px; /* Más rectangular que el botón continuar */
   cursor: pointer;
   font-family: var(--font-family-code);
   font-size: var(--font-size-sm);
   transition: all var(--transition-normal);
   position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-transform: lowercase;
+  letter-spacing: 0.5px;
 }
 
 .console__cmd-btn:hover {
-  background-color: var(--color-primary);
-  color: var(--color-bg);
-  box-shadow: 0 0 10px var(--color-primary);
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.15), rgba(33, 150, 243, 0.1));
+  border-color: rgba(33, 150, 243, 0.5);
+  color: rgba(33, 150, 243, 1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 8px rgba(33, 150, 243, 0.2);
+  transform: none; /* Sin transformación para indicar que no es un botón de acción principal */
 }
 
 /* Console Input */
@@ -105,19 +110,22 @@
 }
 
 .console__execute-btn {
-  background-color: var(--color-accent);
+  background: linear-gradient(135deg, var(--color-accent), var(--color-highlight));
   border: none;
   color: var(--color-bg);
   padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: 3px;
+  border-radius: 20px; /* Más redondeado - claramente un botón de acción */
   cursor: pointer;
   font-size: var(--font-size-sm);
+  font-weight: 600;
   transition: all var(--transition-normal);
+  box-shadow: 0 2px 8px rgba(0, 229, 255, 0.3);
 }
 
 .console__execute-btn:hover {
-  background-color: var(--color-highlight);
-  box-shadow: 0 0 8px var(--color-highlight);
+  background: linear-gradient(135deg, var(--color-highlight), var(--color-accent));
+  box-shadow: 0 4px 16px rgba(0, 229, 255, 0.5);
+  transform: translateY(-1px);
 }
 
 /* Special Buttons */
@@ -132,23 +140,25 @@
 .console__special-btn {
   flex: 1;
   padding: var(--spacing-md) var(--spacing-md);
-  border-radius: var(--border-radius-sm);
+  border-radius: 25px; /* Muy redondeado - claramente interactivo */
   cursor: pointer;
   font-size: var(--font-size-base);
   font-weight: bold;
   transition: all var(--transition-normal);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border: none;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .console__special-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .console__special-btn:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .console__special-btn--reset {
