@@ -1,317 +1,423 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pantalla 1: Origin (1985→1955) | Git to the Future</title>
-  
-  <!-- CSS Modular -->
-  <link rel="stylesheet" href="../css/variables.css">
-  <link rel="stylesheet" href="../css/components/base.css">
-  <link rel="stylesheet" href="../css/components/branch-indicator.css">
-  <link rel="stylesheet" href="../css/components/console.css">
-  <link rel="stylesheet" href="../css/components/graph.css">
-  <link rel="stylesheet" href="../css/components/navigation.css">
-  
-  <!-- GitGraph CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>
-</head>
-<body class="screen-body">
-  <!-- Header Principal de la App -->
-  <header class="app-header">
-    <a href="../index.html" style="text-decoration: none;">
-      
-      <h1 class="app-header__title">GIT TO THE FUTURE</h1>
-    </a>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pantalla 1: Origin (1985→1955) | Git to the Future</title>
 
-  <!-- Navegación Superior -->
-  <div id="navigationContainer"></div>
+    <!-- CSS Modular -->
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/components/base.css" />
+    <link rel="stylesheet" href="../css/components/branch-indicator.css" />
+    <link rel="stylesheet" href="../css/components/console.css" />
+    <link rel="stylesheet" href="../css/components/graph.css" />
+    <link rel="stylesheet" href="../css/components/navigation.css" />
 
-  <!-- Header de la Pantalla -->
-  <header class="header">
-    <div class="container">
-      <div id="breadcrumbContainer"></div>
-      <h1 class="text-gradient">🚗 Pantalla 1: Origin (1985→1955)</h1>
-      <p class="text-muted">El inicio de la aventura: desde 1985 hasta 1955, aprende Git mientras Marty resuelve la paradoja de sus padres</p>
-    </div>
-  </header>
+    <!-- GitGraph CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>
+  </head>
+  <body class="screen-body">
+    <!-- Header Principal de la App -->
+    <header class="app-header">
+      <a href="../index.html" style="text-decoration: none">
+        <h1 class="app-header__title">GIT TO THE FUTURE</h1>
+      </a>
+    </header>
 
-  <!-- Contenido Principal -->
-  <main class="container" style="max-width: 1400px; margin: 0 auto; padding: var(--spacing-xl);">
-    
-    <!-- Historia / Contexto -->
-    <section class="card card--accent" style="margin-bottom: var(--spacing-lg);">
-      <h2>📖 Historia: El Inicio del Viaje (1985-1955)</h2>
-      <p>
-        Es el año <strong>1985</strong>. Marty McFly conoce la máquina del tiempo de Doc Brown y viaja 
-        accidentalmente a <strong>1955</strong>, donde interfiere con el primer encuentro de sus padres, 
-        creando una paradoja temporal que debe resolver.
-      </p>
-      <p>
-        En esta pantalla aprenderás los <strong>fundamentos de Git</strong>:
-      </p>
-      <ul>
-        <li><code>git init</code> - Inicializar un repositorio (crear la máquina del tiempo)</li>
-        <li><code>git commit</code> - Registrar puntos importantes en la historia</li>
-        <li><code>git branch</code> - Crear líneas temporales alternativas</li>
-        <li><code>git checkout</code> - Viajar entre ramas</li>
-        <li><code>git merge</code> - Fusionar líneas temporales</li>
-      </ul>
-      <p class="text-muted" style="margin-top: var(--spacing-md);">
-        <strong>🎯 Objetivo:</strong> Completar 6 ejercicios que cubren la primera película de BTTF.
-      </p>
-    </section>
+    <!-- Navegación Superior -->
+    <div id="navigationContainer"></div>
 
-    <!-- Progreso de Ejercicios -->
-    <div id="exerciseProgress"></div>
+    <!-- Header de la Pantalla -->
+    <header class="header">
+      <div class="container">
+        <div id="breadcrumbContainer"></div>
+        <h1 class="text-gradient">🚗 Pantalla 1: Origin (1985→1955)</h1>
+        <p class="text-muted">
+          El inicio de la aventura: desde 1985 hasta 1955, aprende Git mientras
+          Marty resuelve la paradoja de sus padres
+        </p>
+      </div>
+    </header>
 
-    <!-- Instrucciones del Ejercicio Actual -->
-    <div id="exerciseInstructions"></div>
+    <!-- Contenido Principal -->
+    <main
+      class="container"
+      style="max-width: 1400px; margin: 0 auto; padding: var(--spacing-xl)"
+    >
+      <!-- Historia / Contexto -->
+      <section
+        class="card card--accent"
+        style="margin-bottom: var(--spacing-lg)"
+      >
+        <h2>📖 Historia: El Inicio del Viaje (1985-1955)</h2>
+        <p>
+          Es el año <strong>1985</strong>. Marty McFly conoce la máquina del
+          tiempo de Doc Brown y viaja accidentalmente a <strong>1955</strong>,
+          donde interfiere con el primer encuentro de sus padres, creando una
+          paradoja temporal que debe resolver.
+        </p>
+        <p>
+          En esta pantalla aprenderás los <strong>fundamentos de Git</strong>:
+        </p>
+        <ul>
+          <li>
+            <code>git init</code> - Inicializar un repositorio (crear la máquina
+            del tiempo)
+          </li>
+          <li>
+            <code>git commit</code> - Registrar puntos importantes en la
+            historia
+          </li>
+          <li>
+            <code>git branch</code> - Crear líneas temporales alternativas
+          </li>
+          <li><code>git checkout</code> - Viajar entre ramas</li>
+          <li><code>git merge</code> - Fusionar líneas temporales</li>
+        </ul>
+        <p class="text-muted" style="margin-top: var(--spacing-md)">
+          <strong>🎯 Objetivo:</strong> Completar 6 ejercicios que cubren la
+          primera película de BTTF.
+        </p>
+      </section>
 
-    <!-- Grid de Dos Columnas -->
-    <div class="grid" style="grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); margin-top: var(--spacing-lg);">
-      
-      <!-- Columna Izquierda: Gráfico -->
-      <div class="graph">
-        <div class="branch-indicator">
-          <span class="branch-indicator__label">📍 Rama Actual:</span>
-          <span class="branch-indicator__value" id="currentBranchIndicator">Sin repositorio</span>
+      <!-- Progreso de Ejercicios -->
+      <div id="exerciseProgress"></div>
+
+      <!-- Instrucciones del Ejercicio Actual -->
+      <div id="exerciseInstructions"></div>
+
+      <!-- Grid de Dos Columnas -->
+      <div
+        class="grid"
+        style="
+          grid-template-columns: 1fr 1fr;
+          gap: var(--spacing-lg);
+          margin-top: var(--spacing-lg);
+        "
+      >
+        <!-- Columna Izquierda: Gráfico -->
+        <div class="graph">
+          <div class="branch-indicator">
+            <span class="branch-indicator__label">📍 Rama Actual:</span>
+            <span class="branch-indicator__value" id="currentBranchIndicator"
+              >Sin repositorio</span
+            >
+          </div>
+
+          <h2 class="graph__title">📊 Línea Temporal Git</h2>
+          <p class="graph__description">
+            Visualiza cómo se construye el historial de Git
+          </p>
+
+          <div class="graph__canvas" id="gitGraph">
+            <div class="graph__empty">
+              <div class="graph__empty-icon">🚗💨</div>
+              <div class="graph__empty-text">El DeLorean está listo...</div>
+              <div class="graph__empty-hint">
+                Ejecuta "git init" para comenzar tu viaje temporal
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <h2 class="graph__title">📊 Línea Temporal Git</h2>
-        <p class="graph__description">Visualiza cómo se construye el historial de Git</p>
-        
-        <div class="graph__canvas" id="gitGraph">
-          <div class="graph__empty">
-            <div class="graph__empty-icon">🚗💨</div>
-            <div class="graph__empty-text">El DeLorean está listo...</div>
-            <div class="graph__empty-hint">Ejecuta "git init" para comenzar tu viaje temporal</div>
+
+        <!-- Columna Derecha: Consola -->
+        <div class="console">
+          <h2 class="console__title">🖥️ Consola Git Interactiva</h2>
+          <p class="console__description">
+            Ejecuta comandos Git para completar los ejercicios
+          </p>
+
+          <!-- Output de la Consola -->
+          <div class="console__output" id="consoleOutput">
+            <div class="console__output-line console__output-line--info">
+              <span class="prompt">$</span> ¡Bienvenido a 1955! Completa los
+              ejercicios para regresar a 1985 🚗⚡
+            </div>
+          </div>
+
+          <!-- Botones de Comandos Rápidos -->
+          <div class="console__commands">
+            <button class="console__cmd-btn" data-command="init">init</button>
+            <button class="console__cmd-btn" data-command="status">
+              status
+            </button>
+            <button class="console__cmd-btn" data-command="add .">add .</button>
+            <button class="console__cmd-btn" data-command="commit -m 'mensaje'">
+              commit
+            </button>
+            <button class="console__cmd-btn" data-command="branch">
+              branch
+            </button>
+            <button class="console__cmd-btn" data-command="checkout">
+              checkout
+            </button>
+            <button class="console__cmd-btn" data-command="merge">
+              merge
+            </button>
+            <button class="console__cmd-btn" data-command="rebase">
+              rebase
+            </button>
+          </div>
+
+          <!-- Input de Comando -->
+          <div class="console__input">
+            <span class="console__input-prompt">git $</span>
+            <input
+              type="text"
+              class="console__input-field"
+              id="commandInput"
+              placeholder="Escribe tu comando aquí..."
+              autocomplete="off"
+            />
+            <button class="console__execute-btn" id="executeBtn">▶</button>
+          </div>
+
+          <!-- Botones Especiales -->
+          <div class="console__special-buttons">
+            <button
+              class="console__special-btn console__special-btn--reset"
+              id="resetBtn"
+            >
+              🔄 Reiniciar
+            </button>
+            <button
+              class="console__special-btn console__special-btn--demo"
+              id="hintBtn"
+            >
+              💡 Pista
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- Columna Derecha: Consola -->
-      <div class="console">
-        <h2 class="console__title">🖥️ Consola Git Interactiva</h2>
-        <p class="console__description">Ejecuta comandos Git para completar los ejercicios</p>
-
-        <!-- Output de la Consola -->
-        <div class="console__output" id="consoleOutput">
-          <div class="console__output-line console__output-line--info">
-            <span class="prompt">$</span> ¡Bienvenido a 1955! Completa los ejercicios para regresar a 1985 🚗⚡
+      <!-- Ayuda Adicional -->
+      <section
+        class="card card--secondary"
+        style="margin-top: var(--spacing-lg)"
+      >
+        <h3>🎓 Referencia Rápida de Comandos</h3>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+          "
+        >
+          <div>
+            <strong>git init</strong>
+            <p class="text-muted text-sm">
+              Inicializa un nuevo repositorio Git
+            </p>
+          </div>
+          <div>
+            <strong>git add .</strong>
+            <p class="text-muted text-sm">
+              Agrega archivos al área de preparación
+            </p>
+          </div>
+          <div>
+            <strong>git commit -m "mensaje"</strong>
+            <p class="text-muted text-sm">Crea un commit con un mensaje</p>
+          </div>
+          <div>
+            <strong>git branch [nombre]</strong>
+            <p class="text-muted text-sm">Crea una nueva rama</p>
+          </div>
+          <div>
+            <strong>git checkout [rama]</strong>
+            <p class="text-muted text-sm">Cambia a otra rama</p>
+          </div>
+          <div>
+            <strong>git status</strong>
+            <p class="text-muted text-sm">Muestra el estado actual</p>
           </div>
         </div>
+      </section>
+    </main>
 
-        <!-- Botones de Comandos Rápidos -->
-        <div class="console__commands">
-          <button class="console__cmd-btn" data-command="init">init</button>
-          <button class="console__cmd-btn" data-command="status">status</button>
-          <button class="console__cmd-btn" data-command="add .">add .</button>
-          <button class="console__cmd-btn" data-command="commit -m 'mensaje'">commit</button>
-          <button class="console__cmd-btn" data-command="branch">branch</button>
-          <button class="console__cmd-btn" data-command="checkout">checkout</button>
-        </div>
+    <!-- Footer -->
+    <footer
+      class="text-center text-muted"
+      style="padding: var(--spacing-xl); margin-top: var(--spacing-xl)"
+    >
+      <p>🚗⚡ Git to the Future - Aprende Git usando Back to the Future</p>
+      <p class="text-sm">Pantalla 1 de 4 | Origin (1985→1955)</p>
+    </footer>
 
-        <!-- Input de Comando -->
-        <div class="console__input">
-          <span class="console__input-prompt">git $</span>
-          <input 
-            type="text" 
-            class="console__input-field" 
-            id="commandInput" 
-            placeholder="Escribe tu comando aquí..."
-            autocomplete="off"
-          >
-          <button class="console__execute-btn" id="executeBtn">▶</button>
-        </div>
+    <!-- JavaScript sin módulos ES6 -->
+    <script src="../js/git-bttf-standalone.js"></script>
+    <script>
+      // Inicializar cuando se cargue la página
+      document.addEventListener('DOMContentLoaded', function () {
+        Logger.log('Iniciando Pantalla 1: Origin');
 
-        <!-- Botones Especiales -->
-        <div class="console__special-buttons">
-          <button class="console__special-btn console__special-btn--reset" id="resetBtn">
-            🔄 Reiniciar
-          </button>
-          <button class="console__special-btn console__special-btn--demo" id="hintBtn">
-            💡 Pista
-          </button>
-        </div>
-      </div>
+        // 1️⃣ Inicializar controladores
+        const graph = new GitGraphController('gitGraph');
+        const consoleCtrl = new ConsoleController(
+          'consoleOutput',
+          'commandInput',
+          graph
+        );
+        const validator = new ExerciseValidator(consoleCtrl, graph);
+        const ui = new UIController();
+        const screenCtrl = new ScreenController();
 
-    </div>
+        // 2️⃣ Configurar ejercicios y conectar validador
+        validator.setExercises(SCREEN_EXERCISES.screen1);
+        consoleCtrl.setValidator(validator);
 
-    <!-- Ayuda Adicional -->
-    <section class="card card--secondary" style="margin-top: var(--spacing-lg);">
-      <h3>🎓 Referencia Rápida de Comandos</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
-        <div>
-          <strong>git init</strong>
-          <p class="text-muted text-sm">Inicializa un nuevo repositorio Git</p>
-        </div>
-        <div>
-          <strong>git add .</strong>
-          <p class="text-muted text-sm">Agrega archivos al área de preparación</p>
-        </div>
-        <div>
-          <strong>git commit -m "mensaje"</strong>
-          <p class="text-muted text-sm">Crea un commit con un mensaje</p>
-        </div>
-        <div>
-          <strong>git branch [nombre]</strong>
-          <p class="text-muted text-sm">Crea una nueva rama</p>
-        </div>
-        <div>
-          <strong>git checkout [rama]</strong>
-          <p class="text-muted text-sm">Cambia a otra rama</p>
-        </div>
-        <div>
-          <strong>git status</strong>
-          <p class="text-muted text-sm">Muestra el estado actual</p>
-        </div>
-      </div>
-    </section>
+        // 3️⃣ Renderizar navegación
+        screenCtrl.renderNavigation('navigationContainer');
+        screenCtrl.renderBreadcrumb('breadcrumbContainer');
 
-  </main>
+        // 4️⃣ Mostrar primer ejercicio
+        ui.showExerciseInstructions(
+          validator.getCurrentExercise(),
+          'exerciseInstructions'
+        );
+        ui.updateExerciseProgress(
+          0,
+          SCREEN_EXERCISES.screen1.length,
+          'exerciseProgress'
+        );
 
-  <!-- Footer -->
-  <footer class="text-center text-muted" style="padding: var(--spacing-xl); margin-top: var(--spacing-xl);">
-    <p>🚗⚡ Git to the Future - Aprende Git usando Back to the Future</p>
-    <p class="text-sm">Pantalla 1 de 4 | Origin (1985→1955)</p>
-  </footer>
+        // 5️⃣ Interceptar comandos para validación automática
+        const originalExecute = consoleCtrl.executeCommand.bind(consoleCtrl);
+        consoleCtrl.executeCommand = function (commandString) {
+          const cmd = commandString.trim().toLowerCase();
 
-  <!-- JavaScript Modular -->
-  <script type="module">
-    import { 
-      GitGraphController, 
-      ConsoleController, 
-      ScreenController,
-      ExerciseValidator,
-      SCREEN_EXERCISES,
-      UIController,
-      Logger 
-    } from '../js/modules/index.js';
+          // Comandos de ayuda no necesitan validación
+          if (
+            cmd === 'hint' ||
+            cmd === 'ayuda' ||
+            cmd === 'help' ||
+            cmd === 'clear'
+          ) {
+            originalExecute(commandString);
+            return;
+          }
 
-    // 1️⃣ Inicializar controladores
-    Logger.log('Iniciando Pantalla 1: Origin');
+          // Ejecutar comando
+          originalExecute(commandString);
 
-    const graph = new GitGraphController('gitGraph');
-    const consoleCtrl = new ConsoleController('consoleOutput', 'commandInput', graph);
-    const validator = new ExerciseValidator(consoleCtrl, graph);
-    const ui = new UIController();
-    const screenCtrl = new ScreenController();
+          // Validar ejercicio actual
+          const parts = cmd.split(' ');
+          const command = parts[0] === 'git' ? parts[1] : parts[0];
+          const args = parts[0] === 'git' ? parts.slice(2) : parts.slice(1);
 
-    // 2️⃣ Configurar ejercicios y conectar validador
-    validator.setExercises(SCREEN_EXERCISES.screen1);
-    consoleCtrl.setValidator(validator);
+          const result = validator.validateCommand(command, args);
 
-    // 3️⃣ Renderizar navegación
-    screenCtrl.renderNavigation('navigationContainer');
-    screenCtrl.renderBreadcrumb('breadcrumbContainer');
+          if (result.valid) {
+            // ✅ Comando correcto
+            ui.showNotification(result.message, 'success');
 
-    // 4️⃣ Mostrar primer ejercicio
-    ui.showExerciseInstructions(validator.getCurrentExercise(), 'exerciseInstructions');
-    ui.updateExerciseProgress(0, SCREEN_EXERCISES.screen1.length, 'exerciseProgress');
+            const nextResult = validator.nextExercise();
 
-    // 5️⃣ Interceptar comandos para validación automática
-    const originalExecute = consoleCtrl.executeCommand.bind(consoleCtrl);
-    consoleCtrl.executeCommand = function(commandString) {
-      const cmd = commandString.trim().toLowerCase();
-      
-      // Comandos de ayuda no necesitan validación
-      if (cmd === 'hint' || cmd === 'ayuda' || cmd === 'help' || cmd === 'clear') {
-        originalExecute(commandString);
-        return;
-      }
+            if (nextResult.completed) {
+              // 🎉 ¡Pantalla completada!
+              ui.showNotification(
+                '🎉 ¡Has completado la Pantalla 1!',
+                'success',
+                5000
+              );
+              ui.createConfetti();
+              screenCtrl.completeScreen(1);
 
-      // Ejecutar comando
-      originalExecute(commandString);
+              setTimeout(() => {
+                ui.showCompletionModal('Origin (1985→1955)', () => {
+                  screenCtrl.navigateTo(2);
+                });
+              }, 2000);
+            } else {
+              // 📝 Mostrar siguiente ejercicio
+              ui.updateExerciseProgress(
+                validator.currentExerciseIndex,
+                SCREEN_EXERCISES.screen1.length,
+                'exerciseProgress'
+              );
+              ui.showExerciseInstructions(
+                nextResult.exercise,
+                'exerciseInstructions'
+              );
+            }
+          } else if (result.suggestion) {
+            // ⚠️ Mostrar sugerencia
+            ui.showNotification(result.suggestion, 'info', 4000);
+          }
+        };
 
-      // Validar ejercicio actual
-      const parts = cmd.split(' ');
-      const command = parts[0] === 'git' ? parts[1] : parts[0];
-      const args = parts[0] === 'git' ? parts.slice(2) : parts.slice(1);
+        // 6️⃣ Event Listeners
+        // Ejecutar comando con botón o Enter
+        const executeCommand = () => {
+          const input = document.getElementById('commandInput');
+          const command = input.value.trim();
+          if (command) {
+            consoleCtrl.executeCommand(command);
+            input.value = '';
+          }
+        };
 
-      const result = validator.validateCommand(command, args);
-      
-      if (result.valid) {
-        // ✅ Comando correcto
-        ui.showNotification(result.message, 'success');
-        
-        const nextResult = validator.nextExercise();
-        
-        if (nextResult.completed) {
-          // 🎉 ¡Pantalla completada!
-          ui.showNotification('🎉 ¡Has completado la Pantalla 1!', 'success', 5000);
-          ui.createConfetti();
-          screenCtrl.completeScreen(1);
-          
-          setTimeout(() => {
-            ui.showCompletionModal('Origin (1985→1955)', () => {
-              screenCtrl.navigateTo(2);
-            });
-          }, 2000);
-        } else {
-          // 📝 Mostrar siguiente ejercicio
-          ui.updateExerciseProgress(validator.currentExerciseIndex, SCREEN_EXERCISES.screen1.length, 'exerciseProgress');
-          ui.showExerciseInstructions(nextResult.exercise, 'exerciseInstructions');
+        document
+          .getElementById('executeBtn')
+          .addEventListener('click', executeCommand);
+        document
+          .getElementById('commandInput')
+          .addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') executeCommand();
+          });
+
+        // Botones de comando rápido
+        document.querySelectorAll('.console__cmd-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const command = btn.getAttribute('data-command');
+            document.getElementById('commandInput').value = command;
+            document.getElementById('commandInput').focus();
+          });
+        });
+
+        // Botón de reiniciar
+        document.getElementById('resetBtn').addEventListener('click', () => {
+          if (
+            confirm(
+              '¿Estás seguro de reiniciar? Perderás todo el progreso de esta pantalla.'
+            )
+          ) {
+            consoleCtrl.resetAll();
+            validator.reset();
+            ui.showExerciseInstructions(
+              SCREEN_EXERCISES.screen1[0],
+              'exerciseInstructions'
+            );
+            ui.updateExerciseProgress(
+              0,
+              SCREEN_EXERCISES.screen1.length,
+              'exerciseProgress'
+            );
+            ui.showNotification('🔄 Pantalla reiniciada', 'info');
+          }
+        });
+
+        // Botón de pista progresiva (si existe)
+        const hintBtn = document.getElementById('hintBtn');
+        if (hintBtn) {
+          hintBtn.addEventListener('click', () => {
+            const exercise = validator.getCurrentExercise();
+            if (exercise) {
+              ui.showNotification(`💡 ${exercise.hint}`, 'warning', 6000);
+            }
+          });
         }
-      } else if (result.suggestion) {
-        // ⚠️ Mostrar sugerencia
-        ui.showNotification(result.suggestion, 'info', 4000);
-      }
-    };
 
-    // 6️⃣ Event Listeners
-    // Ejecutar comando con botón o Enter
-    const executeCommand = () => {
-      const input = document.getElementById('commandInput');
-      const command = input.value.trim();
-      if (command) {
-        consoleCtrl.executeCommand(command);
-        input.value = '';
-      }
-    };
+        // Actualizar indicador de rama
+        const originalCheckout = graph.checkout.bind(graph);
+        graph.checkout = function (branchName) {
+          const result = originalCheckout(branchName);
+          if (result) ui.updateBranchIndicator(branchName);
+          return result;
+        };
 
-    document.getElementById('executeBtn').addEventListener('click', executeCommand);
-    document.getElementById('commandInput').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') executeCommand();
-    });
-
-    // Botones de comando rápido
-    document.querySelectorAll('.console__cmd-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const command = btn.getAttribute('data-command');
-        document.getElementById('commandInput').value = command;
-        document.getElementById('commandInput').focus();
+        Logger.log('Pantalla 1 inicializada correctamente');
       });
-    });
-
-    // Botón de reiniciar
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      if (confirm('¿Estás seguro de reiniciar? Perderás todo el progreso de esta pantalla.')) {
-        consoleCtrl.resetAll();
-        validator.reset();
-        ui.showExerciseInstructions(SCREEN_EXERCISES.screen1[0], 'exerciseInstructions');
-        ui.updateExerciseProgress(0, SCREEN_EXERCISES.screen1.length, 'exerciseProgress');
-        ui.showNotification('🔄 Pantalla reiniciada', 'info');
-      }
-    });
-
-    // Botón de pista progresiva
-    document.getElementById('hintBtn').addEventListener('click', () => {
-      const hint = validator.getHint();
-      ui.showNotification(hint, 'warning', 6000);
-    });
-
-    // Actualizar indicador de rama
-    const originalCheckout = graph.checkout.bind(graph);
-    graph.checkout = function(branchName) {
-      const result = originalCheckout(branchName);
-      if (result) ui.updateBranchIndicator(branchName);
-      return result;
-    };
-
-    Logger.log('Pantalla 1 inicializada correctamente');
-  </script>
-
-</body>
+    </script>
+  </body>
 </html>

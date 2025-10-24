@@ -453,7 +453,7 @@ class GitConsole {
       initialized: true,
       staged: [],
       committed: [],
-      branches: ['main', 'clara-viva', 'biff-paradise', 'marty-calendario', 'marty-sin-papas', 'familia-feliz'],
+      branches: ['main', '1955', '2015', '1985A', '1885'],
       currentBranch: 'main',
       commits: [],
     };
@@ -466,9 +466,9 @@ class GitConsole {
     // Limpiar consola y mostrar mensaje
     this.output.innerHTML = '';
     this.addOutput('🚗⚡ Demo "Volver al Futuro" cargado', 'success');
-    this.addOutput('🎬 Puedes ver las líneas temporales de la película en el gráfico', 'info');
-    this.addOutput('💡 Usa "git branch" para ver todas las ramas creadas', 'info');
-    this.addOutput('📚 Este es un ejemplo completo de cómo Git maneja ramas y merges', 'info');
+    this.addOutput('🎬 Visualización completa de las líneas temporales', 'info');
+    this.addOutput('💡 Usa "git branch" para ver todas las ramas', 'info');
+    this.addOutput('📚 Ejemplo de cómo Git maneja viajes temporales', 'info');
   }
 }
 
