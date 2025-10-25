@@ -9,363 +9,7 @@
     <link rel="stylesheet" href="css/variables.css" />
     <link rel="stylesheet" href="css/components/base.css" />
     <link rel="stylesheet" href="css/components/navigation.css" />
-
-    <style>
-      /* ============================================
-       BASE STYLES
-       ============================================ */
-      body {
-        background: linear-gradient(
-          135deg,
-          #0f0f1e 0%,
-          #1a1a2e 50%,
-          #2196f3 100%
-        );
-        background-attachment: fixed;
-        min-height: 100vh;
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-        margin: 0;
-        padding: 0;
-      }
-
-      /* ============================================
-       HEADER
-       ============================================ */
-      .app-header {
-        background: rgba(15, 15, 30, 0.5);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding: var(--spacing-md) var(--spacing-xl);
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-      }
-
-      .app-header__title {
-        font-family: var(--font-family-heading);
-        font-size: 16px;
-        font-weight: 400;
-        color: rgba(255, 255, 255, 0.7);
-        margin: 0;
-        text-align: center;
-        letter-spacing: 3px;
-      }
-
-      /* ============================================
-       LAYOUT
-       ============================================ */
-      .main-layout {
-        max-width: 1400px;
-        margin: 0 auto;
-        display: flex;
-        padding: 35px 0;
-        gap: var(--spacing-xl);
-        align-items: stretch;
-        flex: 1;
-        position: relative;
-      }
-
-      /* ============================================
-       LOGO SECTION (LEFT)
-       ============================================ */
-      .logo-sidebar {
-        flex: 0 0 500px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: var(--spacing-xl);
-        height: 100vh;
-        position: fixed;
-        left: 50%;
-        top: 0;
-        margin-left: calc(-1400px / 2);
-        padding: 0 var(--spacing-md) var(--spacing-md);
-      }
-
-      .brand-logo {
-        max-width: 500px;
-        width: 100%;
-        height: auto;
-        filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.5));
-      }
-
-      .logo-sidebar .start-button {
-        margin-top: var(--spacing-md);
-      }
-
-      /* ============================================
-       CONTENT SECTION (RIGHT)
-       ============================================ */
-      .content-section {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        margin-left: 550px;
-      }
-
-      .content-section__scroll {
-        padding: var(--spacing-md);
-        padding-top: 50px;
-      }
-
-      /* ============================================
-       CONTENT CARDS
-       ============================================ */
-      .content-card {
-        padding: var(--spacing-lg);
-        margin-bottom: var(--spacing-lg);
-        min-height: 50vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        position: relative;
-      }
-
-      .content-card:first-child {
-        min-height: 70vh;
-        padding-top: 0;
-        display: flex;
-        justify-content: center;
-        padding-bottom: 0;
-      }
-
-      .content-card:not(:last-child)::after {
-        content: '↓';
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 32px;
-        color: var(--secondary-color);
-        opacity: 0.4;
-        animation: bounce 2s infinite;
-      }
-
-      @keyframes bounce {
-        0%,
-        20%,
-        50%,
-        80%,
-        100% {
-          transform: translateX(-50%) translateY(0);
-        }
-        40% {
-          transform: translateX(-50%) translateY(-10px);
-        }
-        60% {
-          transform: translateX(-50%) translateY(-5px);
-        }
-      }
-
-      .content-card::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(33, 150, 243, 0.3) 50%,
-          transparent
-        );
-      }
-
-      .content-card:last-child::before {
-        display: none;
-      }
-
-      .content-card h2 {
-        color: #ffffff;
-        font-size: 36px;
-        font-weight: 700;
-        margin: 0 0 var(--spacing-md) 0;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        line-height: 1.3;
-      }
-
-      .content-card h3 {
-        color: #2196f3;
-        font-size: 28px;
-        font-weight: 600;
-        margin: var(--spacing-md) 0 var(--spacing-md) 0;
-      }
-
-      .content-card p {
-        color: rgba(255, 255, 255, 0.8);
-        line-height: 1.7;
-        margin-bottom: var(--spacing-md);
-        font-size: 16px;
-      }
-
-      .content-card .subtitle {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 18px;
-        line-height: 1.6;
-        margin-top: var(--spacing-md);
-      }
-
-      .content-card ul {
-        list-style: none;
-        padding: 0;
-        margin: var(--spacing-md) 0;
-      }
-
-      .content-card li {
-        padding: var(--spacing-sm) 0;
-        margin-bottom: var(--spacing-xs);
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 16px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .content-card li strong {
-        color: #ffc107;
-        font-size: 17px;
-      }
-
-      .highlight {
-        color: #ffc107;
-        font-weight: 600;
-      }
-
-      /* Features Grid */
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-md);
-        margin: var(--spacing-md) 0;
-      }
-
-      .feature-box {
-        background: rgba(33, 150, 243, 0.1);
-        border: 1px solid rgba(33, 150, 243, 0.3);
-        border-radius: 12px;
-        padding: var(--spacing-md);
-        text-align: center;
-      }
-
-      .feature-box__icon {
-        font-size: 2em;
-        margin-bottom: var(--spacing-xs);
-      }
-
-      .feature-box__title {
-        color: #2196f3;
-        font-size: 15px;
-        font-weight: 600;
-        margin-bottom: var(--spacing-xs);
-      }
-
-      .feature-box__description {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 13px;
-        line-height: 1.5;
-      }
-
-      /* CTA Button */
-      .cta-card {
-        text-align: center;
-        padding: var(--spacing-md);
-      }
-
-      .start-button {
-        display: inline-block;
-        padding: 20px 40px;
-        font-family: var(--font-family-heading);
-        font-size: 24px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        color: #1a1a2e;
-        background: linear-gradient(135deg, #ffc107, #ffb300);
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 6px 20px rgba(255, 193, 7, 0.5);
-      }
-
-      .start-button:hover {
-        transform: scale(1.05) translateY(-3px);
-        box-shadow: 0 8px 30px rgba(255, 193, 7, 0.7);
-      }
-
-      /* Footer */
-      .app-footer {
-        text-align: center;
-        padding: var(--spacing-md);
-        background: linear-gradient(
-          135deg,
-          rgba(20, 20, 35, 0.95),
-          rgba(15, 15, 30, 0.98)
-        );
-        border-top: 2px solid transparent;
-        border-image: linear-gradient(
-            90deg,
-            rgba(255, 153, 0, 0.3),
-            rgba(33, 150, 243, 0.4),
-            rgba(255, 153, 0, 0.3)
-          )
-          1;
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 12px;
-        position: sticky;
-        bottom: 0;
-        z-index: 1000;
-        backdrop-filter: blur(10px);
-      }
-
-      .delorean {
-        position: fixed;
-        bottom: 35px;
-        left: -150px;
-        height: 60px;
-        width: auto;
-        animation: driveThrough 15s linear infinite;
-        z-index: 1001;
-        filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.5));
-      }
-
-      @keyframes driveThrough {
-        0% {
-          left: -150px;
-        }
-        35% {
-          left: calc(100% + 150px);
-        }
-        100% {
-          left: calc(100% + 150px);
-        }
-      }      /* Responsive */
-      @media (max-width: 1024px) {
-        .main-layout {
-          flex-direction: column;
-        }
-
-        .logo-sidebar {
-          flex: 0 0 auto;
-          width: 100%;
-        }
-
-        .brand-logo {
-          max-width: 300px;
-        }
-
-        .content-section {
-          max-height: none;
-          overflow-y: visible;
-        }
-
-        .features-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="css/index.css" />
   </head>
   <body>
     <!-- Header -->
@@ -380,7 +24,7 @@
         "
       >
         <a
-          href="#intro"
+          href="#hero"
           style="
             font-size: 18px;
             font-family: var(--font-family-heading);
@@ -448,7 +92,7 @@
 
     <!-- Main Layout -->
     <main class="main-layout">
-      <!-- Logo Sidebar (Left) -->
+      <!-- Logo Sidebar (Left) - FIXED -->
       <aside class="logo-sidebar">
         <img
           src="assets/fonts/img/GItToTheFuture.png"
@@ -458,34 +102,47 @@
         <a href="index-menu.html" class="start-button"> EMPEZAR AVENTURA </a>
       </aside>
 
-      <!-- Content Section (Right) -->
+      <!-- Content Section (Right) - SCROLLABLE -->
       <div class="content-section">
         <div class="content-section__scroll">
-          <!-- Sección 1: Introducción -->
-          <div id="intro" class="content-card">
-            <h2>El Único Juego Interactivo<br />Para Dominar Git Desde Cero</h2>
-            <p class="subtitle">
-              ¿Cansado de tutoriales aburridos? Aprende Git jugando. Viaja en el tiempo con el DeLorean, 
-              ejecuta comandos reales en una consola interactiva y observa cómo tu código cambia 
-              la historia. Sin instalaciones. Sin miedo. Solo aprendizaje práctico.
-            </p>
+          <!-- Sección Hero: Con DeLorean -->
+          <div id="hero" class="content-card content-card--hero">
+            <h3>Domina Git Jugando En El Tiempo</h3>
+            <div class="hero-content">
+              <div class="hero-delorean">
+                <img
+                  src="assets/fonts/img/DeloreanConsole.png"
+                  alt="Consola DeLorean"
+                  class="delorean-console"
+                />
+              </div>
+            </div>
           </div>
 
           <!-- Sección 2: ¿Qué aprenderás? -->
           <div id="comandos" class="content-card">
             <h3>Domina Git Como Un Pro</h3>
             <ul>
-              <li><strong>init, add, commit</strong> — Tu primer viaje temporal: crea tu línea de tiempo</li>
               <li>
-                <strong>branch, checkout</strong> — Salta entre realidades alternativas sin romper nada
+                <strong>init, add, commit</strong> — Tu primer viaje temporal:
+                crea tu línea de tiempo
               </li>
               <li>
-                <strong>merge, rebase</strong> — Fusiona universos paralelos como Doc Brown
+                <strong>branch, checkout</strong> — Salta entre realidades
+                alternativas sin romper nada
               </li>
               <li>
-                <strong>reset, revert</strong> — Arregla paradojas temporales antes de que sea tarde
+                <strong>merge, rebase</strong> — Fusiona universos paralelos
+                como Doc Brown
               </li>
-              <li><strong>stash</strong> — Guarda tus cambios en el flujo del tiempo</li>
+              <li>
+                <strong>reset, revert</strong> — Arregla paradojas temporales
+                antes de que sea tarde
+              </li>
+              <li>
+                <strong>stash</strong> — Guarda tus cambios en el flujo del
+                tiempo
+              </li>
             </ul>
           </div>
 
@@ -494,19 +151,35 @@
             <h3>Por Qué Este Juego Funciona</h3>
             <div class="features-grid">
               <div class="feature-box">
-                <div class="feature-box__icon">🎮</div>
+                <img
+                  src="assets/fonts/img/interactiveConsole.png"
+                  alt="Consola Interactiva"
+                  class="feature-box__image"
+                />
                 <h4 class="feature-box__title">100% Interactivo</h4>
-                <p class="feature-box__description">Escribe comandos reales en la consola del juego</p>
+                <p class="feature-box__description">
+                  Escribe comandos reales en la consola del juego
+                </p>
               </div>
 
               <div class="feature-box">
-                <div class="feature-box__icon">📊</div>
+                <img
+                  src="assets/fonts/img/branch.png"
+                  alt="Árbol Git"
+                  class="feature-box__image"
+                />
                 <h4 class="feature-box__title">Feedback Visual</h4>
-                <p class="feature-box__description">Ve tu árbol Git crecer en tiempo real</p>
+                <p class="feature-box__description">
+                  Ve tu árbol Git crecer en tiempo real
+                </p>
               </div>
 
               <div class="feature-box">
-                <div class="feature-box__icon">💡</div>
+                <img
+                  src="assets/fonts/img/hint.png"
+                  alt="Sistema de Pistas"
+                  class="feature-box__image"
+                />
                 <h4 class="feature-box__title">Nunca Te Quedas Atascado</h4>
                 <p class="feature-box__description">
                   Sistema de pistas que te guía paso a paso
@@ -514,28 +187,79 @@
               </div>
 
               <div class="feature-box">
-                <div class="feature-box__icon">🎬</div>
+                <img
+                  src="assets/fonts/img/bttfreference.png"
+                  alt="Back to the Future"
+                  class="feature-box__image"
+                />
                 <h4 class="feature-box__title">Historia Épica</h4>
-                <p class="feature-box__description">Inspirado en Back to the Future</p>
+                <p class="feature-box__description">
+                  Inspirado en Back to the Future
+                </p>
               </div>
             </div>
           </div>
 
           <!-- Sección 4: Tu Viaje -->
-          <div id="viaje" class="content-card">
-            <h3>Tu Misión: 4 Épocas + Desafío Final</h3>
-            <ul>
-              <li><strong>Nivel 1: 1955</strong> — Tus primeros comandos Git. Ayuda a Doc a volver al futuro</li>
-              <li>
-                <strong>Nivel 2: 2015</strong> — Domina branches como Marty McFly navega realidades
-              </li>
-              <li>
-                <strong>Nivel 3: 1985-A</strong> — Merge conflicts en la línea temporal oscura de Biff
-              </li>
-              <li>
-                <strong>Nivel 4: 1885</strong> — Git stash en el Salvaje Oeste. El desafío definitivo
-              </li>
-            </ul>
+          <div id="viaje" class="content-card content-card--mission">
+            <h3>Tu Misión: 4 Épocas</h3>
+            <div class="mission-grid">
+              <div class="mission-box">
+                <img
+                  src="assets/fonts/img/thunder.png"
+                  alt="1955 - Rayo"
+                  class="mission-box__image"
+                />
+                <div class="mission-box__content">
+                  <h4 class="mission-box__title">Nivel 1: 1955</h4>
+                  <p class="mission-box__description">
+                    Tus primeros comandos Git. Ayuda a Doc a volver al futuro
+                  </p>
+                </div>
+              </div>
+
+              <div class="mission-box">
+                <img
+                  src="assets/fonts/img/mcfly.png"
+                  alt="2015 - Marty McFly"
+                  class="mission-box__image"
+                />
+                <div class="mission-box__content">
+                  <h4 class="mission-box__title">Nivel 2: 2015</h4>
+                  <p class="mission-box__description">
+                    Domina branches como Marty McFly navega realidades
+                  </p>
+                </div>
+              </div>
+
+              <div class="mission-box">
+                <img
+                  src="assets/fonts/img/biff.png"
+                  alt="1985-A - Biff"
+                  class="mission-box__image"
+                />
+                <div class="mission-box__content">
+                  <h4 class="mission-box__title">Nivel 3: 1985-A</h4>
+                  <p class="mission-box__description">
+                    Merge conflicts en la línea temporal oscura de Biff
+                  </p>
+                </div>
+              </div>
+
+              <div class="mission-box">
+                <img
+                  src="assets/fonts/img/train.png"
+                  alt="1885 - Tren del Salvaje Oeste"
+                  class="mission-box__image"
+                />
+                <div class="mission-box__content">
+                  <h4 class="mission-box__title">Nivel 4: 1885</h4>
+                  <p class="mission-box__description">
+                    Git stash en el Salvaje Oeste. El desafío definitivo
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
