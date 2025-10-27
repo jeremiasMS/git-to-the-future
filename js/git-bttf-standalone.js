@@ -330,9 +330,8 @@ class GitGraphController {
     this.initialized = false;
     this.container.innerHTML = `
       <div class="graph__empty">
-        <div class="graph__empty-icon">🚗💨</div>
-        <div class="graph__empty-text">El DeLorean está listo...</div>
-        <div class="graph__empty-hint">Ejecuta "git init" para comenzar tu viaje temporal</div>
+        <div class="graph__empty-text">Visualizador de Líneas Temporales</div>
+        <div class="graph__empty-hint">Aquí verás todas las ramas, commits y fusiones de tu repositorio Git en forma de árbol visual. Ejecuta "git init" para comenzar.</div>
       </div>
     `;
     Logger.log('Estado vacío mostrado');
@@ -589,6 +588,23 @@ class ConsoleController {
       currentBranch: 'main',
       commits: []
     };
+    
+    // Mostrar mensaje de bienvenida en la consola
+    this.showWelcomeMessage();
+  }
+  
+  showWelcomeMessage() {
+    if (!this.outputElement) return;
+    
+    this.addOutput('', 'info');
+    this.addOutput('', 'info');
+    this.addOutput('        Terminal Git Interactiva', 'info');
+    this.addOutput('', 'info');
+    this.addOutput('  Aquí verás todos los comandos que ejecutes y sus resultados.', 'info');
+    this.addOutput('   Escribe comandos Git para interactuar con tu repositorio.', 'info');
+    this.addOutput('', 'info');
+    this.addOutput('  Escribe "help" o "ayuda" para ver los comandos disponibles', 'info');
+    this.addOutput('', 'info');
   }
 
   setValidator(validator) {

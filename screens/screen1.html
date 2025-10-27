@@ -12,142 +12,61 @@
     <link rel="stylesheet" href="../css/components/console.css" />
     <link rel="stylesheet" href="../css/components/graph.css" />
     <link rel="stylesheet" href="../css/components/navigation.css" />
+    <link rel="stylesheet" href="../css/screens.css" />
 
     <!-- GitGraph CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>
   </head>
-  <body class="screen-body">
-    <!-- Botón de Volver -->
-    <a href="../index-menu.html" title="Volver al menú principal">
-      <img
-        src="../assets/fonts/img/Back.png"
-        alt="Volver"
-        style="
-          position: fixed;
-          top: 20px;
-          left: 20px;
-          height: 40px;
-          cursor: pointer;
-          z-index: 1000;
-        "
-      />
-    </a>
-    <!-- Header Principal de la App -->
-    <header class="app-header">
-      <a href="../index.html" style="text-decoration: none">
-        <h1 class="app-header__title">GIT TO THE FUTURE</h1>
+  <body class="screen-body screen-1">
+    <!-- Header con Logo y Back Button -->
+    <header class="screen-header">
+      <div class="screen-header__left">
+        <a href="../index-menu.html" title="Volver al menú principal">
+          <img
+            src="../assets/fonts/img/Back.png"
+            alt="Volver"
+            class="screen-header__back"
+          />
+        </a>
+      </div>
+      <a href="../index.html">
+        <img
+          src="../assets/fonts/img/GItToTheFuture.png"
+          alt="Git to the Future"
+          class="screen-header__logo"
+        />
       </a>
-    </header>
 
-    <!-- Navegación Superior -->
-    <div id="navigationContainer"></div>
-
-    <!-- Header de la Pantalla -->
-    <header class="header">
-      <div class="container">
-        <div id="breadcrumbContainer"></div>
-        <h1 class="text-gradient">🚗 Pantalla 1: Origin (1985→1955)</h1>
-        <p class="text-muted">
-          El inicio de la aventura: desde 1985 hasta 1955, aprende Git mientras
-          Marty resuelve la paradoja de sus padres
-        </p>
+      <!-- Barra de Progreso Radioactiva (Superior Derecha) -->
+      <div class="plutonium-progress">
+        <span class="plutonium-progress__label">PROGRESO</span>
+        <div class="plutonium-progress__tube">
+          <div
+            class="plutonium-progress__fill"
+            id="progressBarFill"
+            style="width: 0%"
+          >
+            <div class="plutonium-progress__glow"></div>
+          </div>
+          <span class="plutonium-progress__counter" id="progressCounter"
+            >0/6</span
+          >
+        </div>
       </div>
     </header>
 
-    <!-- Contenido Principal -->
-    <main
-      class="container"
-      style="max-width: 1400px; margin: 0 auto; padding: var(--spacing-xl)"
-    >
-      <!-- Historia / Contexto -->
-      <section
-        class="card card--accent"
-        style="margin-bottom: var(--spacing-lg)"
-      >
-        <h2>📖 Historia: El Inicio del Viaje (1985-1955)</h2>
-        <p>
-          Es el año <strong>1985</strong>. Marty McFly conoce la máquina del
-          tiempo de Doc Brown y viaja accidentalmente a <strong>1955</strong>,
-          donde interfiere con el primer encuentro de sus padres, creando una
-          paradoja temporal que debe resolver.
-        </p>
-        <p>
-          En esta pantalla aprenderás los <strong>fundamentos de Git</strong>:
-        </p>
-        <ul>
-          <li>
-            <code>git init</code> - Inicializar un repositorio (crear la máquina
-            del tiempo)
-          </li>
-          <li>
-            <code>git commit</code> - Registrar puntos importantes en la
-            historia
-          </li>
-          <li>
-            <code>git branch</code> - Crear líneas temporales alternativas
-          </li>
-          <li><code>git checkout</code> - Viajar entre ramas</li>
-          <li><code>git merge</code> - Fusionar líneas temporales</li>
-        </ul>
-        <p class="text-muted" style="margin-top: var(--spacing-md)">
-          <strong>🎯 Objetivo:</strong> Completar 6 ejercicios que cubren la
-          primera película de BTTF.
-        </p>
-      </section>
-
-      <!-- Progreso de Ejercicios -->
-      <div id="exerciseProgress"></div>
-
-      <!-- Instrucciones del Ejercicio Actual -->
-      <div id="exerciseInstructions"></div>
-
-      <!-- Grid de Dos Columnas -->
-      <div
-        class="grid"
-        style="
-          grid-template-columns: 1fr 1fr;
-          gap: var(--spacing-lg);
-          margin-top: var(--spacing-lg);
-        "
-      >
-        <!-- Columna Izquierda: Gráfico -->
-        <div class="graph">
-          <div class="branch-indicator">
-            <span class="branch-indicator__label">📍 Rama Actual:</span>
-            <span class="branch-indicator__value" id="currentBranchIndicator"
-              >Sin repositorio</span
-            >
+    <!-- Layout Principal de 3 Columnas -->
+    <main class="screen-main">
+      <!-- COLUMNA IZQUIERDA: Consola Git Interactiva (PROTAGONISTA - 55-60%) -->
+      <div class="screen-left">
+        <!-- Consola -->
+        <div class="console-card">
+          <div class="console-card__header">
+            <h2 class="console-card__title">Git Terminal</h2>
           </div>
-
-          <h2 class="graph__title">📊 Línea Temporal Git</h2>
-          <p class="graph__description">
-            Visualiza cómo se construye el historial de Git
-          </p>
-
-          <div class="graph__canvas" id="gitGraph">
-            <div class="graph__empty">
-              <div class="graph__empty-icon">🚗💨</div>
-              <div class="graph__empty-text">El DeLorean está listo...</div>
-              <div class="graph__empty-hint">
-                Ejecuta "git init" para comenzar tu viaje temporal
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Columna Derecha: Consola -->
-        <div class="console">
-          <h2 class="console__title">🖥️ Consola Git Interactiva</h2>
-          <p class="console__description">
-            Ejecuta comandos Git para completar los ejercicios
-          </p>
 
           <!-- Output de la Consola -->
           <div class="console__output" id="consoleOutput">
-            <div class="console__output-line console__output-line--info">
-              <span class="prompt">$</span> ¡Bienvenido a 1955! Completa los
-              ejercicios para regresar a 1985 🚗⚡
-            </div>
           </div>
 
           <!-- Botones de Comandos Rápidos -->
@@ -167,9 +86,6 @@
               checkout
             </button>
             <button class="console__cmd-btn" data-command="merge">merge</button>
-            <button class="console__cmd-btn" data-command="rebase">
-              rebase
-            </button>
           </div>
 
           <!-- Input de Comando -->
@@ -191,71 +107,107 @@
               class="console__special-btn console__special-btn--reset"
               id="resetBtn"
             >
-              🔄 Reiniciar
+              Reiniciar
             </button>
             <button
               class="console__special-btn console__special-btn--demo"
               id="hintBtn"
             >
-              💡 Pista
+              Pista
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Ayuda Adicional -->
-      <section
-        class="card card--secondary"
-        style="margin-top: var(--spacing-lg)"
-      >
-        <h3>🎓 Referencia Rápida de Comandos</h3>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--spacing-md);
-          "
-        >
-          <div>
-            <strong>git init</strong>
-            <p class="text-muted text-sm">
-              Inicializa un nuevo repositorio Git
-            </p>
+      <!-- COLUMNA CENTRAL: Visualizador de Árbol Git (SECUNDARIA - 20-25%) -->
+      <div class="screen-center">
+        <!-- Gráfico Git -->
+        <div class="graph-card">
+          <div class="graph-card__header">
+            <h2 class="graph-card__title">Git Timeline</h2>
           </div>
-          <div>
-            <strong>git add .</strong>
-            <p class="text-muted text-sm">
-              Agrega archivos al área de preparación
-            </p>
+
+          <div class="graph__canvas" id="gitGraph">
+            <div class="graph__empty">
+              <div class="graph__empty-text">
+                DeLorean listo para el viaje temporal
+              </div>
+              <div class="graph__empty-hint">
+                Ejecuta "git init" para comenzar
+              </div>
+            </div>
           </div>
-          <div>
-            <strong>git commit -m "mensaje"</strong>
-            <p class="text-muted text-sm">Crea un commit con un mensaje</p>
-          </div>
-          <div>
-            <strong>git branch [nombre]</strong>
-            <p class="text-muted text-sm">Crea una nueva rama</p>
-          </div>
-          <div>
-            <strong>git checkout [rama]</strong>
-            <p class="text-muted text-sm">Cambia a otra rama</p>
-          </div>
-          <div>
-            <strong>git status</strong>
-            <p class="text-muted text-sm">Muestra el estado actual</p>
+
+          <!-- Branch Indicator movido abajo -->
+          <div class="branch-indicator">
+            <span class="branch-indicator__label">Branch:</span>
+            <span class="branch-indicator__value" id="currentBranchIndicator"
+              >Sin repositorio</span
+            >
           </div>
         </div>
-      </section>
-    </main>
+      </div>
 
-    <!-- Footer -->
-    <footer
-      class="text-center text-muted"
-      style="padding: var(--spacing-xl); margin-top: var(--spacing-xl)"
-    >
-      <p>🚗⚡ Git to the Future - Aprende Git usando Back to the Future</p>
-      <p class="text-sm">Pantalla 1 de 4 | Origin (1985→1955)</p>
-    </footer>
+      <!-- COLUMNA DERECHA: Cards de Información (CONTEXTO - 15-20%) -->
+      <div class="screen-right">
+        <!-- Tarjeta de Misión -->
+        <div class="mission-card mission-card--objective">
+          <h2 class="mission-card__title">🎯 Mission Objective</h2>
+          <p class="mission-card__text" id="exerciseInstructions">
+            <strong>Challenge 1:</strong> Inicializa tu primer repositorio Git
+          </p>
+        </div>
+
+        <!-- Historia del Nivel -->
+        <div class="mission-card">
+          <h2 class="mission-card__title">Level Context</h2>
+          <p class="mission-card__description" style="margin-bottom: 8px">
+            <strong>Película:</strong> Back to the Future (1985)<br />
+            <strong>Año:</strong> 1955<br />
+            <strong>Director:</strong> Robert Zemeckis
+          </p>
+          <p class="mission-card__description" style="margin-bottom: 8px">
+            Marty McFly, un adolescente de Hill Valley en 1985, es amigo de un
+            científico excéntrico llamado Doc Brown. Una noche, Doc le muestra
+            su invento más ambicioso: un DeLorean convertido en máquina del
+            tiempo.
+          </p>
+          <p class="mission-card__description" style="margin-bottom: 8px">
+            Durante la demostración, son atacados por terroristas libios. En el
+            escape, Marty activa accidentalmente el condensador de flujo y viaja
+            30 años al pasado, a 1955. Allí conoce a sus padres adolescentes y,
+            sin querer, interfiere con su primer encuentro romántico.
+          </p>
+          <p class="mission-card__description">
+            Ahora, con la ayuda del joven Doc Brown, Marty debe encontrar una
+            forma de generar suficiente energía (1.21 gigawatts) para activar el
+            condensador de flujo y regresar a su época, mientras asegura que sus
+            padres se enamoren para no desaparecer de la existencia.
+          </p>
+          <div
+            style="
+              margin-top: 10px;
+              padding-top: 10px;
+              border-top: 1px solid rgba(255, 255, 255, 0.1);
+            "
+          >
+            <img
+              src="../assets/fonts/img/thunder.png"
+              alt="1955"
+              style="
+                width: 100%;
+                max-width: 180px;
+                height: auto;
+                margin: 0 auto;
+                display: block;
+                border-radius: 6px;
+                filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+              "
+            />
+          </div>
+        </div>
+      </div>
+    </main>
 
     <!-- JavaScript sin módulos ES6 -->
     <script src="../js/git-bttf-standalone.js"></script>
@@ -279,22 +231,45 @@
         validator.setExercises(SCREEN_EXERCISES.screen1);
         consoleCtrl.setValidator(validator);
 
-        // 3️⃣ Renderizar navegación
-        screenCtrl.renderNavigation('navigationContainer');
-        screenCtrl.renderBreadcrumb('breadcrumbContainer');
+        // 3️⃣ Función para actualizar la UI del progreso
+        function updateProgress() {
+          const current = validator.currentExerciseIndex;
+          const total = SCREEN_EXERCISES.screen1.length;
+          const percentage = Math.round((current / total) * 100);
 
-        // 4️⃣ Mostrar primer ejercicio
-        ui.showExerciseInstructions(
-          validator.getCurrentExercise(),
-          'exerciseInstructions'
-        );
-        ui.updateExerciseProgress(
-          0,
-          SCREEN_EXERCISES.screen1.length,
-          'exerciseProgress'
-        );
+          const progressFill = document.getElementById('progressBarFill');
+          const progressCounter = document.getElementById('progressCounter');
 
-        // 5️⃣ Interceptar comandos para validación automática
+          if (progressFill) {
+            progressFill.style.width = percentage + '%';
+          }
+
+          if (progressCounter) {
+            // Mostrar ejercicios completados (current ya incluye el ejercicio actual)
+            progressCounter.textContent = `${current}/${total}`;
+          }
+
+          // Debug para verificar
+          console.log(
+            `Progreso actualizado: ${current}/${total} (${percentage}%)`
+          );
+        }
+
+        // 4️⃣ Función para actualizar instrucciones
+        function updateInstructions(exercise) {
+          const container = document.getElementById('exerciseInstructions');
+          if (container && exercise) {
+            container.innerHTML = `<strong>Ejercicio ${
+              validator.currentExerciseIndex + 1
+            }:</strong> ${exercise.description}`;
+          }
+        }
+
+        // 5️⃣ Mostrar primer ejercicio
+        updateInstructions(validator.getCurrentExercise());
+        updateProgress();
+
+        // 6️⃣ Interceptar comandos para validación automática
         const originalExecute = consoleCtrl.executeCommand.bind(consoleCtrl);
         consoleCtrl.executeCommand = function (commandString) {
           const cmd = commandString.trim().toLowerCase();
@@ -343,15 +318,8 @@
               }, 2000);
             } else {
               // 📝 Mostrar siguiente ejercicio
-              ui.updateExerciseProgress(
-                validator.currentExerciseIndex,
-                SCREEN_EXERCISES.screen1.length,
-                'exerciseProgress'
-              );
-              ui.showExerciseInstructions(
-                nextResult.exercise,
-                'exerciseInstructions'
-              );
+              updateProgress();
+              updateInstructions(nextResult.exercise);
             }
           } else if (result.suggestion) {
             // ⚠️ Mostrar sugerencia
@@ -359,7 +327,7 @@
           }
         };
 
-        // 6️⃣ Event Listeners
+        // 7️⃣ Event Listeners
         // Ejecutar comando con botón o Enter
         const executeCommand = () => {
           const input = document.getElementById('commandInput');
@@ -397,15 +365,8 @@
           ) {
             consoleCtrl.resetAll();
             validator.reset();
-            ui.showExerciseInstructions(
-              SCREEN_EXERCISES.screen1[0],
-              'exerciseInstructions'
-            );
-            ui.updateExerciseProgress(
-              0,
-              SCREEN_EXERCISES.screen1.length,
-              'exerciseProgress'
-            );
+            updateInstructions(SCREEN_EXERCISES.screen1[0]);
+            updateProgress();
             ui.showNotification('🔄 Pantalla reiniciada', 'info');
           }
         });

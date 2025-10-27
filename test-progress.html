@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test de Progreso - Git to the Future</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #1a1a2e;
+        color: white;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        background: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+      button:hover {
+        background: #1976d2;
+      }
+      .info {
+        background: rgba(33, 150, 243, 0.2);
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        border: 1px solid #2196f3;
+      }
+      .success {
+        background: rgba(76, 175, 80, 0.2);
+        border-color: #4caf50;
+      }
+      pre {
+        background: #0f0f1e;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧪 Test de Sistema de Progreso</h1>
+
+    <div class="info">
+      <h3>Estado Actual del LocalStorage</h3>
+      <pre id="currentState">Cargando...</pre>
+    </div>
+
+    <h3>Acciones de Prueba</h3>
+    <button onclick="viewProgress()">🔍 Ver Progreso Actual</button>
+    <button onclick="clearProgress()">🗑️ Limpiar Progreso</button>
+    <button onclick="simulateLevel1Complete()">
+      ✅ Simular Nivel 1 Completado
+    </button>
+    <button onclick="simulateLevel2Complete()">
+      ✅ Simular Nivel 2 Completado
+    </button>
+    <button onclick="simulateLevel3Complete()">
+      ✅ Simular Nivel 3 Completado
+    </button>
+    <button onclick="simulateLevel4Complete()">
+      ✅ Simular Nivel 4 Completado
+    </button>
+    <button onclick="resetToFresh()">🔄 Reset (Usuario Nuevo)</button>
+    <button onclick="goToMenu()">🎮 Ir al Menú de Niveles</button>
+
+    <div
+      id="output"
+      class="info success"
+      style="margin-top: 20px; display: none"
+    >
+      <h3>Resultado</h3>
+      <pre id="result"></pre>
+    </div>
+
+    <script>
+      function viewProgress() {
+        const progress = localStorage.getItem('git-bttf-progress');
+        const currentLevel = localStorage.getItem('currentLevel');
+
+        let output = '📊 PROGRESO ACTUAL:\n\n';
+
+        if (progress) {
+          const parsed = JSON.parse(progress);
+          output += 'git-bttf-progress:\n';
+          parsed.forEach((level) => {
+            output += `  Nivel ${level.id}: ${
+              level.completed ? '✅ Completado' : '⭕ No completado'
+            } | ${level.locked ? '🔒 Bloqueado' : '🔓 Desbloqueado'}\n`;
+          });
+        } else {
+          output += 'git-bttf-progress: ❌ No existe\n';
+        }
+
+        output += `\ncurrentLevel: ${currentLevel || '❌ No existe'}`;
+
+        showResult(output);
+        updateDisplay();
+      }
+
+      function clearProgress() {
+        localStorage.removeItem('git-bttf-progress');
+        localStorage.removeItem('currentLevel');
+        localStorage.removeItem('hasSeenWelcome');
+        showResult('✅ Progreso eliminado completamente');
+        updateDisplay();
+      }
+
+      function simulateLevel1Complete() {
+        const progress = [
+          { id: 1, completed: true, locked: false },
+          { id: 2, completed: false, locked: false },
+          { id: 3, completed: false, locked: true },
+          { id: 4, completed: false, locked: true },
+          { id: 5, completed: false, locked: false },
+        ];
+        localStorage.setItem('git-bttf-progress', JSON.stringify(progress));
+        showResult(
+          '✅ Nivel 1 completado - Nivel 2 desbloqueado\nProgreso: 25%'
+        );
+        updateDisplay();
+      }
+
+      function simulateLevel2Complete() {
+        const progress = [
+          { id: 1, completed: true, locked: false },
+          { id: 2, completed: true, locked: false },
+          { id: 3, completed: false, locked: false },
+          { id: 4, completed: false, locked: true },
+          { id: 5, completed: false, locked: false },
+        ];
+        localStorage.setItem('git-bttf-progress', JSON.stringify(progress));
+        showResult(
+          '✅ Nivel 2 completado - Nivel 3 desbloqueado\nProgreso: 50%'
+        );
+        updateDisplay();
+      }
+
+      function simulateLevel3Complete() {
+        const progress = [
+          { id: 1, completed: true, locked: false },
+          { id: 2, completed: true, locked: false },
+          { id: 3, completed: true, locked: false },
+          { id: 4, completed: false, locked: false },
+          { id: 5, completed: false, locked: false },
+        ];
+        localStorage.setItem('git-bttf-progress', JSON.stringify(progress));
+        showResult(
+          '✅ Nivel 3 completado - Nivel 4 desbloqueado\nProgreso: 75%'
+        );
+        updateDisplay();
+      }
+
+      function simulateLevel4Complete() {
+        const progress = [
+          { id: 1, completed: true, locked: false },
+          { id: 2, completed: true, locked: false },
+          { id: 3, completed: true, locked: false },
+          { id: 4, completed: true, locked: false },
+          { id: 5, completed: false, locked: false },
+        ];
+        localStorage.setItem('git-bttf-progress', JSON.stringify(progress));
+        showResult(
+          '✅ Nivel 4 completado - ¡Todos los niveles completados!\nProgreso: 100%'
+        );
+        updateDisplay();
+      }
+
+      function resetToFresh() {
+        const progress = [
+          { id: 1, completed: false, locked: false },
+          { id: 2, completed: false, locked: true },
+          { id: 3, completed: false, locked: true },
+          { id: 4, completed: false, locked: true },
+          { id: 5, completed: false, locked: false },
+        ];
+        localStorage.setItem('git-bttf-progress', JSON.stringify(progress));
+        localStorage.removeItem('hasSeenWelcome');
+        showResult('✅ Reset completo - Estado de usuario nuevo\nProgreso: 0%');
+        updateDisplay();
+      }
+
+      function goToMenu() {
+        window.location.href = 'index-menu.html';
+      }
+
+      function showResult(text) {
+        const outputDiv = document.getElementById('output');
+        const resultPre = document.getElementById('result');
+        resultPre.textContent = text;
+        outputDiv.style.display = 'block';
+      }
+
+      function updateDisplay() {
+        const progress = localStorage.getItem('git-bttf-progress');
+        const currentState = document.getElementById('currentState');
+
+        if (progress) {
+          currentState.textContent = JSON.stringify(
+            JSON.parse(progress),
+            null,
+            2
+          );
+        } else {
+          currentState.textContent = '❌ No hay progreso guardado';
+        }
+      }
+
+      // Update on load
+      updateDisplay();
+    </script>
+  </body>
+</html>

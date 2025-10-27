@@ -43,7 +43,8 @@
   /* Tipografía */
   --font-family-main: Arial, sans-serif;
   --font-family-heading: 'BackToTheFuture', 'Marty', Arial, sans-serif;
-  --font-family-code: 'Courier New', monospace;
+  --font-family-code: 'Consolas', 'Courier New', 'Monaco', 'Menlo', monospace;
+  --font-family-terminal: 'Consolas', 'Courier New', 'Monaco', 'Menlo', monospace;
   --font-size-sm: 0.8em;
   --font-size-base: 0.9em;
   --font-size-md: 1em;

@@ -1,37 +1,75 @@
-/* 📊 Graph Component */
+/* 📊 Graph Component - Estilo Terminal Técnico */
 .graph {
-  background-color: var(--color-surface);
-  border: var(--border-width) solid var(--color-primary);
-  border-radius: var(--border-radius-md);
-  padding: var(--spacing-lg);
+  background-color: #000000;
+  border: 2px solid #1e1e1e;
+  border-radius: 4px;
+  padding: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
 }
 
+/* Graph Header */
 .graph__title {
-  color: var(--color-primary);
-  margin-bottom: var(--spacing-sm);
-  font-size: var(--font-size-xl);
+  background: #1e1e1e;
+  color: #ffffff;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  border-bottom: 1px solid #2d2d2d;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.graph__title::before {
+  content: '⎇';
+  color: #4ec9b0;
+  font-size: 14px;
 }
 
 .graph__description {
-  color: var(--color-muted);
-  font-size: var(--font-size-base);
-  margin-bottom: var(--spacing-md);
+  display: none;
 }
 
 /* Graph Canvas Container */
 .graph__canvas {
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-highlight);
-  border-radius: var(--border-radius-sm);
-  padding: var(--spacing-md);
+  background-color: #000000;
+  border: none;
+  border-radius: 0;
+  padding: 16px;
   min-height: 400px;
   overflow: auto;
   position: relative;
 }
 
+/* Scrollbar personalizado estilo terminal */
+.graph__canvas::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background-color: #1e1e1e;
+}
+
+.graph__canvas::-webkit-scrollbar-thumb {
+  background-color: #3e3e3e;
+  border-radius: 2px;
+}
+
+.graph__canvas::-webkit-scrollbar-thumb:hover {
+  background-color: #4e4e4e;
+}
+
+.graph__canvas::-webkit-scrollbar-track {
+  background-color: #1e1e1e;
+  border: 1px solid #2d2d2d;
+}
+
+.graph__canvas::-webkit-scrollbar-corner {
+  background-color: #1e1e1e;
+}
+
 .graph__canvas canvas {
   max-width: 100%;
   height: auto;
+  filter: contrast(1.1) brightness(1.1);
 }
 
 /* Loading State */
@@ -40,8 +78,14 @@
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  color: var(--color-muted);
-  font-size: var(--font-size-lg);
+  color: #666666;
+  font-size: 13px;
+  font-family: 'Consolas', 'Courier New', monospace;
+}
+
+.graph__loading::before {
+  content: '> ';
+  color: #00ff00;
 }
 
 .graph__loading::after {
@@ -55,62 +99,86 @@
   60%, 100% { content: '...'; }
 }
 
-/* Graph Info Panel */
+/* Graph Info Panel - Estilo Terminal */
 .graph__info {
-  margin-top: var(--spacing-md);
-  padding: var(--spacing-sm);
-  background-color: var(--color-bg);
-  border-radius: var(--border-radius-sm);
-  border: 1px solid var(--color-highlight);
+  margin-top: 0;
+  padding: 12px 16px;
+  background-color: #1e1e1e;
+  border-radius: 0;
+  border-top: 1px solid #2d2d2d;
+  font-family: 'Consolas', 'Courier New', monospace;
 }
 
 .graph__info-item {
   display: flex;
   justify-content: space-between;
-  padding: var(--spacing-xs) 0;
-  color: var(--color-text);
-  font-size: var(--font-size-sm);
+  padding: 4px 0;
+  color: #ffffff;
+  font-size: 12px;
 }
 
 .graph__info-label {
-  color: var(--color-muted);
+  color: #9cdcfe;
+}
+
+.graph__info-label::after {
+  content: ':';
+  margin-right: 8px;
 }
 
 .graph__info-value {
-  color: var(--color-accent);
-  font-weight: bold;
+  color: #4ec9b0;
+  font-weight: normal;
+  font-family: 'Consolas', 'Courier New', monospace;
 }
 
-/* Branch Legend */
+/* Branch Legend - Estilo Terminal */
 .graph__legend {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-md);
-  padding: var(--spacing-sm);
-  background-color: var(--color-bg);
-  border-radius: var(--border-radius-sm);
+  gap: 12px;
+  margin-top: 0;
+  padding: 12px 16px;
+  background-color: #1e1e1e;
+  border-radius: 0;
+  border-top: 1px solid #2d2d2d;
+  font-family: 'Consolas', 'Courier New', monospace;
 }
 
 .graph__legend-item {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  font-size: var(--font-size-sm);
+  gap: 6px;
+  font-size: 11px;
+  color: #ffffff;
 }
 
 .graph__legend-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid var(--color-text);
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid #3e3e3e;
 }
 
-.graph__legend-color--master { background-color: var(--color-accent); }
-.graph__legend-color--main { background-color: var(--color-accent); }
-.graph__legend-color--develop { background-color: var(--color-secondary); }
-.graph__legend-color--feature { background-color: var(--color-highlight); }
-.graph__legend-color--hotfix { background-color: #ff0080; }
+.graph__legend-color--master { 
+  background-color: #f48771;
+}
+
+.graph__legend-color--main { 
+  background-color: #f48771;
+}
+
+.graph__legend-color--develop { 
+  background-color: #dcdcaa;
+}
+
+.graph__legend-color--feature { 
+  background-color: #4ec9b0;
+}
+
+.graph__legend-color--hotfix { 
+  background-color: #c586c0;
+}
 
 /* Empty State */
 .graph__empty {
@@ -119,25 +187,33 @@
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  color: var(--color-muted);
+  color: #ffffff;
   text-align: center;
-  padding: var(--spacing-xl);
+  padding: 32px;
+  font-family: 'Consolas', 'Courier New', monospace;
 }
 
 .graph__empty-icon {
-  font-size: 48px;
-  margin-bottom: var(--spacing-md);
-  opacity: 0.5;
+  font-size: 36px;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.graph__empty-icon::before {
+  content: '⎇';
+  color: #4ec9b0;
 }
 
 .graph__empty-text {
-  font-size: var(--font-size-lg);
-  margin-bottom: var(--spacing-sm);
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #9cdcfe;
+  font-weight: bold;
 }
 
 .graph__empty-hint {
-  font-size: var(--font-size-sm);
-  color: var(--color-muted);
+  font-size: 11px;
+  color: #ffffff;
 }
 
 /* Responsive adjustments */

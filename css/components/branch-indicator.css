@@ -1,43 +1,70 @@
-/* 📍 Branch Indicator Component */
+/* 📍 Branch Indicator Component - Estilo Terminal */
 .branch-indicator {
-  background: linear-gradient(135deg, var(--color-accent), var(--color-highlight));
-  border: var(--border-width) solid var(--color-secondary);
-  border-radius: var(--border-radius-md);
-  padding: var(--spacing-md) var(--spacing-lg);
-  margin-bottom: var(--spacing-md);
+  background: #1e1e1e;
+  border: none;
+  border-top: 2px solid #2d2d2d;
+  border-radius: 0;
+  padding: 12px 16px;
+  margin-bottom: 0;
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  box-shadow: var(--shadow-md);
+  gap: 8px;
+  box-shadow: none;
+  font-family: 'Consolas', 'Courier New', monospace;
+  flex-shrink: 0;
+  height: 110px;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
 }
 
 .branch-indicator__label {
-  font-weight: bold;
-  color: var(--color-bg);
-  font-size: var(--font-size-lg);
+  font-weight: normal;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.branch-indicator__label::before {
+  content: 'git:(';
+  color: #4ec9b0;
+}
+
+.branch-indicator__label::after {
+  content: ')';
+  color: #4ec9b0;
 }
 
 .branch-indicator__value {
-  background-color: var(--color-bg);
-  color: var(--color-secondary);
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-sm);
-  font-family: var(--font-family-code);
-  font-size: var(--font-size-lg);
+  background-color: transparent;
+  color: #f48771;
+  padding: 0;
+  border-radius: 0;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
   font-weight: bold;
-  flex: 1;
-  text-align: center;
-  box-shadow: inset var(--shadow-sm);
-  transition: all var(--transition-normal);
+  flex: 0;
+  text-align: left;
+  box-shadow: none;
+  transition: all 0.15s ease;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.branch-indicator__value::before {
+  content: '✦ ';
+  color: #00ff00;
+  font-size: 12px;
 }
 
 @media (max-width: 768px) {
   .branch-indicator {
-    flex-direction: column;
-    gap: var(--spacing-xs);
+    flex-direction: row;
+    gap: 8px;
   }
   
   .branch-indicator__value {
-    font-size: var(--font-size-base);
+    font-size: 13px;
   }
 }
