@@ -1,0 +1,539 @@
+/* ============================================
+   BASE STYLES
+   ============================================ */
+body {
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #2196f3 100%);
+  background-attachment: fixed;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   BACK BUTTON
+   ============================================ */
+.back-button-container {
+  position: fixed;
+  top: 18px;
+  left: var(--spacing-lg);
+  z-index: 1000;
+}
+
+.back-button {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.back-button:hover {
+  transform: translateX(-3px);
+  filter: drop-shadow(0 4px 8px rgba(255, 193, 7, 0.5));
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.main-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  padding-top: 35px;
+  gap: var(--spacing-lg);
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+/* ============================================
+   PROGRESS SECTION (LEFT)
+   ============================================ */
+.progress-sidebar {
+  flex: 0 0 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  padding: 0 var(--spacing-md) var(--spacing-md);
+}
+
+.brand-logo {
+  max-width: 350px;
+  width: 100%;
+  height: auto;
+  margin-top: 50px;
+  filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.5));
+}
+
+.brand-logo-link {
+  text-decoration: none;
+  display: block;
+  margin-bottom: var(--spacing-md);
+  margin-top: 0;
+}
+
+.progress-section {
+  width: 100%;
+  padding: var(--spacing-md);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.progress-title {
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-md);
+}
+
+.delorean-animation {
+  width: 100%;
+  max-width: 320px;
+}
+
+.progress-bar {
+  background: var(--color-bg);
+  border-radius: var(--border-radius-lg);
+  height: 32px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  background: #2196f3;
+  transition: width var(--transition-slow);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: var(--spacing-md);
+  color: white;
+  font-weight: bold;
+}
+
+.progress-description {
+  color: var(--color-muted);
+}
+
+/* ============================================
+   LEVELS MENU (RIGHT)
+   ============================================ */
+.levels-menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.levels-menu__header {
+  padding: 0 var(--spacing-md) var(--spacing-md);
+  flex-shrink: 0;
+  padding-top: 50px;
+}
+
+.levels-menu__title {
+  text-align: left;
+  color: #ffffff;
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.levels-menu__content {
+  flex: 1;
+  padding: 0 var(--spacing-md) var(--spacing-md);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+
+.levels-menu__content::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================
+   LEVEL CARDS
+   ============================================ */
+.level-card {
+  background: linear-gradient(
+    135deg,
+    rgba(26, 26, 46, 0.95),
+    rgba(15, 15, 30, 0.98)
+  );
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  border-radius: 16px;
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.level-card:hover {
+  box-shadow: 0 8px 32px rgba(33, 150, 243, 0.4);
+  border-color: rgba(33, 150, 243, 0.6);
+}
+
+.level-card--locked {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(90%);
+  background: linear-gradient(
+    135deg,
+    rgba(20, 20, 35, 0.95),
+    rgba(15, 15, 25, 0.98)
+  );
+}
+
+.level-card--locked:hover {
+  transform: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.level-card--completed {
+  border-color: rgba(76, 175, 80, 0.6);
+  background: linear-gradient(
+    135deg,
+    rgba(26, 46, 28, 0.95),
+    rgba(15, 30, 18, 0.98)
+  );
+}
+
+.level-card--completed:hover {
+  /* Sin efectos de hover para niveles completados */
+  transform: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border-color: rgba(76, 175, 80, 0.6);
+  cursor: pointer;
+}
+
+.level-card--completed .level-card__number {
+  background: rgba(76, 175, 80, 0.2);
+  border-color: rgba(76, 175, 80, 0.5);
+  color: #4caf50;
+}
+
+.level-card--completed .level-card__title {
+  color: #4caf50;
+  text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+.level-card--completed .level-card__command {
+  background: rgba(76, 175, 80, 0.15);
+  border: 1px solid rgba(76, 175, 80, 0.25);
+  color: #66bb6a;
+}
+
+.level-card--completed::after {
+  content: '✓';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  background: rgba(76, 175, 80, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #4caf50;
+  backdrop-filter: blur(5px);
+}
+
+.level-card--active {
+  border-color: rgba(255, 193, 7, 0.6);
+  background: linear-gradient(
+    135deg,
+    rgba(46, 38, 26, 0.95),
+    rgba(30, 25, 15, 0.98)
+  );
+  box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3),
+    0 0 0 2px rgba(255, 193, 7, 0.2);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.level-card__shine {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 193, 7, 0.3), transparent);
+  animation: shineEffect 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes shineEffect {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3),
+      0 0 0 2px rgba(255, 193, 7, 0.2),
+      0 0 30px rgba(255, 193, 7, 0.2);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(255, 193, 7, 0.5),
+      0 0 0 2px rgba(255, 193, 7, 0.4),
+      0 0 50px rgba(255, 193, 7, 0.4);
+  }
+}
+
+.level-card--active:hover {
+  box-shadow: 0 4px 20px rgba(255, 193, 7, 0.5),
+    0 0 0 2px rgba(255, 193, 7, 0.4),
+    0 0 50px rgba(255, 193, 7, 0.4);
+  border-color: rgba(255, 193, 7, 0.8);
+  cursor: pointer;
+  /* Sin transform para evitar movimiento */
+}
+
+.level-card--active .level-card__number {
+  background: rgba(255, 193, 7, 0.2);
+  border-color: rgba(255, 193, 7, 0.5);
+  color: #ffc107;
+}
+
+.level-card--active::before {
+  content: '▶ CONTINUAR';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(90deg, #ffc107, #ffb300);
+  color: #1a1a2e;
+  padding: 8px 18px;
+  border-radius: 25px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.5),
+    0 0 20px rgba(255, 193, 7, 0.3);
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.level-card--active:hover::before {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(255, 193, 7, 0.6),
+    0 0 30px rgba(255, 193, 7, 0.4);
+}
+
+.level-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.level-card__number {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: rgba(76, 175, 80, 0.15);
+  border: 1px solid rgba(76, 175, 80, 0.4);
+  color: #4caf50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.level-card--completed .level-card__number {
+  background: rgba(255, 193, 7, 0.15);
+  border-color: rgba(255, 193, 7, 0.4);
+  color: #ffc107;
+}
+
+.level-card__title {
+  flex: 1;
+  margin: 0;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.level-card__description {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.level-card__label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--spacing-xs);
+  display: block;
+}
+
+.level-card__commands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--spacing-md);
+}
+
+.level-card__command {
+  background: rgba(33, 150, 243, 0.15);
+  border: 1px solid rgba(33, 150, 243, 0.25);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 12px;
+  color: #64b5f6;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.level-card__badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 193, 7, 0.2);
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  color: #ffc107;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.level-card__lock {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+/* Demo Level Modifier */
+.level-card--demo {
+  border: 1px solid rgba(124, 77, 255, 0.4);
+  background: linear-gradient(
+    135deg,
+    rgba(40, 26, 66, 0.95),
+    rgba(25, 15, 45, 0.98)
+  );
+}
+
+.level-card__number--demo {
+  background: rgba(124, 77, 255, 0.15);
+  border-color: rgba(124, 77, 255, 0.4);
+  color: #9c7bff;
+}
+
+.level-card__label--demo {
+  color: rgba(156, 123, 255, 0.8);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.app-footer {
+  text-align: center;
+  padding: var(--spacing-md) var(--spacing-md);
+  background: linear-gradient(
+    135deg,
+    rgba(20, 20, 35, 0.95),
+    rgba(15, 15, 30, 0.98)
+  );
+  border-top: 2px solid transparent;
+  border-image: linear-gradient(
+      90deg,
+      rgba(255, 153, 0, 0.3),
+      rgba(33, 150, 243, 0.4),
+      rgba(255, 153, 0, 0.3)
+    )
+    1;
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+  font-size: 12px;
+  position: relative;
+  z-index: 100;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.app-footer p {
+  font-size: 12px;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  .main-layout {
+    flex-direction: column;
+  }
+
+  .progress-sidebar {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  .delorean-animation {
+    max-width: 300px;
+  }
+
+  .levels-menu {
+    max-height: none;
+    overflow-y: visible;
+  }
+}
