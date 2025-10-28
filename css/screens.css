@@ -5,8 +5,8 @@
 
 /* ===== BASE Y LAYOUT ===== */
 .screen-body {
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
-  background-attachment: fixed;
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%) !important;
+  background-attachment: fixed !important;
   min-height: 100vh;
   max-height: 100vh;
   overflow: hidden;
@@ -14,6 +14,15 @@
   flex-direction: column;
   margin: 0;
   padding: 0;
+}
+
+/* Asegurar que todas las screens tengan el mismo background */
+body.screen-1,
+body.screen-2,
+body.screen-3,
+body.screen-4 {
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%) !important;
+  background-attachment: fixed !important;
 }
 
 /* ===== HEADER CON LOGO ===== */
@@ -98,19 +107,22 @@
 
 .plutonium-progress__tube {
   width: 200px;
-  height: 18px;
+  height: 24px;
   background: rgba(0, 0, 0, 0.6);
   border: 2px solid #00e5ff;
-  border-radius: 10px;
+  border-radius: 12px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 
     0 0 10px rgba(0, 229, 255, 0.5),
     inset 0 0 10px rgba(0, 0, 0, 0.8);
+  padding: 2px;
+  box-sizing: border-box;
 }
 
 .plutonium-progress__fill {
   height: 100%;
+  width: 0%;
   background: linear-gradient(
     90deg,
     #00e5ff 0%,
@@ -122,6 +134,8 @@
   box-shadow: 
     0 0 20px rgba(0, 229, 255, 0.8),
     inset 0 0 10px rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .plutonium-progress__glow {
@@ -145,7 +159,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #ffffff;
   text-shadow: 
@@ -174,55 +188,65 @@
   }
 }
 
-/* ===== LAYOUT PRINCIPAL - 3 COLUMNAS ===== */
-/* Izquierda (Principal): Consola Interactiva 55-60% | Centro (Secundaria): Árbol Git 20-25% | Derecha (Info): Cards 15-20% */
+/* ===== LAYOUT PRINCIPAL - RESPONSIVE FLEXIBLE ===== */
 .screen-main {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 380px 280px;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm);
-  max-width: 100%;
+  grid-template-columns: minmax(500px, 2fr) minmax(300px, 1fr) minmax(250px, 1fr);
+  grid-template-rows: 1fr;
+  gap: 16px;
+  padding: 16px;
+  max-width: 100vw;
   margin: 0 auto;
   width: 100%;
-  align-items: start;
+  align-items: stretch;
   min-height: 0;
-  max-height: calc(100vh - 78px);
+  height: calc(100vh - 80px);
   overflow: hidden;
+  box-sizing: border-box;
 }
 
-/* ===== COLUMNA IZQUIERDA: CONSOLA INTERACTIVA (PROTAGONISTA - MÁXIMA PRIORIDAD) ===== */
+/* ===== COLUMNA IZQUIERDA: CONSOLA INTERACTIVA (PROTAGONISTA) ===== */
 .screen-left {
   display: flex;
   flex-direction: column;
   gap: 0;
   height: 100%;
-  max-height: 100%;
+  min-height: 500px;
   overflow: hidden;
+  background: rgba(10, 14, 39, 0.95);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 193, 7, 0.3);
 }
 
-/* ===== COLUMNA CENTRAL: VISUALIZADOR DE ÁRBOL GIT (SECUNDARIA - ALTA PRIORIDAD) ===== */
+/* ===== COLUMNA CENTRAL: VISUALIZADOR DE ÁRBOL GIT (SECUNDARIA) ===== */
 .screen-center {
   display: flex;
   flex-direction: column;
   gap: 0;
   height: 100%;
-  max-height: 100%;
+  min-height: 500px;
   overflow: hidden;
+  background: rgba(26, 26, 46, 0.95);
+  border-radius: 8px;
+  border: 1px solid rgba(33, 150, 243, 0.3);
 }
 
-/* ===== COLUMNA DERECHA: CARDS DE INFORMACIÓN (CONTEXTO - BAJA PRIORIDAD) ===== */
+/* ===== COLUMNA DERECHA: CARDS DE INFORMACIÓN (CONTEXTO) ===== */
 .screen-right {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: 12px;
   height: 100%;
-  max-height: 100%;
-  min-height: 0;
+  min-height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
+  padding: 8px;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 193, 7, 0.3) transparent;
+  background: rgba(26, 26, 46, 0.5);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .screen-right::-webkit-scrollbar {
@@ -244,40 +268,40 @@
 
 /* ===== TARJETA DE MISIÓN (AUXILIAR - COMPACTA) ===== */
 .mission-card {
-  background: rgba(26, 26, 46, 0.8);
-  border: 1px solid rgba(33, 150, 243, 0.25);
+  background: rgba(26, 26, 46, 0.95);
+  border: 1px solid rgba(33, 150, 243, 0.4);
   border-radius: 8px;
   padding: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  animation: fadeInUp 0.6s ease-out;
-  opacity: 0.9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  opacity: 1;
   pointer-events: none;
   user-select: none;
   flex-shrink: 0;
 }
 
 .mission-card__title {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   color: #ffc107;
-  margin: 0 0 8px 0;
+  margin: 0 0 10px 0;
   display: flex;
   align-items: center;
   gap: 6px;
-  text-shadow: none;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(255, 193, 7, 0.5);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
 }
 
 .mission-card__description {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.95);
   font-size: 11px;
   line-height: 1.5;
   margin-bottom: 8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .mission-card__objective {
-  background: rgba(255, 193, 7, 0.15);
+  background: rgba(255, 193, 7, 0.2);
   border-left: 3px solid #ffc107;
   padding: 12px;
   border-radius: 4px;
@@ -285,36 +309,172 @@
   color: #ffffff;
   line-height: 1.5;
   font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-/* Estilo especial para la tarjeta de objetivo principal */
+/* Estilo especial para la tarjeta de objetivo principal - GOLDEN TICKET */
 .mission-card--objective {
-  background: linear-gradient(135deg, rgba(46, 38, 26, 0.95), rgba(30, 25, 15, 0.98));
-  border: 2px solid rgba(255, 193, 7, 0.6);
-  box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3),
-    0 0 30px rgba(255, 193, 7, 0.2);
-  padding: 16px;
+  background: linear-gradient(135deg, 
+    rgba(255, 245, 157, 0.98) 0%,
+    rgba(255, 238, 88, 0.98) 25%,
+    rgba(255, 245, 157, 0.98) 50%,
+    rgba(255, 238, 88, 0.98) 75%,
+    rgba(255, 245, 157, 0.98) 100%);
+  border: 3px solid #ffd700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 0 30px rgba(255, 255, 255, 0.5);
+  padding: 20px;
   pointer-events: auto;
   user-select: auto;
   opacity: 1;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  animation: goldenShimmer 3s ease-in-out infinite;
+  transform: scale(1.05);
+  border-radius: 12px;
+}
+
+.mission-card--objective::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  animation: goldenSweep 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes goldenShimmer {
+  0%, 100% {
+    filter: brightness(1) saturate(1);
+  }
+  50% {
+    filter: brightness(1.2) saturate(1.3);
+  }
+}
+
+@keyframes goldenSweep {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Estilo especial para la tarjeta de pista - AMARILLO WARNING LLAMATIVO */
+.mission-card--hint {
+  background: linear-gradient(135deg, 
+    rgba(255, 193, 7, 0.35) 0%,
+    rgba(255, 160, 0, 0.4) 100%);
+  border: 3px solid #ffc107;
+  box-shadow: 0 0 25px rgba(255, 193, 7, 0.6),
+    0 0 40px rgba(255, 193, 7, 0.4),
+    inset 0 0 30px rgba(255, 193, 7, 0.2);
+  padding: 20px;
+  pointer-events: auto;
+  user-select: auto;
+  opacity: 0;
+  margin-top: 16px;
+  border-radius: 8px;
+  transform: translateX(120px) scale(0.95);
+  transition: all 0.3s ease;
+  animation: hintPulse 2s ease-in-out infinite;
+}
+
+.mission-card--hint.show {
+  animation: hintSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
+    hintPulse 2s ease-in-out 0.4s infinite;
+}
+
+@keyframes hintSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(120px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.mission-card--hint.hide {
+  animation: hintSlideOut 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+}
+
+@keyframes hintSlideOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(120px) scale(0.95);
+  }
+}
+
+@keyframes hintPulse {
+  0%, 100% {
+    box-shadow: 0 0 25px rgba(255, 193, 7, 0.6),
+      0 0 40px rgba(255, 193, 7, 0.4),
+      inset 0 0 30px rgba(255, 193, 7, 0.2);
+    border-color: #ffc107;
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(255, 193, 7, 0.8),
+      0 0 60px rgba(255, 193, 7, 0.6),
+      inset 0 0 40px rgba(255, 193, 7, 0.3);
+    border-color: #ffdb4d;
+  }
+}
+
+.mission-card--hint .mission-card__title {
+  color: #ffc107;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  margin-bottom: 14px;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.8),
+    0 0 20px rgba(255, 193, 7, 0.5);
+}
+
+.mission-card--hint .mission-card__text {
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .mission-card--objective .mission-card__title {
-  font-size: 14px;
-  color: #ffc107;
-  text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
-  margin-bottom: 12px;
+  font-size: 16px;
+  color: #0d0d1a;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+  margin-bottom: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  z-index: 1;
 }
 
 .mission-card--objective .mission-card__text {
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.5;
+  color: #0d0d1a;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.6;
   margin: 0;
-  border-left: 4px solid #ffc107;
-  padding-left: 12px;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+  position: relative;
+  z-index: 1;
 }
 
 /* ===== TARJETA DE PROGRESO (AUXILIAR - COMPACTA) ===== */
@@ -324,7 +484,6 @@
   border-radius: 8px;
   padding: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  animation: fadeInUp 0.7s ease-out;
   opacity: 0.9;
   pointer-events: none;
   user-select: none;
@@ -372,19 +531,17 @@
 /* ===== CONSOLA INTERACTIVA (ESTILO TERMINAL REAL) ===== */
 .console-card {
   flex: 1;
-  background: #0a0e27;
-  border: 1px solid rgba(255, 193, 7, 0.3);
-  border-radius: 8px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-  animation: fadeInLeft 0.6s ease-out;
   overflow: hidden;
   min-height: 0;
   position: relative;
-  transition: all 0.3s ease;
   height: 100%;
+  margin: 8px;
 }
 
 .console-card:hover {
@@ -433,18 +590,17 @@
 /* ===== LÍNEA TEMPORAL GIT (PROTAGONISTA) ===== */
 .graph-card {
   flex: 1;
-  background: #0a0e27;
-  border: 1px solid rgba(255, 193, 7, 0.3);
-  border-radius: 8px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-  animation: fadeInRight 0.6s ease-out;
   overflow: hidden;
   min-height: 0;
   position: relative;
   height: 100%;
+  margin: 8px;
 }
 
 .graph-card__header {
@@ -523,66 +679,177 @@
   }
 }
 
+/* ===== CONTRASTE GARANTIZADO ===== */
+.mission-card * {
+  /* Asegurar contraste mínimo para todos los elementos */
+  filter: contrast(1.1) brightness(1.05);
+}
+
+.mission-card__text {
+  color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+  font-weight: 500;
+}
+
 /* ===== TEMAS POR PANTALLA ===== */
 /* Screen 1: Origin (1985→1955) - Blue */
 .screen-1 .mission-card {
-  border-color: rgba(33, 150, 243, 0.4);
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.25), rgba(26, 26, 46, 0.95));
+  border-color: rgba(33, 150, 243, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.screen-1 .mission-card__title {
+  color: #64b5f6;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 10px rgba(33, 150, 243, 0.6);
+}
+
+.screen-1 .mission-card__description {
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
 }
 
 /* Screen 2: Future (2015) - Purple */
 .screen-2 .mission-card {
-  background: linear-gradient(135deg, rgba(124, 77, 255, 0.15), rgba(124, 77, 255, 0.05));
-  border-color: rgba(124, 77, 255, 0.4);
+  background: linear-gradient(135deg, rgba(124, 77, 255, 0.25), rgba(26, 26, 46, 0.95));
+  border-color: rgba(124, 77, 255, 0.6);
+  backdrop-filter: blur(4px);
 }
 
 .screen-2 .mission-card__title {
-  color: #9c7bff;
-  text-shadow: 0 0 10px rgba(156, 123, 255, 0.5);
+  color: #b39dff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 10px rgba(156, 123, 255, 0.6);
+}
+
+.screen-2 .mission-card__description {
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
 }
 
 /* Screen 3: Dystopia (1985A) - Red */
 .screen-3 .mission-card {
-  background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(244, 67, 54, 0.05));
-  border-color: rgba(244, 67, 54, 0.4);
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.25), rgba(26, 26, 46, 0.95));
+  border-color: rgba(244, 67, 54, 0.6);
+  backdrop-filter: blur(4px);
 }
 
 .screen-3 .mission-card__title {
-  color: #f44336;
-  text-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+  color: #ff6659;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 10px rgba(244, 67, 54, 0.6);
+}
+
+.screen-3 .mission-card__description {
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
 }
 
 /* Screen 4: Wild West (1885) - Brown/Gold */
 .screen-4 .mission-card {
-  background: linear-gradient(135deg, rgba(161, 136, 127, 0.15), rgba(161, 136, 127, 0.05));
-  border-color: rgba(161, 136, 127, 0.4);
+  background: linear-gradient(135deg, rgba(161, 136, 127, 0.25), rgba(26, 26, 46, 0.95));
+  border-color: rgba(161, 136, 127, 0.6);
+  backdrop-filter: blur(4px);
 }
 
 .screen-4 .mission-card__title {
-  color: #a1887f;
-  text-shadow: 0 0 10px rgba(161, 136, 127, 0.5);
+  color: #bcaaa4;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 10px rgba(161, 136, 127, 0.6);
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 1400px) {
+.screen-4 .mission-card__description {
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1600px) {
   .screen-main {
-    grid-template-columns: 1fr 350px 1fr;
+    grid-template-columns: minmax(450px, 2fr) minmax(280px, 1fr) minmax(220px, 1fr);
+    gap: 12px;
+    padding: 12px;
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .screen-main {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 
+      "console graph"
+      "info info";
+    height: calc(100vh - 80px);
+  }
+  
+  .screen-left {
+    grid-area: console;
+    min-height: 450px;
   }
   
   .screen-center {
-    position: relative;
-    top: 0;
+    grid-area: graph;
+    min-height: 450px;
+  }
+  
+  .screen-right {
+    grid-area: info;
+    flex-direction: row;
+    gap: 16px;
+    height: auto;
+    max-height: 200px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 12px;
+  }
+  
+  .screen-right .mission-card {
+    min-width: 300px;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .screen-main {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto auto;
+    grid-template-areas: 
+      "console"
+      "graph"
+      "info";
+    gap: 16px;
+    height: auto;
+    min-height: calc(100vh - 80px);
   }
   
   .screen-left,
-  .screen-right {
-    height: auto;
+  .screen-center {
     min-height: 400px;
+    height: auto;
+  }
+  
+  .screen-right {
+    flex-direction: column;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+  
+  .screen-right .mission-card {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .screen-main {
+    padding: 8px;
+    gap: 12px;
+  }
+  
+  .screen-left,
+  .screen-center {
+    min-height: 350px;
+  }
+  
+  .console-card,
+  .graph-card {
+    margin: 4px;
   }
 }

@@ -71,6 +71,11 @@ body {
   width: 100%;
   height: auto;
   filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.5));
+  transition: filter 0.3s ease;
+}
+
+.brand-logo:hover {
+  filter: drop-shadow(0 0 30px rgba(255, 204, 0, 0.8));
 }
 
 .logo-sidebar .start-button {
@@ -583,7 +588,7 @@ body {
   left: -150px;
   height: 40px;
   width: auto;
-  animation: driveThrough 15s linear 5s infinite;
+  animation: driveThrough 15s linear 2s infinite;
   z-index: 1001;
   filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.5));
 }

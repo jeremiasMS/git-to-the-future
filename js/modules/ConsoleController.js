@@ -5,6 +5,7 @@ export class ConsoleController {
     this.inputElement = document.getElementById(inputId);
     this.graphController = graphController;
     this.validator = null; // 🆕 Validador de ejercicios (opcional)
+    this.isFirstCommand = true; // Bandera para detectar primer comando
     
     this.state = {
       initialized: false,
@@ -47,20 +48,31 @@ export class ConsoleController {
     this.graphController = graphController;
   }
 
-  // Añadir línea al output de la consola
+    // Añadir línea al output de la consola
   addOutput(text, type = 'default') {
+    if (!this.outputElement) return;
+    
     const line = document.createElement('div');
-    line.className = `console__output-line console__output-line--${type}`;
-    line.innerHTML = `<span class="prompt">$</span> ${text}`;
+    line.className = `output-line output-line--${type}`;
+    line.textContent = text;
     this.outputElement.appendChild(line);
+    
+    // Auto-scroll al final
     this.outputElement.scrollTop = this.outputElement.scrollHeight;
   }
 
-  // Ejecutar comando Git
-  executeCommand(commandString) {
-    const parts = commandString.trim().toLowerCase().split(' ');
-    const command = parts[0] === 'git' ? parts[1] : parts[0];
-    const args = parts[0] === 'git' ? parts.slice(2) : parts.slice(1);
+  clearWelcomeMessage() {
+    // Limpiar el mensaje de bienvenida al ejecutar el primer comando
+    if (this.isFirstCommand && this.outputElement) {
+      this.outputElement.innerHTML = '';
+      this.isFirstCommand = false;
+    }
+  }
+
+  // Ejecutar comando
+  executeCommand(command, args = []) {
+    // Limpiar mensaje de bienvenida antes de ejecutar el primer comando
+    this.clearWelcomeMessage();
 
     // Mostrar comando ejecutado
     this.addOutput(`git ${command} ${args.join(' ')}`.trim(), 'default');
@@ -124,7 +136,7 @@ export class ConsoleController {
 
     const files = ['index.html', 'README.md', 'style.css'];
     this.state.staged = [...files];
-    this.addOutput('✅ Archivos agregados al área de preparación', 'success');
+    this.addOutput('✅ Archivos agregados al staging area', 'success');
     files.forEach((file) => {
       this.addOutput(`  ${file}`, 'success');
     });
@@ -319,7 +331,7 @@ export class ConsoleController {
       }
 
       this.addOutput(`✅ Commit deshecho (cambios preservados en staging): "${lastCommit.message}"`, 'success');
-      this.addOutput('💾 Los cambios se mantienen en el área de preparación (staged)', 'info');
+      this.addOutput('💾 Los cambios se mantienen en el staging area (staged)', 'info');
       this.addOutput('📚 Explicación: reset --soft deshace commits pero mantiene los cambios', 'warning');
       this.addOutput('⚠️ Este comando reescribe la historia (usar con cuidado)', 'warning');
       return;
@@ -327,8 +339,8 @@ export class ConsoleController {
 
     // Reset normal (limpiar staging)
     this.state.staged = [];
-    this.addOutput('✅ Área de preparación limpiada', 'success');
-    this.addOutput('📚 Explicación: git reset deshace cambios en el área de preparación', 'info');
+    this.addOutput('✅ Staging area limpiado', 'success');
+    this.addOutput('📚 Explicación: git reset deshace cambios en el staging area', 'info');
   }
 
   // 🆕 Git Rebase - Reorganizar historia

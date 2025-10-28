@@ -4,6 +4,7 @@ class GitConsole {
     this.output = document.getElementById('consoleOutput');
     this.input = document.getElementById('commandInput');
     this.executeBtn = document.getElementById('executeBtn');
+    this.isFirstCommand = true; // Bandera para detectar primer comando
     this.gitState = {
       initialized: false,
       staged: [],
@@ -66,7 +67,18 @@ class GitConsole {
     this.output.scrollTop = this.output.scrollHeight;
   }
 
+  clearWelcomeMessage() {
+    // Limpiar el mensaje de bienvenida al ejecutar el primer comando
+    if (this.isFirstCommand && this.output) {
+      this.output.innerHTML = '';
+      this.isFirstCommand = false;
+    }
+  }
+
   executeCommand(command) {
+    // Limpiar mensaje de bienvenida antes de ejecutar el primer comando
+    this.clearWelcomeMessage();
+
     const parts = command.toLowerCase().split(' ');
     const mainCommand = parts[0];
     const args = parts.slice(1);
@@ -180,7 +192,7 @@ class GitConsole {
     const files = ['index.html', 'README.md', 'style.css'];
     this.gitState.staged = [...files];
     this.addOutput(
-      '✅ Archivos agregados al área de preparación',
+      '✅ Archivos agregados al staging area',
       'success'
     );
     files.forEach((file) => {
@@ -408,9 +420,9 @@ class GitConsole {
     }
 
     this.gitState.staged = [];
-    this.addOutput('✅ Área de preparación limpiada', 'success');
+    this.addOutput('✅ Staging area limpiado', 'success');
     this.addOutput(
-      '📚 Explicación: git reset deshace cambios en el área de preparación',
+      '📚 Explicación: git reset deshace cambios en el staging area',
       'info'
     );
   }

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantalla 2 Fixed - Git to the Future</title>
+    
+    <style>
+        /* Reset y Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgba(26, 26, 46, 0.95);
+            border-bottom: 1px solid rgba(255, 193, 7, 0.3);
+            height: 60px;
+            flex-shrink: 0;
+        }
+
+        .screen-header__logo {
+            height: 40px;
+        }
+
+        .screen-header__back {
+            height: 30px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .screen-header__back:hover {
+            opacity: 1;
+        }
+
+        /* Barra de Progreso */
+        .plutonium-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .plutonium-progress__label {
+            color: #ffc107;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .plutonium-progress__tube {
+            width: 120px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            border: 1px solid #ffc107;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .plutonium-progress__fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffc107, #ff9800);
+            transition: width 0.6s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+        }
+
+        .plutonium-progress__counter {
+            color: #000;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Layout Principal - FIXED */
+        .screen-main {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 1fr;
+            gap: 16px;
+            padding: 16px;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+        }
+
+        /* Columnas */
+        .screen-left,
+        .screen-center,
+        .screen-right {
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen-left {
+            background: rgba(10, 14, 39, 0.95);
+        }
+
+        .screen-center {
+            background: rgba(26, 26, 46, 0.95);
+        }
+
+        .screen-right {
+            background: rgba(26, 26, 46, 0.5);
+            gap: 12px;
+            overflow-y: auto;
+        }
+
+        /* Console */
+        .console-card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .console-card__header {
+            background: #151a35;
+            padding: 10px 14px;
+            border-radius: 8px 8px 0 0;
+            margin: -16px -16px 16px -16px;
+            border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+        }
+
+        .console-card__title {
+            color: #ffc107;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .console__output {
+            flex: 1;
+            background: #000;
+            border-radius: 4px;
+            padding: 16px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 13px;
+            color: #e0e0e0;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            min-height: 200px;
+        }
+
+        .console__commands {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .console__cmd-btn {
+            background: rgba(33, 150, 243, 0.2);
+            border: 1px solid #2196f3;
+            color: #64b5f6;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .console__cmd-btn:hover {
+            background: rgba(33, 150, 243, 0.4);
+            color: #fff;
+        }
+
+        .console__input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #000;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+
+        .console__input-prompt {
+            color: #00ff00;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+        }
+
+        .console__input-field {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .console__execute-btn {
+            background: #ffc107;
+            border: none;
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .console__special-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .console__special-btn {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            color: #ff6659;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .console__special-btn:hover {
+            background: rgba(244, 67, 54, 0.4);
+            color: #fff;
+        }
+
+        .console__special-btn--demo {
+            background: rgba(255, 193, 7, 0.2);
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+
+        .console__special-btn--demo:hover {
+            background: rgba(255, 193, 7, 0.4);
+        }
+
+        /* Graph */
+        .graph-card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .graph-card__header {
+            background: #151a35;
+            padding: 10px 14px;
+            border-radius: 8px 8px 0 0;
+            margin: -16px -16px 16px -16px;
+            border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+        }
+
+        .graph-card__title {
+            color: #ffc107;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .graph__canvas {
+            flex: 1;
+            background: #0a0e27;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .graph__empty {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .graph__empty-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffc107;
+            margin: 16px 0;
+        }
+
+        .graph__empty-hint {
+            font-size: 12px;
+            margin: 8px 0;
+        }
+
+        .graph__empty-line {
+            height: 1px;
+            background: rgba(255, 193, 7, 0.3);
+            margin: 8px auto;
+            width: 60%;
+        }
+
+        .branch-indicator {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .branch-indicator__label {
+            color: #ffc107;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .branch-indicator__value {
+            color: #64b5f6;
+            font-size: 12px;
+            font-family: 'Consolas', monospace;
+        }
+
+        /* Mission Cards */
+        .mission-card {
+            background: rgba(26, 26, 46, 0.95);
+            border: 1px solid rgba(33, 150, 243, 0.4);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .mission-card--objective {
+            background: linear-gradient(135deg, rgba(255, 245, 157, 0.98), rgba(255, 238, 88, 0.98));
+            border: 2px solid #ffd700;
+            color: #000;
+        }
+
+        .mission-card__title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffc107;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .mission-card--objective .mission-card__title {
+            color: #000;
+        }
+
+        .mission-card__text {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .mission-card--objective .mission-card__text {
+            color: #000;
+            font-weight: bold;
+        }
+
+        .mission-card__description {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 12px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .mission-card--hint {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.35), rgba(255, 160, 0, 0.4));
+            border: 2px solid #ffc107;
+            display: none;
+            animation: pulse 2s infinite;
+        }
+
+        .mission-card--hint.show {
+            display: block;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .screen-main {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr auto;
+                grid-template-areas: 
+                    "console graph"
+                    "info info";
+            }
+            
+            .screen-left { grid-area: console; }
+            .screen-center { grid-area: graph; }
+            .screen-right { 
+                grid-area: info; 
+                flex-direction: row;
+                overflow-x: auto;
+                max-height: 200px;
+            }
+            
+            .mission-card {
+                min-width: 300px;
+                flex-shrink: 0;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .screen-main {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                grid-template-areas: 
+                    "console"
+                    "graph"
+                    "info";
+                height: auto;
+                min-height: calc(100vh - 60px);
+            }
+            
+            .screen-left,
+            .screen-center {
+                min-height: 400px;
+            }
+            
+            .screen-right {
+                flex-direction: column;
+                max-height: none;
+                overflow: visible;
+            }
+            
+            .mission-card {
+                min-width: auto;
+            }
+        }
+
+        /* Console Output Styles */
+        .console__output-line {
+            margin: 2px 0;
+            padding: 2px 0;
+        }
+
+        .console__output-line--success { color: #4caf50; }
+        .console__output-line--error { color: #f44336; }
+        .console__output-line--warning { color: #ff9800; }
+        .console__output-line--info { color: #2196f3; }
+        .console__output-line--command { color: #ffc107; }
+    </style>
+
+    <!-- GitGraph CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>
+</head>
+<body class="screen-body screen-2">
+    <!-- Header -->
+    <header class="screen-header">
+        <div class="screen-header__left">
+            <a href="../index-menu.html" title="Volver al menú principal" id="backBtn">
+                <img src="../assets/fonts/img/Back.png" alt="Volver" class="screen-header__back" />
+            </a>
+        </div>
+        <a href="../index.html">
+            <img src="../assets/fonts/img/GItToTheFuture.png" alt="Git to the Future" class="screen-header__logo" />
+        </a>
+
+        <!-- Barra de Progreso -->
+        <div class="plutonium-progress">
+            <span class="plutonium-progress__label">PROGRESO</span>
+            <div class="plutonium-progress__tube">
+                <div class="plutonium-progress__fill" id="progressBarFill" style="width: 0%">
+                    <div class="plutonium-progress__glow"></div>
+                </div>
+                <span class="plutonium-progress__counter" id="progressCounter">0/7</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Layout Principal -->
+    <main class="screen-main">
+        <!-- COLUMNA IZQUIERDA: Consola Git -->
+        <div class="screen-left">
+            <div class="console-card">
+                <div class="console-card__header">
+                    <h2 class="console-card__title">Git Terminal</h2>
+                </div>
+
+                <!-- Output de la Consola -->
+                <div class="console__output" id="consoleOutput">
+                    <div class="console__output-line console__output-line--info">
+                        🚗⚡ Bienvenido a Git to the Future - Pantalla 2: Time Travel (2015)
+                    </div>
+                    <div class="console__output-line console__output-line--info">
+                        💡 Usa los comandos Git para completar los ejercicios
+                    </div>
+                    <div class="console__output-line console__output-line--info">
+                        🎯 Comienza con "git init" para inicializar el repositorio
+                    </div>
+                </div>
+
+                <!-- Botones de Comandos Rápidos -->
+                <div class="console__commands">
+                    <button class="console__cmd-btn" data-command="init">init</button>
+                    <button class="console__cmd-btn" data-command="status">status</button>
+                    <button class="console__cmd-btn" data-command="add .">add .</button>
+                    <button class="console__cmd-btn" data-command="commit -m 'mensaje'">commit</button>
+                    <button class="console__cmd-btn" data-command="branch">branch</button>
+                    <button class="console__cmd-btn" data-command="checkout">checkout</button>
+                    <button class="console__cmd-btn" data-command="merge">merge</button>
+                </div>
+
+                <!-- Input de Comando -->
+                <div class="console__input">
+                    <span class="console__input-prompt">git $</span>
+                    <input type="text" class="console__input-field" id="commandInput" 
+                           placeholder="Escribe tu comando aquí..." autocomplete="off" />
+                    <button class="console__execute-btn" id="executeBtn">▶</button>
+                </div>
+
+                <!-- Botones Especiales -->
+                <div class="console__special-buttons">
+                    <button class="console__special-btn console__special-btn--reset" id="resetBtn">
+                        Reiniciar
+                    </button>
+                    <button class="console__special-btn console__special-btn--demo" id="hintBtn">
+                        Pista
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMNA CENTRAL: Gráfico Git -->
+        <div class="screen-center">
+            <div class="graph-card">
+                <div class="graph-card__header">
+                    <h2 class="graph-card__title">Git Timeline</h2>
+                </div>
+
+                <div class="graph__canvas" id="gitGraph">
+                    <div class="graph__empty">
+                        <div class="graph__empty-line"></div>
+                        <div class="graph__empty-text">Visualizador de Líneas Temporales</div>
+                        <div class="graph__empty-line"></div>
+                        <div class="graph__empty-hint">
+                            Aquí verás todas las ramas, commits y fusiones
+                        </div>
+                        <div class="graph__empty-hint">
+                            Ejecuta "git init" para comenzar
+                        </div>
+                        <div class="graph__empty-line"></div>
+                    </div>
+                </div>
+
+                <!-- Branch Indicator -->
+                <div class="branch-indicator">
+                    <span class="branch-indicator__label">Branch:</span>
+                    <span class="branch-indicator__value" id="currentBranchIndicator">Sin repositorio</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: Cards de Información -->
+        <div class="screen-right">
+            <!-- Tarjeta de Misión -->
+            <div class="mission-card mission-card--objective">
+                <h2 class="mission-card__title">Mission Objective</h2>
+                <p class="mission-card__text" id="exerciseInstructions">
+                    Prepara el viaje al futuro - Inicializa un repositorio para documentar el viaje temporal a 2015
+                </p>
+            </div>
+
+            <!-- Historia del Nivel -->
+            <div class="mission-card">
+                <h2 class="mission-card__title">Level Context</h2>
+                <p class="mission-card__description" style="margin-bottom: 12px;">
+                    <strong style="color: #2196f3">🎬 Back to the Future II</strong> (1989)<br />
+                    <strong>📅 Año:</strong> 2015<br />
+                    <strong>🎥 Director:</strong> Robert Zemeckis
+                </p>
+                <p class="mission-card__description">
+                    Marty y Doc viajan al futuro (2015) para salvar a la familia McFly. 
+                    Sin embargo, el anciano Biff roba el DeLorean y altera la historia 
+                    con un almanaque deportivo, creando una línea temporal distópica.
+                </p>
+            </div>
+
+            <!-- Tarjeta de Pista -->
+            <div class="mission-card mission-card--hint" id="hintCard">
+                <h2 class="mission-card__title">PISTA</h2>
+                <p class="mission-card__text" id="hintText">
+                    Usa 'git init' para inicializar el repositorio
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="../js/git-bttf-standalone.js"></script>
+    <script>
+        // Inicializar cuando se cargue la página
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🚀 Iniciando Pantalla 2 Fixed');
+
+            // Verificar que las clases existan
+            if (typeof GitGraphController === 'undefined' || 
+                typeof ConsoleController === 'undefined' || 
+                typeof ExerciseValidator === 'undefined') {
+                console.error('❌ Clases no encontradas en git-bttf-standalone.js');
+                document.getElementById('consoleOutput').innerHTML += 
+                    '<div class="console__output-line console__output-line--error">❌ Error: Sistema no inicializado correctamente</div>';
+                return;
+            }
+
+            try {
+                // 1️⃣ Inicializar controladores
+                const graph = new GitGraphController('gitGraph');
+                const consoleCtrl = new ConsoleController('consoleOutput', 'commandInput', graph);
+                const validator = new ExerciseValidator(consoleCtrl, graph);
+                
+                // 2️⃣ Configurar ejercicios
+                if (typeof SCREEN_EXERCISES !== 'undefined' && SCREEN_EXERCISES.screen2) {
+                    validator.setExercises(SCREEN_EXERCISES.screen2);
+                    consoleCtrl.setValidator(validator);
+                    console.log('✅ Ejercicios cargados:', SCREEN_EXERCISES.screen2.length);
+                } else {
+                    console.error('❌ SCREEN_EXERCISES.screen2 no encontrado');
+                }
+
+                // 3️⃣ Función para actualizar progreso
+                function updateProgress() {
+                    const current = validator.currentExerciseIndex;
+                    const total = SCREEN_EXERCISES.screen2.length;
+                    const percentage = Math.round((current / total) * 100);
+
+                    const progressFill = document.getElementById('progressBarFill');
+                    const progressCounter = document.getElementById('progressCounter');
+
+                    if (progressFill) progressFill.style.width = percentage + '%';
+                    if (progressCounter) progressCounter.textContent = `${current}/${total}`;
+                }
+
+                // 4️⃣ Función para actualizar instrucciones
+                function updateInstructions(exercise) {
+                    const container = document.getElementById('exerciseInstructions');
+                    if (container && exercise) {
+                        container.textContent = exercise.description;
+                    }
+                }
+
+                // 5️⃣ Mostrar primer ejercicio
+                updateInstructions(validator.getCurrentExercise());
+                updateProgress();
+
+                // 6️⃣ Event Listeners
+                const executeCommand = () => {
+                    const input = document.getElementById('commandInput');
+                    const command = input.value.trim();
+                    if (command) {
+                        consoleCtrl.executeCommand(command);
+                        input.value = '';
+                        
+                        // Validar ejercicio
+                        const parts = command.toLowerCase().split(' ');
+                        const cmd = parts[0] === 'git' ? parts[1] : parts[0];
+                        const args = parts[0] === 'git' ? parts.slice(2) : parts.slice(1);
+                        
+                        const result = validator.validateCommand(cmd, args);
+                        if (result.valid) {
+                            const nextResult = validator.nextExercise();
+                            updateProgress();
+                            if (!nextResult.completed) {
+                                updateInstructions(nextResult.exercise);
+                            } else {
+                                document.getElementById('exerciseInstructions').textContent = '🎉 ¡Pantalla completada!';
+                            }
+                        }
+                    }
+                };
+
+                document.getElementById('executeBtn').addEventListener('click', executeCommand);
+                document.getElementById('commandInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') executeCommand();
+                });
+
+                // Botones de comando rápido
+                document.querySelectorAll('.console__cmd-btn').forEach((btn) => {
+                    btn.addEventListener('click', () => {
+                        const command = btn.getAttribute('data-command');
+                        document.getElementById('commandInput').value = command;
+                        document.getElementById('commandInput').focus();
+                    });
+                });
+
+                // Botón de reiniciar
+                document.getElementById('resetBtn').addEventListener('click', () => {
+                    if (confirm('¿Reiniciar el progreso?')) {
+                        consoleCtrl.resetAll();
+                        validator.reset();
+                        updateInstructions(SCREEN_EXERCISES.screen2[0]);
+                        updateProgress();
+                    }
+                });
+
+                // Botón de pista
+                document.getElementById('hintBtn').addEventListener('click', () => {
+                    const exercise = validator.getCurrentExercise();
+                    const hintCard = document.getElementById('hintCard');
+                    const hintText = document.getElementById('hintText');
+                    
+                    if (exercise && hintCard && hintText) {
+                        hintText.textContent = exercise.hint;
+                        hintCard.classList.add('show');
+                        
+                        setTimeout(() => {
+                            hintCard.classList.remove('show');
+                        }, 5000);
+                    }
+                });
+
+                console.log('✅ Pantalla 2 inicializada correctamente');
+
+            } catch (error) {
+                console.error('❌ Error inicializando:', error);
+                document.getElementById('consoleOutput').innerHTML += 
+                    `<div class="console__output-line console__output-line--error">❌ Error: ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -140,6 +140,40 @@ class UIController {
     this.updateProgress();
     this.attachEventListeners();
     this.showWelcomeNotification();
+    this.scrollToCurrentLevel();
+  }
+
+  scrollToCurrentLevel() {
+    // Encontrar el nivel actual
+    const currentLevel = this.levelController.levels.find((level) => 
+      this.levelController.isCurrentLevel(level.id)
+    );
+
+    if (currentLevel) {
+      const currentCard = document.getElementById(`level${currentLevel.id}`);
+      if (currentCard) {
+        Logger.log('Scrolling to current level:', currentLevel.id);
+        
+        // Esperar un momento para que el DOM esté completamente renderizado
+        setTimeout(() => {
+          // Obtener el contenedor con scroll
+          const container = document.querySelector('.levels-menu__content');
+          const cardRect = currentCard.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          
+          // Calcular el offset para centrar la tarjeta
+          const offset = cardRect.top - containerRect.top - (containerRect.height / 2) + (cardRect.height / 2);
+          
+          // Scroll suave con duración personalizada
+          container.scrollBy({
+            top: offset,
+            behavior: 'smooth'
+          });
+        }, 200);
+      }
+    } else {
+      Logger.log('No current level found (all completed or all locked)');
+    }
   }
 
   updateAllCards() {

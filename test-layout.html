@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Layout - Git to the Future</title>
+    
+    <!-- CSS Modular -->
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/components/base.css" />
+    <link rel="stylesheet" href="../css/components/branch-indicator.css" />
+    <link rel="stylesheet" href="../css/components/console.css" />
+    <link rel="stylesheet" href="../css/components/graph.css" />
+    <link rel="stylesheet" href="../css/components/navigation.css" />
+    <link rel="stylesheet" href="../css/screens.css" />
+    
+    <style>
+        /* Override específico para testing */
+        .test-content {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .console-test {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: #ffc107;
+        }
+        
+        .graph-test {
+            background: rgba(33, 150, 243, 0.1);
+            border-color: #2196f3;
+        }
+        
+        .info-test {
+            background: rgba(244, 67, 54, 0.1);
+            border-color: #f44336;
+        }
+    </style>
+</head>
+<body class="screen-body screen-2">
+    <!-- Header con Logo y Back Button -->
+    <header class="screen-header">
+        <div class="screen-header__left">
+            <a href="../index-menu.html" title="Volver al menú principal">
+                <img src="../assets/fonts/img/Back.png" alt="Volver" class="screen-header__back" />
+            </a>
+        </div>
+        <a href="../index.html">
+            <img src="../assets/fonts/img/GItToTheFuture.png" alt="Git to the Future" class="screen-header__logo" />
+        </a>
+
+        <!-- Barra de Progreso -->
+        <div class="plutonium-progress">
+            <span class="plutonium-progress__label">PROGRESO</span>
+            <div class="plutonium-progress__tube">
+                <div class="plutonium-progress__fill" style="width: 25%">
+                    <div class="plutonium-progress__glow"></div>
+                </div>
+                <span class="plutonium-progress__counter">2/8</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Layout Principal TEST -->
+    <main class="screen-main">
+        <!-- COLUMNA IZQUIERDA: Consola -->
+        <div class="screen-left">
+            <div class="test-content console-test">
+                <div>
+                    <h3>CONSOLA GIT</h3>
+                    <p>Esta sección contiene el terminal interactivo</p>
+                    <p>Comandos: init, add, commit, branch, merge</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMNA CENTRAL: Gráfico -->
+        <div class="screen-center">
+            <div class="test-content graph-test">
+                <div>
+                    <h3>GRÁFICO GIT</h3>
+                    <p>Visualización del árbol de commits</p>
+                    <p>Ramas, merges, y líneas temporales</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: Información -->
+        <div class="screen-right">
+            <div class="test-content info-test">
+                <div>
+                    <h3>INFORMACIÓN</h3>
+                    <p>Objetivos de la misión</p>
+                    <p>Contexto del nivel</p>
+                </div>
+            </div>
+            
+            <div class="test-content info-test">
+                <div>
+                    <h3>PISTAS</h3>
+                    <p>Ayuda contextual</p>
+                    <p>Comandos sugeridos</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

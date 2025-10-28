@@ -17,212 +17,87 @@
     <!-- GitGraph CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>
   </head>
-  <body class="screen-body screen-dystopia">
-    <!-- Botón de Volver -->
-    <a href="../index-menu.html" title="Volver al menú principal">
-      <img
-        src="../assets/fonts/img/Back.png"
-        alt="Volver"
-        style="
-          position: fixed;
-          top: 20px;
-          left: 20px;
-          height: 40px;
-          cursor: pointer;
-          z-index: 1000;
-        "
-      />
-    </a>
-    <!-- Header Principal de la App -->
-    <header class="app-header">
-      <a href="../index.html" style="text-decoration: none">
-        <h1 class="app-header__title">GIT TO THE FUTURE</h1>
+  <body class="screen-body screen-3">
+    <!-- Header con Logo y Back Button -->
+    <header class="screen-header">
+      <div class="screen-header__left">
+        <a href="../index-menu.html" title="Volver al menú principal" id="backBtn">
+          <img
+            src="../assets/fonts/img/Back.png"
+            alt="Volver"
+            class="screen-header__back"
+          />
+        </a>
+      </div>
+      <a href="../index.html">
+        <img
+          src="../assets/fonts/img/GItToTheFuture.png"
+          alt="Git to the Future"
+          class="screen-header__logo"
+        />
       </a>
-    </header>
 
-    <!-- Navegación Superior -->
-    <div id="navigationContainer"></div>
-
-    <!-- Header de la Pantalla -->
-    <header class="header">
-      <div class="container">
-        <div id="breadcrumbContainer"></div>
-        <h1 class="text-gradient" style="color: #ff4081">
-          ⚠️ Pantalla 3: Dystopia (1985A)
-        </h1>
-        <p class="text-muted">
-          Crea la rama "familia-feliz" y resuelve la paradoja de Biff con merges
-          avanzados y cherry-picks
-        </p>
+      <!-- Barra de Progreso Radioactiva (Superior Derecha) -->
+      <div class="plutonium-progress">
+        <span class="plutonium-progress__label">PROGRESO</span>
+        <div class="plutonium-progress__tube">
+          <div
+            class="plutonium-progress__fill"
+            id="progressBarFill"
+            style="width: 0%"
+          >
+            <div class="plutonium-progress__glow"></div>
+          </div>
+          <span class="plutonium-progress__counter" id="progressCounter"
+            >0/7</span
+          >
+        </div>
       </div>
     </header>
 
-    <!-- Contenido Principal -->
-    <main
-      class="container"
-      style="max-width: 1400px; margin: 0 auto; padding: var(--spacing-xl)"
-    >
-      <!-- Historia / Contexto -->
-      <section
-        class="card card--accent"
-        style="margin-bottom: var(--spacing-lg); border-color: #d32f2f"
-      >
-        <h2>📖 Historia: Familia Feliz y Comandos Avanzados</h2>
-        <p>
-          Después de recuperar el almanaque, Marty crea la rama
-          <strong>"familia-feliz"</strong> que representa el
-          <strong>1985 mejorado</strong>. Pero ahora necesitarás comandos más
-          avanzados para manipular la historia de forma precisa.
-        </p>
-        <p>
-          En esta pantalla dominarás <strong>Git intermedio-avanzado</strong>:
-        </p>
-        <ul>
-          <li>
-            <code>git rebase</code> - 🔥 Reorganizar y limpiar la historia
-          </li>
-          <li>
-            <code>git cherry-pick</code> - 🍒 Copiar commits específicos entre
-            ramas
-          </li>
-          <li>
-            <code>git branch</code> - Crear "familia-feliz" (mejor realidad)
-          </li>
-          <li><code>git commit</code> - Registrar eventos clave</li>
-          <li><code>git merge</code> - Fusionar y consolidar cambios</li>
-        </ul>
-        <p class="text-muted" style="margin-top: var(--spacing-md)">
-          <strong>🎯 Objetivo:</strong> Completar 8 ejercicios usando comandos
-          avanzados para crear la mejor realidad.
-        </p>
-        <div
-          class="badge badge--warning"
-          style="
-            margin-top: var(--spacing-md);
-            background: linear-gradient(135deg, #f57c00, #ff9800);
-          "
-        >
-          ⚡ Nivel Intermedio - Se introducen comandos más complejos
-        </div>
-      </section>
-
-      <!-- Progreso de Ejercicios -->
-      <div id="exerciseProgress"></div>
-
-      <!-- Instrucciones del Ejercicio Actual -->
-      <div id="exerciseInstructions"></div>
-
-      <!-- Grid de Dos Columnas -->
-      <div
-        class="grid"
-        style="
-          grid-template-columns: 1fr 1fr;
-          gap: var(--spacing-lg);
-          margin-top: var(--spacing-lg);
-        "
-      >
-        <!-- Columna Izquierda: Gráfico -->
-        <div class="graph" style="border-color: #d32f2f">
-          <div
-            class="branch-indicator"
-            style="background: linear-gradient(135deg, #d32f2f, #f44336)"
-          >
-            <span class="branch-indicator__label">⚠️ Línea Corrupta:</span>
-            <span class="branch-indicator__value" id="currentBranchIndicator"
-              >1985-dystopia</span
-            >
+    <!-- Layout Principal de 3 Columnas -->
+    <main class="screen-main">
+      <!-- COLUMNA IZQUIERDA: Consola Git Interactiva (PROTAGONISTA - 55-60%) -->
+      <div class="screen-left">
+        <!-- Consola -->
+        <div class="console-card">
+          <div class="console-card__header">
+            <h2 class="console-card__title">Git Terminal</h2>
           </div>
-
-          <h2 class="graph__title" style="color: #ff4081">
-            💀 Historial Corrupto
-          </h2>
-          <p class="graph__description">
-            Visualiza el historial distópico y cómo arreglarlo
-          </p>
-
-          <div class="graph__canvas" id="gitGraph"></div>
-
-          <!-- Advertencia -->
-          <div
-            class="graph__info"
-            style="border-color: #d32f2f; background: rgba(211, 47, 47, 0.1)"
-          >
-            <div class="graph__info-item">
-              <span class="graph__info-label">⚠️ Estado:</span>
-              <span class="graph__info-value" style="color: #f44336"
-                >LÍNEA TEMPORAL CORRUPTA</span
-              >
-            </div>
-            <div class="graph__info-item">
-              <span class="graph__info-label">🎯 Objetivo:</span>
-              <span class="graph__info-value">Restaurar 1985 original</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Columna Derecha: Consola -->
-        <div class="console" style="border-color: #d32f2f">
-          <h2 class="console__title" style="color: #ff4081">
-            🖥️ Terminal de Reparación Temporal
-          </h2>
-          <p class="console__description">
-            Usa comandos avanzados para restaurar la línea temporal
-          </p>
 
           <!-- Output de la Consola -->
-          <div class="console__output" id="consoleOutput">
-            <div class="console__output-line console__output-line--warning">
-              <span class="prompt">$</span> Doc: "¡Marty! Este no es nuestro
-              1985... algo salió terriblemente mal" 😱
-            </div>
-            <div class="console__output-line console__output-line--warning">
-              <span class="prompt">$</span> Biff ha corrompido la línea
-              temporal. Debemos usar git para arreglarlo
-            </div>
-          </div>
+          <div class="console__output" id="consoleOutput"></div>
 
           <!-- Botones de Comandos Rápidos -->
           <div class="console__commands">
-            <button class="console__cmd-btn" data-command="log">log</button>
+            <button class="console__cmd-btn" data-command="init">init</button>
+            <button class="console__cmd-btn" data-command="status">
+              status
+            </button>
+            <button class="console__cmd-btn" data-command="add .">add .</button>
+            <button class="console__cmd-btn" data-command="commit -m 'mensaje'">
+              commit
+            </button>
             <button class="console__cmd-btn" data-command="branch">
               branch
             </button>
-            <button class="console__cmd-btn" data-command="checkout main">
-              checkout main
+            <button class="console__cmd-btn" data-command="checkout">
+              checkout
             </button>
-            <button class="console__cmd-btn" data-command="merge 1985-dystopia">
-              merge
-            </button>
-            <button class="console__cmd-btn" data-command="rebase">
-              rebase
-            </button>
-            <button class="console__cmd-btn" data-command="reset --hard HEAD~1">
-              reset --hard
-            </button>
-            <button class="console__cmd-btn" data-command="revert HEAD">
-              revert
-            </button>
+            <button class="console__cmd-btn" data-command="merge">merge</button>
           </div>
 
           <!-- Input de Comando -->
           <div class="console__input">
-            <span class="console__input-prompt" style="color: #f44336"
-              >git $</span
-            >
+            <span class="console__input-prompt">git $</span>
             <input
               type="text"
               class="console__input-field"
               id="commandInput"
-              placeholder="Comandos de recuperación..."
+              placeholder="Escribe tu comando aquí..."
               autocomplete="off"
             />
-            <button
-              class="console__execute-btn"
-              id="executeBtn"
-              style="background: #d32f2f"
-            >
-              ▶
-            </button>
+            <button class="console__execute-btn" id="executeBtn">▶</button>
           </div>
 
           <!-- Botones Especiales -->
@@ -231,210 +106,125 @@
               class="console__special-btn console__special-btn--reset"
               id="resetBtn"
             >
-              🔄 Reiniciar
+              Reiniciar
             </button>
             <button
               class="console__special-btn console__special-btn--demo"
               id="hintBtn"
             >
-              💡 Pista
+              Pista
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Comparación Visual -->
-      <section class="card card--primary" style="margin-top: var(--spacing-lg)">
-        <h3>⚖️ Comparación de Líneas Temporales</h3>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-lg);
-            padding: var(--spacing-md) 0;
-          "
-        >
-          <div
-            style="
-              text-align: center;
-              padding: var(--spacing-md);
-              border: 2px solid #4caf50;
-              border-radius: 8px;
-            "
-          >
-            <div style="font-size: 48px">✅</div>
-            <strong style="color: #4caf50">1985 Original</strong>
-            <ul
-              style="
-                text-align: left;
-                margin-top: var(--spacing-sm);
-                color: var(--color-muted);
-                font-size: 14px;
-              "
-            >
-              <li>George es exitoso</li>
-              <li>Familia feliz</li>
-              <li>Biff es amable</li>
-              <li>Hill Valley próspero</li>
-            </ul>
+      <!-- COLUMNA CENTRAL: Visualizador de Árbol Git (SECUNDARIA - 20-25%) -->
+      <div class="screen-center">
+        <!-- Gráfico Git -->
+        <div class="graph-card">
+          <div class="graph-card__header">
+            <h2 class="graph-card__title">Git Timeline</h2>
           </div>
-          <div
-            style="
-              text-align: center;
-              padding: var(--spacing-md);
-              border: 2px solid #f44336;
-              border-radius: 8px;
-            "
-          >
-            <div style="font-size: 48px">❌</div>
-            <strong style="color: #f44336">1985 Distópico</strong>
-            <ul
-              style="
-                text-align: left;
-                margin-top: var(--spacing-sm);
-                color: var(--color-muted);
-                font-size: 14px;
-              "
-            >
-              <li>George está muerto</li>
-              <li>Biff es millonario</li>
-              <li>Lorraine casada con Biff</li>
-              <li>Hill Valley corrupto</li>
-            </ul>
-          </div>
-        </div>
-      </section>
 
-      <!-- Ayuda Adicional -->
-      <section
-        class="card card--secondary"
-        style="margin-top: var(--spacing-lg)"
-      >
-        <h3>🎓 Comandos de Recuperación</h3>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing-md);
-          "
-        >
-          <div>
-            <strong style="color: #f44336">git reset --hard [commit]</strong>
-            <p class="text-muted text-sm">
-              Vuelve el repositorio a un commit específico, descartando todos
-              los cambios
-            </p>
-            <code class="text-xs"
-              >⚠️ PELIGRO: Pérdida permanente de cambios</code
+          <div class="graph__canvas" id="gitGraph">
+            <div class="graph__empty">
+              <div class="graph__empty-line"></div>
+              <div class="graph__empty-line"></div>
+              <div class="graph__empty-text">
+                Visualizador de Líneas Temporales
+              </div>
+              <div class="graph__empty-line"></div>
+              <div class="graph__empty-hint">
+                Aquí verás todas las ramas, commits y fusiones de tu repositorio
+              </div>
+              <div class="graph__empty-hint">
+                Git en forma de árbol visual. Ejecuta "git init" para comenzar.
+              </div>
+              <div class="graph__empty-line"></div>
+            </div>
+          </div>
+
+          <!-- Branch Indicator movido abajo -->
+          <div class="branch-indicator">
+            <span class="branch-indicator__label">Branch:</span>
+            <span class="branch-indicator__value" id="currentBranchIndicator"
+              >Sin repositorio</span
             >
           </div>
-          <div>
-            <strong style="color: #ff9100">git revert [commit]</strong>
-            <p class="text-muted text-sm">
-              Crea un nuevo commit que deshace los cambios de un commit anterior
-            </p>
-            <code class="text-xs">✅ SEGURO: Preserva el historial</code>
-          </div>
-          <div>
-            <strong style="color: #4caf50">git merge [rama]</strong>
-            <p class="text-muted text-sm">
-              Fusiona cambios de otra rama a la actual
-            </p>
-            <code class="text-xs">Combina líneas temporales</code>
+        </div>
+      </div>
+
+      <!-- COLUMNA DERECHA: Cards de Información (CONTEXTO - 15-20%) -->
+      <div class="screen-right">
+        <!-- Tarjeta de Misión -->
+        <div class="mission-card mission-card--objective">
+          <h2 class="mission-card__title">Mission Objective</h2>
+          <p class="mission-card__text" id="exerciseInstructions">
+            Inicializa la máquina del tiempo
+          </p>
+        </div>
+
+        <!-- Historia del Nivel -->
+        <div class="mission-card">
+          <h2 class="mission-card__title">Level Context</h2>
+          <p
+            class="mission-card__description"
+            style="margin-bottom: 12px; font-size: 13px; line-height: 1.6"
+          >
+            <strong style="color: #ff4081">🎬 Back to the Future II</strong>
+            (1989)<br />
+            <strong>📅 Año:</strong> 1985A (Distopía)<br />
+            <strong>🎥 Director:</strong> Robert Zemeckis
+          </p>
+          <p
+            class="mission-card__description"
+            style="font-size: 13px; line-height: 1.6"
+          >
+            Biff del futuro entrega un almanaque deportivo a su yo del pasado, 
+            creando una línea temporal alternativa donde controla Hill Valley. 
+            Debes usar git merge para entender y corregir la historia corrupta.
+          </p>
+          <div
+            style="
+              margin-top: 12px;
+              padding-top: 12px;
+              border-top: 1px solid rgba(255, 255, 255, 0.1);
+            "
+          >
+            <img
+              src="../assets/fonts/img/thunder.png"
+              alt="1985A"
+              style="
+                width: 100%;
+                max-width: 180px;
+                height: auto;
+                margin: 0 auto;
+                display: block;
+                border-radius: 6px;
+                filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+              "
+            />
           </div>
         </div>
-      </section>
+
+        <!-- Tarjeta de Pista -->
+        <div class="mission-card mission-card--hint" id="hintCard" style="display: none;">
+          <h2 class="mission-card__title">PISTA</h2>
+          <p class="mission-card__text" id="hintText" style="font-size: 13px; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+            <!-- La pista se mostrará aquí -->
+          </p>
+        </div>
+      </div>
     </main>
-
-    <!-- Footer -->
-    <footer
-      class="text-center text-muted"
-      style="padding: var(--spacing-xl); margin-top: var(--spacing-xl)"
-    >
-      <p>🚗⚡ Git to the Future - Aprende Git usando Back to the Future</p>
-      <p class="text-sm">Pantalla 3 de 4 | Dystopia (1985A)</p>
-    </footer>
 
     <!-- JavaScript sin módulos ES6 -->
     <script src="../js/git-bttf-standalone.js"></script>
     <script>
-      // Definir ejercicios para Screen 3
-      SCREEN_EXERCISES.screen3 = [
-        {
-          id: 1,
-          title: 'Inicializar la máquina del tiempo',
-          description:
-            'Crea un repositorio para documentar el problema temporal',
-          expectedCommand: 'git init',
-          successMessage: '🚗 Sistema temporal inicializado',
-          hint: "Usa 'git init' para comenzar",
-        },
-        {
-          id: 2,
-          title: 'Crear rama distópica',
-          description:
-            "Crea una rama llamada 'distopia' para la línea temporal corrupta",
-          expectedCommand: 'git branch distopia',
-          successMessage: '🌆 Línea temporal distópica detectada',
-          hint: "Usa 'git branch distopia'",
-        },
-        {
-          id: 3,
-          title: 'Documentar la distopía',
-          description:
-            'Cambia a la rama distópica y agrega archivos del futuro corrompido',
-          expectedCommand: 'git checkout distopia',
-          successMessage: '⚠️ Entrando en la línea temporal distópica',
-          hint: "Usa 'git checkout distopia'",
-        },
-        {
-          id: 4,
-          title: 'Registrar el caos',
-          description: 'Agrega y confirma los cambios de la realidad corrupta',
-          expectedCommand: 'git add .',
-          successMessage: '📋 Evidencia de la distopía documentada',
-          hint: "Usa 'git add .' para preparar los archivos",
-        },
-        {
-          id: 5,
-          title: 'Crear commit de la distopía',
-          description: 'Registra el estado distópico con un commit',
-          expectedCommand: 'git commit',
-          successMessage: '💀 Estado distópico registrado en la historia',
-          hint: 'Usa \'git commit -m "mensaje"\'',
-        },
-        {
-          id: 6,
-          title: 'Regresar al presente',
-          description:
-            'Vuelve a la rama principal para corregir la línea temporal',
-          expectedCommand: 'git checkout main',
-          successMessage: '🏠 De vuelta en la línea temporal original',
-          hint: "Usa 'git checkout main'",
-        },
-        {
-          id: 7,
-          title: 'Fusionar realidades',
-          description: 'Fusiona la rama distópica para entender qué salió mal',
-          expectedCommand: 'git merge distopia',
-          successMessage: '🔄 Realidades fusionadas - conocimiento adquirido',
-          hint: "Usa 'git merge distopia'",
-        },
-        {
-          id: 8,
-          title: 'Restaurar la línea temporal',
-          description:
-            'Usa reset para deshacer los cambios y restaurar la realidad',
-          expectedCommand: 'git reset --hard HEAD~1',
-          successMessage:
-            '✨ ¡Realidad restaurada! La distopía ha sido eliminada',
-          hint: "Usa 'git reset --hard HEAD~1' para deshacer el último commit",
-        },
-      ];
-
+      // Inicializar cuando se cargue la página
       document.addEventListener('DOMContentLoaded', function () {
         Logger.log('Iniciando Pantalla 3: Dystopia');
 
+        // 1️⃣ Inicializar controladores
         const graph = new GitGraphController('gitGraph');
         const consoleCtrl = new ConsoleController(
           'consoleOutput',
@@ -445,25 +235,48 @@
         const ui = new UIController();
         const screenCtrl = new ScreenController();
 
-        // Configurar ejercicios
+        // 2️⃣ Configurar ejercicios y conectar validador
         validator.setExercises(SCREEN_EXERCISES.screen3);
         consoleCtrl.setValidator(validator);
 
-        // Renderizar UI
-        screenCtrl.renderNavigation('navigationContainer');
-        screenCtrl.renderBreadcrumb('breadcrumbContainer');
+        // 3️⃣ Función para actualizar la UI del progreso
+        function updateProgress() {
+          const current = validator.currentExerciseIndex;
+          const total = SCREEN_EXERCISES.screen3.length;
+          // Calcular porcentaje: cuando current === total, debe ser 100%
+          const percentage = Math.round((current / total) * 100);
 
-        const firstExercise = validator.getCurrentExercise();
-        if (firstExercise) {
-          ui.showExerciseInstructions(firstExercise, 'exerciseInstructions');
-          ui.updateExerciseProgress(
-            0,
-            SCREEN_EXERCISES.screen3.length,
-            'exerciseProgress'
+          const progressFill = document.getElementById('progressBarFill');
+          const progressCounter = document.getElementById('progressCounter');
+
+          if (progressFill) {
+            progressFill.style.width = percentage + '%';
+          }
+
+          if (progressCounter) {
+            // Mostrar ejercicios completados
+            progressCounter.textContent = `${current}/${total}`;
+          }
+
+          // Debug para verificar
+          console.log(
+            `Progreso actualizado: ${current}/${total} (${percentage}%)`
           );
         }
 
-        // Interceptar comandos para validación
+        // 4️⃣ Función para actualizar instrucciones
+        function updateInstructions(exercise) {
+          const container = document.getElementById('exerciseInstructions');
+          if (container && exercise) {
+            container.textContent = exercise.description;
+          }
+        }
+
+        // 5️⃣ Mostrar primer ejercicio
+        updateInstructions(validator.getCurrentExercise());
+        updateProgress();
+
+        // 6️⃣ Interceptar comandos para validación automática
         const originalExecute = consoleCtrl.executeCommand.bind(consoleCtrl);
         consoleCtrl.executeCommand = function (commandString) {
           const cmd = commandString.trim().toLowerCase();
@@ -479,8 +292,10 @@
             return;
           }
 
+          // Ejecutar comando
           originalExecute(commandString);
 
+          // Validar ejercicio actual
           const parts = cmd.split(' ');
           const command = parts[0] === 'git' ? parts[1] : parts[0];
           const args = parts[0] === 'git' ? parts.slice(2) : parts.slice(1);
@@ -488,12 +303,16 @@
           const result = validator.validateCommand(command, args);
 
           if (result.valid) {
-            ui.showNotification(result.message, 'success');
+            // ✅ Comando correcto - Sin notificación popup
             const nextResult = validator.nextExercise();
 
             if (nextResult.completed) {
+              // Actualizar progreso al 100% antes de mostrar completación
+              updateProgress();
+              
+              // 🎉 ¡Pantalla completada!
               ui.showNotification(
-                '🎉 ¡Has restaurado la línea temporal correcta!',
+                '🎉 ¡Has completado la Pantalla 3!',
                 'success',
                 5000
               );
@@ -506,22 +325,18 @@
                 });
               }, 2000);
             } else {
-              ui.updateExerciseProgress(
-                validator.currentExerciseIndex,
-                SCREEN_EXERCISES.screen3.length,
-                'exerciseProgress'
-              );
-              ui.showExerciseInstructions(
-                nextResult.exercise,
-                'exerciseInstructions'
-              );
+              // 📝 Mostrar siguiente ejercicio
+              updateProgress();
+              updateInstructions(nextResult.exercise);
             }
           } else if (result.suggestion) {
+            // ⚠️ Mostrar sugerencia
             ui.showNotification(result.suggestion, 'info', 4000);
           }
         };
 
-        // Event listeners
+        // 7️⃣ Event Listeners
+        // Ejecutar comando con botón o Enter
         const executeCommand = () => {
           const input = document.getElementById('commandInput');
           const command = input.value.trim();
@@ -540,6 +355,7 @@
             if (e.key === 'Enter') executeCommand();
           });
 
+        // Botones de comando rápido
         document.querySelectorAll('.console__cmd-btn').forEach((btn) => {
           btn.addEventListener('click', () => {
             const command = btn.getAttribute('data-command');
@@ -548,36 +364,55 @@
           });
         });
 
-        const resetBtn = document.getElementById('resetBtn');
-        if (resetBtn) {
-          resetBtn.addEventListener('click', () => {
-            if (
-              confirm(
-                '¿Estás seguro de reiniciar? Perderás todo el progreso de esta pantalla.'
-              )
-            ) {
-              consoleCtrl.resetAll();
-              validator.reset();
-              ui.showExerciseInstructions(
-                SCREEN_EXERCISES.screen3[0],
-                'exerciseInstructions'
-              );
-              ui.updateExerciseProgress(
-                0,
-                SCREEN_EXERCISES.screen3.length,
-                'exerciseProgress'
-              );
-              ui.showNotification('🔄 Pantalla reiniciada', 'info');
-            }
-          });
-        }
+        // Botón de reiniciar
+        document.getElementById('resetBtn').addEventListener('click', () => {
+          if (
+            confirm(
+              '¿Estás seguro de reiniciar? Perderás todo el progreso de esta pantalla.'
+            )
+          ) {
+            consoleCtrl.resetAll();
+            validator.reset();
+            updateInstructions(SCREEN_EXERCISES.screen3[0]);
+            updateProgress();
+            ui.showNotification('🔄 Pantalla reiniciada', 'info');
+          }
+        });
 
+        // Botón de pista progresiva (si existe)
         const hintBtn = document.getElementById('hintBtn');
         if (hintBtn) {
           hintBtn.addEventListener('click', () => {
             const exercise = validator.getCurrentExercise();
-            if (exercise) {
-              ui.showNotification(`💡 ${exercise.hint}`, 'warning', 6000);
+            const hintCard = document.getElementById('hintCard');
+            const hintText = document.getElementById('hintText');
+            
+            if (exercise && hintCard && hintText) {
+              hintText.textContent = exercise.hint;
+              
+              // Remover clase hide si existe
+              hintCard.classList.remove('hide');
+              
+              // Mostrar con animación
+              hintCard.style.display = 'block';
+              
+              // Forzar reflow para que la animación funcione
+              void hintCard.offsetWidth;
+              
+              // Agregar clase show para activar animación
+              hintCard.classList.add('show');
+              
+              // Auto-ocultar después de 8 segundos con animación
+              setTimeout(() => {
+                hintCard.classList.remove('show');
+                hintCard.classList.add('hide');
+                
+                // Esperar a que termine la animación antes de ocultar
+                setTimeout(() => {
+                  hintCard.style.display = 'none';
+                  hintCard.classList.remove('hide');
+                }, 400);
+              }, 8000);
             }
           });
         }
@@ -590,20 +425,27 @@
           return result;
         };
 
+        // Confirmar antes de salir si hay progreso
+        const backBtn = document.getElementById('backBtn');
+        if (backBtn) {
+          backBtn.addEventListener('click', (e) => {
+            const currentExercise = validator.getCurrentExercise();
+            // Si ya completó al menos un ejercicio, mostrar advertencia
+            if (currentExercise && currentExercise.id > 1) {
+              e.preventDefault();
+              const confirmed = confirm(
+                '⚠️ Si regresas al menú, perderás todo tu progreso en este nivel.\n\n¿Estás seguro de que quieres salir?'
+              );
+              if (confirmed) {
+                window.location.href = backBtn.getAttribute('href');
+              }
+            }
+            // Si está en el primer ejercicio, dejar salir sin confirmar
+          });
+        }
+
         Logger.log('Pantalla 3 inicializada correctamente');
       });
-
-      // Actualizar indicador
-      const originalCheckout = graph.checkout.bind(graph);
-      graph.checkout = function (branchName) {
-        const result = originalCheckout(branchName);
-        if (result) {
-          ui.updateBranchIndicator(branchName);
-        }
-        return result;
-      };
-
-      Logger.log('Pantalla 3 lista - Modo Distópico activado');
     </script>
   </body>
 </html>
