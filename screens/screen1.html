@@ -21,7 +21,7 @@
     <!-- Header con Logo y Back Button -->
     <header class="screen-header">
       <div class="screen-header__left">
-        <a href="../index-menu.html" title="Volver al menú principal">
+        <a href="../index-menu.html" title="Volver al menú principal" id="backBtn">
           <img
             src="../assets/fonts/img/Back.png"
             alt="Volver"
@@ -66,8 +66,7 @@
           </div>
 
           <!-- Output de la Consola -->
-          <div class="console__output" id="consoleOutput">
-          </div>
+          <div class="console__output" id="consoleOutput"></div>
 
           <!-- Botones de Comandos Rápidos -->
           <div class="console__commands">
@@ -129,12 +128,19 @@
 
           <div class="graph__canvas" id="gitGraph">
             <div class="graph__empty">
+              <div class="graph__empty-line"></div>
+              <div class="graph__empty-line"></div>
               <div class="graph__empty-text">
-                DeLorean listo para el viaje temporal
+                Visualizador de Líneas Temporales
+              </div>
+              <div class="graph__empty-line"></div>
+              <div class="graph__empty-hint">
+                Aquí verás todas las ramas, commits y fusiones de tu repositorio
               </div>
               <div class="graph__empty-hint">
-                Ejecuta "git init" para comenzar
+                Git en forma de árbol visual. Ejecuta "git init" para comenzar.
               </div>
+              <div class="graph__empty-line"></div>
             </div>
           </div>
 
@@ -152,42 +158,36 @@
       <div class="screen-right">
         <!-- Tarjeta de Misión -->
         <div class="mission-card mission-card--objective">
-          <h2 class="mission-card__title">🎯 Mission Objective</h2>
+          <h2 class="mission-card__title">Mission Objective</h2>
           <p class="mission-card__text" id="exerciseInstructions">
-            <strong>Challenge 1:</strong> Inicializa tu primer repositorio Git
+            Inicializa tu primer repositorio Git
           </p>
         </div>
 
         <!-- Historia del Nivel -->
         <div class="mission-card">
           <h2 class="mission-card__title">Level Context</h2>
-          <p class="mission-card__description" style="margin-bottom: 8px">
-            <strong>Película:</strong> Back to the Future (1985)<br />
-            <strong>Año:</strong> 1955<br />
-            <strong>Director:</strong> Robert Zemeckis
+          <p
+            class="mission-card__description"
+            style="margin-bottom: 12px; font-size: 13px; line-height: 1.6"
+          >
+            <strong style="color: #64b5f6">🎬 Back to the Future</strong>
+            (1985)<br />
+            <strong>📅 Año:</strong> 1955<br />
+            <strong>🎥 Director:</strong> Robert Zemeckis
           </p>
-          <p class="mission-card__description" style="margin-bottom: 8px">
-            Marty McFly, un adolescente de Hill Valley en 1985, es amigo de un
-            científico excéntrico llamado Doc Brown. Una noche, Doc le muestra
-            su invento más ambicioso: un DeLorean convertido en máquina del
-            tiempo.
-          </p>
-          <p class="mission-card__description" style="margin-bottom: 8px">
-            Durante la demostración, son atacados por terroristas libios. En el
-            escape, Marty activa accidentalmente el condensador de flujo y viaja
-            30 años al pasado, a 1955. Allí conoce a sus padres adolescentes y,
-            sin querer, interfiere con su primer encuentro romántico.
-          </p>
-          <p class="mission-card__description">
-            Ahora, con la ayuda del joven Doc Brown, Marty debe encontrar una
-            forma de generar suficiente energía (1.21 gigawatts) para activar el
-            condensador de flujo y regresar a su época, mientras asegura que sus
-            padres se enamoren para no desaparecer de la existencia.
+          <p
+            class="mission-card__description"
+            style="font-size: 13px; line-height: 1.6"
+          >
+            Marty McFly viaja accidentalmente 30 años al pasado en el DeLorean
+            de Doc Brown. Debe generar 1.21 gigawatts para regresar a 1985
+            mientras asegura que sus padres se enamoren.
           </p>
           <div
             style="
-              margin-top: 10px;
-              padding-top: 10px;
+              margin-top: 12px;
+              padding-top: 12px;
               border-top: 1px solid rgba(255, 255, 255, 0.1);
             "
           >
@@ -205,6 +205,14 @@
               "
             />
           </div>
+        </div>
+
+        <!-- Tarjeta de Pista -->
+        <div class="mission-card mission-card--hint" id="hintCard" style="display: none;">
+          <h2 class="mission-card__title">PISTA</h2>
+          <p class="mission-card__text" id="hintText" style="font-size: 13px; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+            <!-- La pista se mostrará aquí -->
+          </p>
         </div>
       </div>
     </main>
@@ -235,6 +243,7 @@
         function updateProgress() {
           const current = validator.currentExerciseIndex;
           const total = SCREEN_EXERCISES.screen1.length;
+          // Calcular porcentaje: cuando current === total, debe ser 100%
           const percentage = Math.round((current / total) * 100);
 
           const progressFill = document.getElementById('progressBarFill');
@@ -245,7 +254,7 @@
           }
 
           if (progressCounter) {
-            // Mostrar ejercicios completados (current ya incluye el ejercicio actual)
+            // Mostrar ejercicios completados
             progressCounter.textContent = `${current}/${total}`;
           }
 
@@ -259,9 +268,7 @@
         function updateInstructions(exercise) {
           const container = document.getElementById('exerciseInstructions');
           if (container && exercise) {
-            container.innerHTML = `<strong>Ejercicio ${
-              validator.currentExerciseIndex + 1
-            }:</strong> ${exercise.description}`;
+            container.textContent = exercise.description;
           }
         }
 
@@ -296,12 +303,13 @@
           const result = validator.validateCommand(command, args);
 
           if (result.valid) {
-            // ✅ Comando correcto
-            ui.showNotification(result.message, 'success');
-
+            // ✅ Comando correcto - Sin notificación popup
             const nextResult = validator.nextExercise();
 
             if (nextResult.completed) {
+              // Actualizar progreso al 100% antes de mostrar completación
+              updateProgress();
+              
               // 🎉 ¡Pantalla completada!
               ui.showNotification(
                 '🎉 ¡Has completado la Pantalla 1!',
@@ -376,8 +384,35 @@
         if (hintBtn) {
           hintBtn.addEventListener('click', () => {
             const exercise = validator.getCurrentExercise();
-            if (exercise) {
-              ui.showNotification(`💡 ${exercise.hint}`, 'warning', 6000);
+            const hintCard = document.getElementById('hintCard');
+            const hintText = document.getElementById('hintText');
+            
+            if (exercise && hintCard && hintText) {
+              hintText.textContent = exercise.hint;
+              
+              // Remover clase hide si existe
+              hintCard.classList.remove('hide');
+              
+              // Mostrar con animación
+              hintCard.style.display = 'block';
+              
+              // Forzar reflow para que la animación funcione
+              void hintCard.offsetWidth;
+              
+              // Agregar clase show para activar animación
+              hintCard.classList.add('show');
+              
+              // Auto-ocultar después de 8 segundos con animación
+              setTimeout(() => {
+                hintCard.classList.remove('show');
+                hintCard.classList.add('hide');
+                
+                // Esperar a que termine la animación antes de ocultar
+                setTimeout(() => {
+                  hintCard.style.display = 'none';
+                  hintCard.classList.remove('hide');
+                }, 400);
+              }, 8000);
             }
           });
         }
@@ -389,6 +424,25 @@
           if (result) ui.updateBranchIndicator(branchName);
           return result;
         };
+
+        // Confirmar antes de salir si hay progreso
+        const backBtn = document.getElementById('backBtn');
+        if (backBtn) {
+          backBtn.addEventListener('click', (e) => {
+            const currentExercise = validator.getCurrentExercise();
+            // Si ya completó al menos un ejercicio, mostrar advertencia
+            if (currentExercise && currentExercise.id > 1) {
+              e.preventDefault();
+              const confirmed = confirm(
+                '⚠️ Si regresas al menú, perderás todo tu progreso en este nivel.\n\n¿Estás seguro de que quieres salir?'
+              );
+              if (confirmed) {
+                window.location.href = backBtn.getAttribute('href');
+              }
+            }
+            // Si está en el primer ejercicio, dejar salir sin confirmar
+          });
+        }
 
         Logger.log('Pantalla 1 inicializada correctamente');
       });

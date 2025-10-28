@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Commands - Git to the Future</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #1a1a2e;
+        color: white;
+      }
+      .test-result {
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+      }
+      .success {
+        background: rgba(76, 175, 80, 0.2);
+        border: 1px solid #4caf50;
+      }
+      .error {
+        background: rgba(244, 67, 54, 0.2);
+        border: 1px solid #f44336;
+      }
+      .info {
+        background: rgba(33, 150, 243, 0.2);
+        border: 1px solid #2196f3;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        background: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧪 Test de Comandos Git - Git to the Future</h1>
+
+    <div id="results"></div>
+
+    <button onclick="testScreen2Commands()">Test Screen 2 Commands</button>
+    <button onclick="testValidation()">Test Validation Logic</button>
+    <button onclick="clearResults()">Clear Results</button>
+
+    <script src="../js/git-bttf-standalone.js"></script>
+    <script>
+      function addResult(text, type = 'info') {
+        const div = document.createElement('div');
+        div.className = `test-result ${type}`;
+        div.textContent = text;
+        document.getElementById('results').appendChild(div);
+      }
+
+      function testScreen2Commands() {
+        addResult('🔍 Testing Screen 2 Commands...', 'info');
+
+        // Test if SCREEN_EXERCISES.screen2 exists
+        if (
+          typeof SCREEN_EXERCISES !== 'undefined' &&
+          SCREEN_EXERCISES.screen2
+        ) {
+          addResult(
+            `✅ SCREEN_EXERCISES.screen2 found with ${SCREEN_EXERCISES.screen2.length} exercises`,
+            'success'
+          );
+
+          // Test each exercise
+          SCREEN_EXERCISES.screen2.forEach((exercise, index) => {
+            addResult(
+              `Exercise ${index + 1}: ${exercise.title} - Expected: ${
+                exercise.expectedCommand
+              }`,
+              'info'
+            );
+          });
+        } else {
+          addResult('❌ SCREEN_EXERCISES.screen2 not found!', 'error');
+        }
+      }
+
+      function testValidation() {
+        addResult('🔍 Testing Validation Logic...', 'info');
+
+        try {
+          // Create a validator instance
+          const validator = new ExerciseValidator();
+          validator.setExercises(SCREEN_EXERCISES.screen2 || []);
+
+          // Test command matching
+          const testCases = [
+            { command: 'init', args: [], expected: 'git init' },
+            { command: 'add', args: ['.'], expected: 'git add .' },
+            { command: 'commit', args: ['-m', 'test'], expected: 'git commit' },
+            {
+              command: 'branch',
+              args: ['test-branch'],
+              expected: 'git branch test-branch',
+            },
+          ];
+
+          testCases.forEach((test) => {
+            const result = validator.isCommandMatch(
+              `${test.command} ${test.args.join(' ')}`.trim(),
+              test.expected
+            );
+            const status = result ? '✅' : '❌';
+            addResult(
+              `${status} Command: ${test.command} ${test.args.join(' ')} vs ${
+                test.expected
+              }`,
+              result ? 'success' : 'error'
+            );
+          });
+        } catch (error) {
+          addResult(`❌ Error testing validation: ${error.message}`, 'error');
+        }
+      }
+
+      function clearResults() {
+        document.getElementById('results').innerHTML = '';
+      }
+
+      // Auto-test on load
+      document.addEventListener('DOMContentLoaded', function () {
+        addResult('🚀 Testing system loaded', 'info');
+        testScreen2Commands();
+      });
+    </script>
+  </body>
+</html>

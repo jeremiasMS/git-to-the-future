@@ -35,8 +35,8 @@
   background-color: #000000;
   border: none;
   border-radius: 0;
-  padding: 12px 16px;
-  height: 300px;
+  padding: 16px;
+  min-height: 400px;
   overflow-y: auto;
   font-family: 'Consolas', 'Courier New', monospace;
   font-size: 14px;
@@ -44,7 +44,10 @@
   line-height: 1.5;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  color: #ffffff;
 }
 
 /* Scrollbar personalizado estilo terminal */
@@ -73,6 +76,7 @@
   color: #ffffff;
   white-space: pre-wrap;
   word-break: break-all;
+  line-height: 1.5;
 }
 
 /* Prompt estilo Git Bash / Linux */
@@ -100,7 +104,11 @@
 
 .console__output-line--info { 
   color: #ffffff;
-  text-align: center;
+  text-align: left;
+  margin: 0;
+  padding: 2px 0;
+  line-height: 1.5;
+  font-size: 14px;
 }
 
 /* Título principal en celeste */
@@ -161,7 +169,7 @@
 .console__input {
   display: flex;
   align-items: center;
-  background-color: #000000;
+  background-color: #1e1e1e;
   border: none;
   border-top: 1px solid #2d2d2d;
   border-radius: 0;

@@ -17,212 +17,88 @@
     <!-- GitGraph CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>
   </head>
-  <body class="screen-body screen-wildwest">
-    <!-- Botón de Volver -->
-    <a href="../index-menu.html" title="Volver al menú principal">
-      <img
-        src="../assets/fonts/img/Back.png"
-        alt="Volver"
-        style="
-          position: fixed;
-          top: 20px;
-          left: 20px;
-          height: 40px;
-          cursor: pointer;
-          z-index: 1000;
-        "
-      />
-    </a>
-    <!-- Header Principal de la App -->
-    <header class="app-header">
-      <a href="../index.html" style="text-decoration: none">
-        <h1 class="app-header__title">GIT TO THE FUTURE</h1>
+  <body class="screen-body screen-4">
+    <!-- Header con Logo y Back Button -->
+    <header class="screen-header">
+      <div class="screen-header__left">
+        <a href="../index-menu.html" title="Volver al menú principal" id="backBtn">
+          <img
+            src="../assets/fonts/img/Back.png"
+            alt="Volver"
+            class="screen-header__back"
+          />
+        </a>
+      </div>
+      <a href="../index.html">
+        <img
+          src="../assets/fonts/img/GItToTheFuture.png"
+          alt="Git to the Future"
+          class="screen-header__logo"
+        />
       </a>
-    </header>
 
-    <!-- Navegación Superior -->
-    <div id="navigationContainer"></div>
-
-    <!-- Header de la Pantalla -->
-    <header class="header">
-      <div class="container">
-        <div id="breadcrumbContainer"></div>
-        <h1 class="text-gradient" style="color: #a1887f">
-          🤠 Pantalla 4: Wild West (1885)
-        </h1>
-        <p class="text-muted">
-          El final épico: Doc en el Lejano Oeste, Clara, y el cierre de toda la
-          saga de Back to the Future
-        </p>
+      <!-- Barra de Progreso Radioactiva (Superior Derecha) -->
+      <div class="plutonium-progress">
+        <span class="plutonium-progress__label">PROGRESO</span>
+        <div class="plutonium-progress__tube">
+          <div
+            class="plutonium-progress__fill"
+            id="progressBarFill"
+            style="width: 0%"
+          >
+            <div class="plutonium-progress__glow"></div>
+          </div>
+          <span class="plutonium-progress__counter" id="progressCounter"
+            >0/9</span
+          >
+        </div>
       </div>
     </header>
 
-    <!-- Contenido Principal -->
-    <main
-      class="container"
-      style="max-width: 1400px; margin: 0 auto; padding: var(--spacing-xl)"
-    >
-      <!-- Historia / Contexto -->
-      <section
-        class="card card--accent"
-        style="margin-bottom: var(--spacing-lg); border-color: #d32f2f"
-      >
-        <h2>📖 Historia: El Salvaje Oeste y Comandos Expertos</h2>
-        <p>
-          En <strong>1885</strong>, Doc conoce a Clara Clayton y debe enfrentar
-          decisiones difíciles. Esta pantalla final te enseñará los comandos más
-          poderosos y peligrosos de Git.
-        </p>
-        <p>Domina <strong>Git nivel experto</strong>:</p>
-        <ul>
-          <li>
-            <code>git stash</code> - 💾 Guardar trabajo temporal sin commit
-          </li>
-          <li>
-            <code>git reset --soft</code> - ⚠️ Deshacer commits manteniendo
-            cambios
-          </li>
-          <li>
-            <code>git revert</code> - 🔄 Deshacer cambios sin reescribir
-            historia
-          </li>
-          <li><code>git commit</code> - Registrar la saga del Salvaje Oeste</li>
-          <li>
-            <code>git merge</code> - Fusión final de todas las líneas temporales
-          </li>
-        </ul>
-        <p class="text-muted" style="margin-top: var(--spacing-md)">
-          <strong>🎯 Objetivo:</strong> Completar 13 ejercicios dominando los
-          comandos más avanzados de Git.
-        </p>
-        <div
-          class="badge badge--danger"
-          style="
-            margin-top: var(--spacing-md);
-            background: linear-gradient(135deg, #c62828, #e53935);
-          "
-        >
-          ⚠️ Nivel Experto - Comandos que pueden reescribir la historia
-        </div>
-      </section>
-
-      <!-- Progreso de Ejercicios -->
-      <div id="exerciseProgress"></div>
-
-      <!-- Instrucciones del Ejercicio Actual -->
-      <div id="exerciseInstructions"></div>
-
-      <!-- Grid de Dos Columnas -->
-      <div
-        class="grid"
-        style="
-          grid-template-columns: 1fr 1fr;
-          gap: var(--spacing-lg);
-          margin-top: var(--spacing-lg);
-        "
-      >
-        <!-- Columna Izquierda: Gráfico -->
-        <div class="graph" style="border-color: #a1887f">
-          <div
-            class="branch-indicator"
-            style="background: linear-gradient(135deg, #8d6e63, #a1887f)"
-          >
-            <span class="branch-indicator__label">🤠 Era:</span>
-            <span class="branch-indicator__value" id="currentBranchIndicator"
-              >1885 (Wild West)</span
-            >
+    <!-- Layout Principal de 3 Columnas -->
+    <main class="screen-main">
+      <!-- COLUMNA IZQUIERDA: Consola Git Interactiva (PROTAGONISTA - 55-60%) -->
+      <div class="screen-left">
+        <!-- Consola -->
+        <div class="console-card">
+          <div class="console-card__header">
+            <h2 class="console-card__title">Git Terminal</h2>
           </div>
-
-          <h2 class="graph__title" style="color: #a1887f">
-            🐎 Líneas Temporales del Oeste
-          </h2>
-          <p class="graph__description">El historial más antiguo de todos</p>
-
-          <div class="graph__canvas" id="gitGraph"></div>
-
-          <!-- Info del Oeste -->
-          <div
-            class="graph__info"
-            style="border-color: #a1887f; background: rgba(161, 136, 127, 0.1)"
-          >
-            <div class="graph__info-item">
-              <span class="graph__info-label">🗓️ Año:</span>
-              <span class="graph__info-value" style="color: #a1887f">1885</span>
-            </div>
-            <div class="graph__info-item">
-              <span class="graph__info-label">🎯 Objetivo:</span>
-              <span class="graph__info-value">Rescatar al Doc</span>
-            </div>
-            <div class="graph__info-item">
-              <span class="graph__info-label">⚡ Combustible:</span>
-              <span class="graph__info-value">Locomotora de vapor</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Columna Derecha: Consola -->
-        <div class="console" style="border-color: #a1887f">
-          <h2 class="console__title" style="color: #a1887f">
-            🖥️ Telégrafo Temporal
-          </h2>
-          <p class="console__description">
-            Comunicación con el DeLorean en 1885
-          </p>
 
           <!-- Output de la Consola -->
-          <div class="console__output" id="consoleOutput">
-            <div class="console__output-line console__output-line--info">
-              <span class="prompt">$</span> 📧 Carta del Doc: "Querido Marty,
-              estoy atrapado en 1885..."
-            </div>
-            <div class="console__output-line console__output-line--info">
-              <span class="prompt">$</span> Marty: "¡Tengo que rescatar al Doc
-              del Lejano Oeste!" 🤠
-            </div>
-          </div>
+          <div class="console__output" id="consoleOutput"></div>
 
           <!-- Botones de Comandos Rápidos -->
           <div class="console__commands">
+            <button class="console__cmd-btn" data-command="init">init</button>
             <button class="console__cmd-btn" data-command="status">
               status
             </button>
+            <button class="console__cmd-btn" data-command="add .">add .</button>
+            <button class="console__cmd-btn" data-command="commit -m 'mensaje'">
+              commit
+            </button>
+            <button class="console__cmd-btn" data-command="branch">
+              branch
+            </button>
+            <button class="console__cmd-btn" data-command="checkout">
+              checkout
+            </button>
             <button class="console__cmd-btn" data-command="stash">stash</button>
-            <button class="console__cmd-btn" data-command="stash list">
-              stash list
-            </button>
-            <button class="console__cmd-btn" data-command="stash pop">
-              stash pop
-            </button>
-            <button class="console__cmd-btn" data-command="branch 1885">
-              branch 1885
-            </button>
-            <button class="console__cmd-btn" data-command="checkout 1885">
-              checkout 1885
-            </button>
-            <button class="console__cmd-btn" data-command="merge">merge</button>
             <button class="console__cmd-btn" data-command="pull">pull</button>
-            <button class="console__cmd-btn" data-command="push">push</button>
           </div>
 
           <!-- Input de Comando -->
           <div class="console__input">
-            <span class="console__input-prompt" style="color: #a1887f"
-              >git $</span
-            >
+            <span class="console__input-prompt">git $</span>
             <input
               type="text"
               class="console__input-field"
               id="commandInput"
-              placeholder="Comandos del oeste..."
+              placeholder="Escribe tu comando aquí..."
               autocomplete="off"
             />
-            <button
-              class="console__execute-btn"
-              id="executeBtn"
-              style="background: #a1887f"
-            >
-              ▶
-            </button>
+            <button class="console__execute-btn" id="executeBtn">▶</button>
           </div>
 
           <!-- Botones Especiales -->
@@ -231,227 +107,125 @@
               class="console__special-btn console__special-btn--reset"
               id="resetBtn"
             >
-              🔄 Reiniciar
+              Reiniciar
             </button>
             <button
               class="console__special-btn console__special-btn--demo"
               id="hintBtn"
             >
-              💡 Pista
+              Pista
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Mapa Temporal -->
-      <section class="card card--primary" style="margin-top: var(--spacing-lg)">
-        <h3>🗺️ Mapa de Viajes Temporales Completo</h3>
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--spacing-lg) 0;
-            flex-wrap: wrap;
-          "
-        >
-          <div class="text-center" style="flex: 1; min-width: 150px">
-            <div style="font-size: 48px">🤠</div>
-            <strong style="color: #a1887f">1885</strong>
-            <p class="text-muted text-sm">Lejano Oeste</p>
+      <!-- COLUMNA CENTRAL: Visualizador de Árbol Git (SECUNDARIA - 20-25%) -->
+      <div class="screen-center">
+        <!-- Gráfico Git -->
+        <div class="graph-card">
+          <div class="graph-card__header">
+            <h2 class="graph-card__title">Git Timeline</h2>
           </div>
-          <div style="font-size: 24px; color: var(--color-accent)">→</div>
-          <div class="text-center" style="flex: 1; min-width: 150px">
-            <div style="font-size: 48px">🎸</div>
-            <strong style="color: #2196f3">1955</strong>
-            <p class="text-muted text-sm">Rock & Roll</p>
-          </div>
-          <div style="font-size: 24px; color: var(--color-accent)">→</div>
-          <div class="text-center" style="flex: 1; min-width: 150px">
-            <div style="font-size: 48px">📼</div>
-            <strong style="color: #ff9100">1985</strong>
-            <p class="text-muted text-sm">Presente</p>
-          </div>
-          <div style="font-size: 24px; color: var(--color-accent)">→</div>
-          <div class="text-center" style="flex: 1; min-width: 150px">
-            <div style="font-size: 48px">🚀</div>
-            <strong style="color: #7c4dff">2015</strong>
-            <p class="text-muted text-sm">Futuro</p>
-          </div>
-        </div>
-      </section>
 
-      <!-- Ayuda Adicional -->
-      <section
-        class="card card--secondary"
-        style="margin-top: var(--spacing-lg)"
-      >
-        <h3>🎓 Comandos Avanzados</h3>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing-md);
-          "
-        >
-          <div>
-            <strong style="color: #a1887f">git stash</strong>
-            <p class="text-muted text-sm">
-              Guarda cambios sin commit temporalmente
-            </p>
-            <code class="text-xs"
-              >Útil cuando necesitas cambiar de rama rápidamente</code
+          <div class="graph__canvas" id="gitGraph">
+            <div class="graph__empty">
+              <div class="graph__empty-line"></div>
+              <div class="graph__empty-line"></div>
+              <div class="graph__empty-text">
+                Visualizador de Líneas Temporales
+              </div>
+              <div class="graph__empty-line"></div>
+              <div class="graph__empty-hint">
+                Aquí verás todas las ramas, commits y fusiones de tu repositorio
+              </div>
+              <div class="graph__empty-hint">
+                Git en forma de árbol visual. Ejecuta "git init" para comenzar.
+              </div>
+              <div class="graph__empty-line"></div>
+            </div>
+          </div>
+
+          <!-- Branch Indicator movido abajo -->
+          <div class="branch-indicator">
+            <span class="branch-indicator__label">Branch:</span>
+            <span class="branch-indicator__value" id="currentBranchIndicator"
+              >Sin repositorio</span
             >
           </div>
-          <div>
-            <strong style="color: #a1887f">git stash pop</strong>
-            <p class="text-muted text-sm">
-              Recupera los últimos cambios guardados
-            </p>
-            <code class="text-xs">Restaura tu trabajo en progreso</code>
-          </div>
-          <div>
-            <strong style="color: #a1887f">git stash list</strong>
-            <p class="text-muted text-sm">
-              Muestra todos los stashes guardados
-            </p>
-            <code class="text-xs">Puedes tener múltiples stashes</code>
-          </div>
-          <div>
-            <strong style="color: #a1887f">git branch -d [rama]</strong>
-            <p class="text-muted text-sm">
-              Elimina una rama que ya no necesitas
-            </p>
-            <code class="text-xs">Limpia tu historial</code>
+        </div>
+      </div>
+
+      <!-- COLUMNA DERECHA: Cards de Información (CONTEXTO - 15-20%) -->
+      <div class="screen-right">
+        <!-- Tarjeta de Misión -->
+        <div class="mission-card mission-card--objective">
+          <h2 class="mission-card__title">Mission Objective</h2>
+          <p class="mission-card__text" id="exerciseInstructions">
+            Prepara rescate en el Oeste
+          </p>
+        </div>
+
+        <!-- Historia del Nivel -->
+        <div class="mission-card">
+          <h2 class="mission-card__title">Level Context</h2>
+          <p
+            class="mission-card__description"
+            style="margin-bottom: 12px; font-size: 13px; line-height: 1.6"
+          >
+            <strong style="color: #a1887f">🎬 Back to the Future III</strong>
+            (1990)<br />
+            <strong>📅 Año:</strong> 1885 (Lejano Oeste)<br />
+            <strong>🎥 Director:</strong> Robert Zemeckis
+          </p>
+          <p
+            class="mission-card__description"
+            style="font-size: 13px; line-height: 1.6"
+          >
+            Marty debe viajar a 1885 para rescatar a Doc Brown del Lejano Oeste. 
+            Aprenderás comandos avanzados como git stash y git pull mientras 
+            enfrentas peligros del salvaje oeste.
+          </p>
+          <div
+            style="
+              margin-top: 12px;
+              padding-top: 12px;
+              border-top: 1px solid rgba(255, 255, 255, 0.1);
+            "
+          >
+            <img
+              src="../assets/fonts/img/thunder.png"
+              alt="1885"
+              style="
+                width: 100%;
+                max-width: 180px;
+                height: auto;
+                margin: 0 auto;
+                display: block;
+                border-radius: 6px;
+                filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+              "
+            />
           </div>
         </div>
-      </section>
 
-      <!-- Congratulations Message -->
-      <section
-        class="card card--accent"
-        style="
-          margin-top: var(--spacing-lg);
-          border-color: #4caf50;
-          background: rgba(76, 175, 80, 0.1);
-        "
-      >
-        <h3 style="color: #4caf50">🎉 ¡Última Pantalla!</h3>
-        <p>
-          Esta es la última pantalla de ejercicios interactivos. Al completarla,
-          desbloquearás el
-          <strong>Demo Completo de Back to the Future</strong> donde verás todos
-          los conceptos integrados en una visualización completa de la trilogía.
-        </p>
-        <p class="text-muted">¡Vamos Doc! El futuro nos espera... 🚗⚡💨</p>
-      </section>
+        <!-- Tarjeta de Pista -->
+        <div class="mission-card mission-card--hint" id="hintCard" style="display: none;">
+          <h2 class="mission-card__title">PISTA</h2>
+          <p class="mission-card__text" id="hintText" style="font-size: 13px; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+            <!-- La pista se mostrará aquí -->
+          </p>
+        </div>
+      </div>
     </main>
-
-    <!-- Footer -->
-    <footer
-      class="text-center text-muted"
-      style="padding: var(--spacing-xl); margin-top: var(--spacing-xl)"
-    >
-      <p>🚗⚡ Git to the Future - Aprende Git usando Back to the Future</p>
-      <p class="text-sm">Pantalla 4 de 4 | Wild West (1885)</p>
-    </footer>
 
     <!-- JavaScript sin módulos ES6 -->
     <script src="../js/git-bttf-standalone.js"></script>
     <script>
-      // Definir ejercicios para Screen 4
-      SCREEN_EXERCISES.screen4 = [
-        {
-          id: 1,
-          title: 'Preparar rescate en el Oeste',
-          description:
-            'Inicializa un repositorio para documentar la misión de rescate de Doc',
-          expectedCommand: 'git init',
-          successMessage: '🚗 Máquina temporal preparada para 1885',
-          hint: "Usa 'git init' para comenzar",
-        },
-        {
-          id: 2,
-          title: 'Crear rama del Oeste',
-          description:
-            "Crea una rama llamada '1885' para la línea temporal del Lejano Oeste",
-          expectedCommand: 'git branch 1885',
-          successMessage: '🤠 Línea temporal del Oeste creada',
-          hint: "Usa 'git branch 1885'",
-        },
-        {
-          id: 3,
-          title: 'Viajar al Lejano Oeste',
-          description: "Cambia a la rama '1885' para comenzar el rescate",
-          expectedCommand: 'git checkout 1885',
-          successMessage: '🏜️ Has llegado al Lejano Oeste - ¡Encuentra a Doc!',
-          hint: "Usa 'git checkout 1885'",
-        },
-        {
-          id: 4,
-          title: 'Guardar trabajo temporal',
-          description:
-            'Doc está en peligro, guarda tu trabajo actual con stash',
-          expectedCommand: 'git stash',
-          successMessage:
-            '📦 Trabajo guardado temporalmente para la emergencia',
-          hint: "Usa 'git stash' para guardar cambios no confirmados",
-        },
-        {
-          id: 5,
-          title: 'Rescatar a Doc',
-          description: 'Agrega archivos del rescate y haz un commit urgente',
-          expectedCommand: 'git add .',
-          successMessage: '🆘 Preparando operación de rescate',
-          hint: "Usa 'git add .' para preparar archivos",
-        },
-        {
-          id: 6,
-          title: 'Confirmar el rescate',
-          description: 'Registra el rescate exitoso de Doc con un commit',
-          expectedCommand: 'git commit',
-          successMessage: '🎯 ¡Doc rescatado exitosamente!',
-          hint: 'Usa \'git commit -m "mensaje"\'',
-        },
-        {
-          id: 7,
-          title: 'Recuperar trabajo guardado',
-          description: 'Recupera el trabajo que guardaste con stash pop',
-          expectedCommand: 'git stash pop',
-          successMessage: '🔄 Trabajo temporal recuperado',
-          hint: "Usa 'git stash pop' para recuperar cambios guardados",
-        },
-        {
-          id: 8,
-          title: 'Sincronizar con otras líneas temporales',
-          description:
-            'Descarga cambios del repositorio remoto con git pull antes de regresar',
-          expectedCommand: 'git pull',
-          successMessage: '📡 Cambios de otras líneas temporales integrados',
-          hint: "Usa 'git pull' para descargar cambios del remoto",
-        },
-        {
-          id: 9,
-          title: 'Regresar al presente',
-          description: 'Vuelve al presente (rama main) con Doc a salvo',
-          expectedCommand: 'git checkout main',
-          successMessage: '🏠 ¡Regreso exitoso al presente con Doc!',
-          hint: "Usa 'git checkout main'",
-        },
-        {
-          id: 10,
-          title: 'Fusionar líneas temporales',
-          description: 'Fusiona la rama del Oeste para completar la saga',
-          expectedCommand: 'git merge 1885',
-          successMessage:
-            '🎉 ¡Todas las líneas temporales restauradas! Saga completada',
-          hint: "Usa 'git merge 1885' para fusionar la rama",
-        },
-      ];
-
+      // Inicializar cuando se cargue la página
       document.addEventListener('DOMContentLoaded', function () {
         Logger.log('Iniciando Pantalla 4: Wild West');
 
+        // 1️⃣ Inicializar controladores
         const graph = new GitGraphController('gitGraph');
         const consoleCtrl = new ConsoleController(
           'consoleOutput',
@@ -462,25 +236,48 @@
         const ui = new UIController();
         const screenCtrl = new ScreenController();
 
-        // Configurar ejercicios
+        // 2️⃣ Configurar ejercicios y conectar validador
         validator.setExercises(SCREEN_EXERCISES.screen4);
         consoleCtrl.setValidator(validator);
 
-        // Renderizar UI
-        screenCtrl.renderNavigation('navigationContainer');
-        screenCtrl.renderBreadcrumb('breadcrumbContainer');
+        // 3️⃣ Función para actualizar la UI del progreso
+        function updateProgress() {
+          const current = validator.currentExerciseIndex;
+          const total = SCREEN_EXERCISES.screen4.length;
+          // Calcular porcentaje: cuando current === total, debe ser 100%
+          const percentage = Math.round((current / total) * 100);
 
-        const firstExercise = validator.getCurrentExercise();
-        if (firstExercise) {
-          ui.showExerciseInstructions(firstExercise, 'exerciseInstructions');
-          ui.updateExerciseProgress(
-            0,
-            SCREEN_EXERCISES.screen4.length,
-            'exerciseProgress'
+          const progressFill = document.getElementById('progressBarFill');
+          const progressCounter = document.getElementById('progressCounter');
+
+          if (progressFill) {
+            progressFill.style.width = percentage + '%';
+          }
+
+          if (progressCounter) {
+            // Mostrar ejercicios completados
+            progressCounter.textContent = `${current}/${total}`;
+          }
+
+          // Debug para verificar
+          console.log(
+            `Progreso actualizado: ${current}/${total} (${percentage}%)`
           );
         }
 
-        // Interceptar comandos para validación
+        // 4️⃣ Función para actualizar instrucciones
+        function updateInstructions(exercise) {
+          const container = document.getElementById('exerciseInstructions');
+          if (container && exercise) {
+            container.textContent = exercise.description;
+          }
+        }
+
+        // 5️⃣ Mostrar primer ejercicio
+        updateInstructions(validator.getCurrentExercise());
+        updateProgress();
+
+        // 6️⃣ Interceptar comandos para validación automática
         const originalExecute = consoleCtrl.executeCommand.bind(consoleCtrl);
         consoleCtrl.executeCommand = function (commandString) {
           const cmd = commandString.trim().toLowerCase();
@@ -496,8 +293,10 @@
             return;
           }
 
+          // Ejecutar comando
           originalExecute(commandString);
 
+          // Validar ejercicio actual
           const parts = cmd.split(' ');
           const command = parts[0] === 'git' ? parts[1] : parts[0];
           const args = parts[0] === 'git' ? parts.slice(2) : parts.slice(1);
@@ -505,12 +304,16 @@
           const result = validator.validateCommand(command, args);
 
           if (result.valid) {
-            ui.showNotification(result.message, 'success');
+            // ✅ Comando correcto - Sin notificación popup
             const nextResult = validator.nextExercise();
 
             if (nextResult.completed) {
+              // Actualizar progreso al 100% antes de mostrar completación
+              updateProgress();
+              
+              // 🎉 ¡Pantalla completada!
               ui.showNotification(
-                '🎉 ¡Has completado todas las pantallas de Git to the Future!',
+                '🎉 ¡Has completado la Pantalla 4!',
                 'success',
                 5000
               );
@@ -519,34 +322,22 @@
 
               setTimeout(() => {
                 ui.showCompletionModal('Wild West (1885)', () => {
-                  // Desbloquear demo final
-                  ui.showNotification(
-                    '🎬 Demo completo desbloqueado!',
-                    'success',
-                    3000
-                  );
-                  setTimeout(() => {
-                    window.location.href = '../index-menu.html';
-                  }, 1000);
+                  screenCtrl.navigateTo('index-menu.html');
                 });
               }, 2000);
             } else {
-              ui.updateExerciseProgress(
-                validator.currentExerciseIndex,
-                SCREEN_EXERCISES.screen4.length,
-                'exerciseProgress'
-              );
-              ui.showExerciseInstructions(
-                nextResult.exercise,
-                'exerciseInstructions'
-              );
+              // 📝 Mostrar siguiente ejercicio
+              updateProgress();
+              updateInstructions(nextResult.exercise);
             }
           } else if (result.suggestion) {
+            // ⚠️ Mostrar sugerencia
             ui.showNotification(result.suggestion, 'info', 4000);
           }
         };
 
-        // Event listeners
+        // 7️⃣ Event Listeners
+        // Ejecutar comando con botón o Enter
         const executeCommand = () => {
           const input = document.getElementById('commandInput');
           const command = input.value.trim();
@@ -565,6 +356,7 @@
             if (e.key === 'Enter') executeCommand();
           });
 
+        // Botones de comando rápido
         document.querySelectorAll('.console__cmd-btn').forEach((btn) => {
           btn.addEventListener('click', () => {
             const command = btn.getAttribute('data-command');
@@ -573,36 +365,55 @@
           });
         });
 
-        const resetBtn = document.getElementById('resetBtn');
-        if (resetBtn) {
-          resetBtn.addEventListener('click', () => {
-            if (
-              confirm(
-                '¿Estás seguro de reiniciar? Perderás todo el progreso de esta pantalla.'
-              )
-            ) {
-              consoleCtrl.resetAll();
-              validator.reset();
-              ui.showExerciseInstructions(
-                SCREEN_EXERCISES.screen4[0],
-                'exerciseInstructions'
-              );
-              ui.updateExerciseProgress(
-                0,
-                SCREEN_EXERCISES.screen4.length,
-                'exerciseProgress'
-              );
-              ui.showNotification('🔄 Pantalla reiniciada', 'info');
-            }
-          });
-        }
+        // Botón de reiniciar
+        document.getElementById('resetBtn').addEventListener('click', () => {
+          if (
+            confirm(
+              '¿Estás seguro de reiniciar? Perderás todo el progreso de esta pantalla.'
+            )
+          ) {
+            consoleCtrl.resetAll();
+            validator.reset();
+            updateInstructions(SCREEN_EXERCISES.screen4[0]);
+            updateProgress();
+            ui.showNotification('🔄 Pantalla reiniciada', 'info');
+          }
+        });
 
+        // Botón de pista progresiva (si existe)
         const hintBtn = document.getElementById('hintBtn');
         if (hintBtn) {
           hintBtn.addEventListener('click', () => {
             const exercise = validator.getCurrentExercise();
-            if (exercise) {
-              ui.showNotification(`💡 ${exercise.hint}`, 'warning', 6000);
+            const hintCard = document.getElementById('hintCard');
+            const hintText = document.getElementById('hintText');
+            
+            if (exercise && hintCard && hintText) {
+              hintText.textContent = exercise.hint;
+              
+              // Remover clase hide si existe
+              hintCard.classList.remove('hide');
+              
+              // Mostrar con animación
+              hintCard.style.display = 'block';
+              
+              // Forzar reflow para que la animación funcione
+              void hintCard.offsetWidth;
+              
+              // Agregar clase show para activar animación
+              hintCard.classList.add('show');
+              
+              // Auto-ocultar después de 8 segundos con animación
+              setTimeout(() => {
+                hintCard.classList.remove('show');
+                hintCard.classList.add('hide');
+                
+                // Esperar a que termine la animación antes de ocultar
+                setTimeout(() => {
+                  hintCard.style.display = 'none';
+                  hintCard.classList.remove('hide');
+                }, 400);
+              }, 8000);
             }
           });
         }
@@ -611,21 +422,30 @@
         const originalCheckout = graph.checkout.bind(graph);
         graph.checkout = function (branchName) {
           const result = originalCheckout(branchName);
-          if (result) {
-            const displayName =
-              branchName === '1885'
-                ? '1885 (Wild West)'
-                : branchName === 'main'
-                ? 'main (1985)'
-                : branchName;
-            ui.updateBranchIndicator(displayName);
-          }
+          if (result) ui.updateBranchIndicator(branchName);
           return result;
         };
 
-        Logger.log(
-          'Pantalla 4 inicializada correctamente - Lejano Oeste activado 🤠'
-        );
+        // Confirmar antes de salir si hay progreso
+        const backBtn = document.getElementById('backBtn');
+        if (backBtn) {
+          backBtn.addEventListener('click', (e) => {
+            const currentExercise = validator.getCurrentExercise();
+            // Si ya completó al menos un ejercicio, mostrar advertencia
+            if (currentExercise && currentExercise.id > 1) {
+              e.preventDefault();
+              const confirmed = confirm(
+                '⚠️ Si regresas al menú, perderás todo tu progreso en este nivel.\n\n¿Estás seguro de que quieres salir?'
+              );
+              if (confirmed) {
+                window.location.href = backBtn.getAttribute('href');
+              }
+            }
+            // Si está en el primer ejercicio, dejar salir sin confirmar
+          });
+        }
+
+        Logger.log('Pantalla 4 inicializada correctamente');
       });
     </script>
   </body>
