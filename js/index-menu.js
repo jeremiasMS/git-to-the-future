@@ -266,7 +266,8 @@ class UIController {
     Object.assign(notification.style, {
       position: 'fixed',
       top: '20px',
-      right: '20px',
+      left: '50%',
+      transform: 'translateX(-50%)',
       background:
         type === 'error'
           ? 'rgba(244, 67, 54, 0.95)'
@@ -277,14 +278,23 @@ class UIController {
       boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
       zIndex: '9999',
       fontWeight: '600',
-      animation: 'slideIn 0.3s ease-out',
+      animation: 'slideInDown 0.3s ease-out',
+      minWidth: '300px',
+      textAlign: 'center',
     });
 
     document.body.appendChild(notification);
 
+    if (type === 'error') {
+      document.body.style.animation = 'screenShake 0.5s ease-in-out';
+      setTimeout(() => {
+        document.body.style.animation = '';
+      }, 500);
+    }
+
     // Remove after 3 seconds
     setTimeout(() => {
-      notification.style.animation = 'slideOut 0.3s ease-out';
+      notification.style.animation = 'fadeOut 0.3s ease-out';
       setTimeout(() => notification.remove(), 300);
     }, 3000);
   }
@@ -315,6 +325,17 @@ style.textContent = `
     }
   }
 
+  @keyframes slideInDown {
+    from {
+      transform: translate(-50%, -100px);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  }
+
   @keyframes slideOut {
     from {
       transform: translateX(0);
@@ -324,6 +345,21 @@ style.textContent = `
       transform: translateX(400px);
       opacity: 0;
     }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes screenShake {
+    0%, 100% { transform: translate(0, 0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 0); }
+    20%, 40%, 60%, 80% { transform: translate(5px, 0); }
   }
 `;
 document.head.appendChild(style);

@@ -101,12 +101,15 @@ class UIController {
       container.style.cssText = `
         position: fixed;
         top: 20px;
-        right: 20px;
+        left: 50%;
+        transform: translateX(-50%);
         z-index: 9999;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        max-width: 400px;
+        max-width: 500px;
+        width: auto;
+        min-width: 300px;
       `;
       document.body.appendChild(container);
     }
@@ -140,10 +143,19 @@ class UIController {
       gap: 12px;
       font-size: 14px;
       font-weight: 500;
-      animation: slideInRight 0.3s ease-out;
+      animation: slideInDown 0.3s ease-out;
+      justify-content: center;
+      text-align: center;
     `;
 
     container.appendChild(notification);
+
+    if (type === 'error') {
+      document.body.style.animation = 'screenShake 0.5s ease-in-out';
+      setTimeout(() => {
+        document.body.style.animation = '';
+      }, 500);
+    }
 
     if (duration > 0) {
       setTimeout(() => {
@@ -1805,10 +1817,21 @@ style.textContent = `
     from { transform: translateX(400px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
   }
+
+  @keyframes slideInDown {
+    from { transform: translateY(-100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
   
   @keyframes fadeOut {
     from { opacity: 1; }
     to { opacity: 0; }
+  }
+
+  @keyframes screenShake {
+    0%, 100% { transform: translate(0, 0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 0); }
+    20%, 40%, 60%, 80% { transform: translate(5px, 0); }
   }
   
   @keyframes confettiFall {

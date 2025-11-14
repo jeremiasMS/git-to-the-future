@@ -13,12 +13,15 @@ export class UIController {
       container.style.cssText = `
         position: fixed;
         top: 20px;
-        right: 20px;
+        left: 50%;
+        transform: translateX(-50%);
         z-index: 9999;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        max-width: 400px;
+        max-width: 500px;
+        width: auto;
+        min-width: 300px;
       `;
       document.body.appendChild(container);
       this.notificationContainer = container;
@@ -53,12 +56,22 @@ export class UIController {
       display: flex;
       align-items: center;
       gap: 12px;
-      animation: slideInRight 0.3s ease-out;
+      animation: slideInDown 0.3s ease-out;
       font-size: 14px;
       font-weight: 500;
+      justify-content: center;
+      text-align: center;
     `;
 
     this.notificationContainer.appendChild(notification);
+
+    // Si es un error, agregar efecto de vibración a la pantalla
+    if (type === 'error') {
+      document.body.style.animation = 'screenShake 0.5s ease-in-out';
+      setTimeout(() => {
+        document.body.style.animation = '';
+      }, 500);
+    }
 
     // Auto-remover después del duration
     if (duration > 0) {
@@ -269,6 +282,17 @@ style.textContent = `
     }
   }
 
+  @keyframes slideInDown {
+    from {
+      transform: translateY(-100px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
   @keyframes fadeOut {
     from {
       opacity: 1;
@@ -276,6 +300,12 @@ style.textContent = `
     to {
       opacity: 0;
     }
+  }
+
+  @keyframes screenShake {
+    0%, 100% { transform: translate(0, 0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 0); }
+    20%, 40%, 60%, 80% { transform: translate(5px, 0); }
   }
 
   @keyframes confettiFall {
