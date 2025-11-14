@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pantalla 4: Wild West (1885) | Git to the Future</title>
+    <title>Pantalla 4: Rescate en el Lejano Oeste | Git to the Future</title>
 
     <!-- CSS Modular -->
     <link rel="stylesheet" href="../css/variables.css" />
@@ -70,22 +70,21 @@
 
           <!-- Botones de Comandos Rápidos -->
           <div class="console__commands">
-            <button class="console__cmd-btn" data-command="init">init</button>
-            <button class="console__cmd-btn" data-command="status">
-              status
+            <button class="console__cmd-btn" data-command="stash">stash</button>
+            <button class="console__cmd-btn" data-command="branch aventura/viejo-oeste">
+              branch
             </button>
-            <button class="console__cmd-btn" data-command="add .">add .</button>
+            <button class="console__cmd-btn" data-command="checkout aventura/viejo-oeste">checkout</button>
+            <button class="console__cmd-btn" data-command="add .">
+              add .
+            </button>
             <button class="console__cmd-btn" data-command="commit -m 'mensaje'">
               commit
             </button>
-            <button class="console__cmd-btn" data-command="branch">
-              branch
+            <button class="console__cmd-btn" data-command="checkout main">
+              main
             </button>
-            <button class="console__cmd-btn" data-command="checkout">
-              checkout
-            </button>
-            <button class="console__cmd-btn" data-command="stash">stash</button>
-            <button class="console__cmd-btn" data-command="pull">pull</button>
+            <button class="console__cmd-btn" data-command="branch -a">branch -a</button>
           </div>
 
           <!-- Input de Comando -->
@@ -172,18 +171,19 @@
             class="mission-card__description"
             style="margin-bottom: 12px; font-size: 13px; line-height: 1.6"
           >
-            <strong style="color: #a1887f">🎬 Back to the Future III</strong>
-            (1990)<br />
+            <strong style="color: #bcaaa4">🤠 Rescate en el Lejano Oeste</strong><br />
             <strong>📅 Año:</strong> 1885 (Lejano Oeste)<br />
-            <strong>🎥 Director:</strong> Robert Zemeckis
+            <strong>❤️ Subplot:</strong> Doc y Clara
           </p>
           <p
             class="mission-card__description"
             style="font-size: 13px; line-height: 1.6"
           >
-            Marty debe viajar a 1885 para rescatar a Doc Brown del Lejano Oeste. 
-            Aprenderás comandos avanzados como git stash y git pull mientras 
-            enfrentas peligros del salvaje oeste.
+            Un rayo envía a Doc a 1885. Marty está en 1955 y debe guardar su trabajo 
+            con git stash para concentrarse en el rescate. Creará una branch para 
+            la aventura del Oeste donde Doc salva a Clara y se enamora. La rama de 
+            Doc seguirá existiendo independientemente (git branch -a) mientras Marty 
+            regresa solo a 1985. Un fork natural de la vida de Doc.
           </p>
           <div
             style="
@@ -239,6 +239,50 @@
         // 2️⃣ Configurar ejercicios y conectar validador
         validator.setExercises(SCREEN_EXERCISES.screen4);
         consoleCtrl.setValidator(validator);
+
+        // 🎬 Hardcoded: Repositorio 1955 con delorean.txt modificado
+        consoleCtrl.state.initialized = true;
+        consoleCtrl.state.branches = ['main', '1955', '1885'];
+        consoleCtrl.state.currentBranch = '1955';
+        consoleCtrl.state.files = ['delorean.txt'];
+        consoleCtrl.state.stagedFiles = [];
+        consoleCtrl.state.stash = [];
+        
+        // Inicializar grafo
+        graph.init();
+        
+        // Commits iniciales
+        graph.commit('1985: Estado inicial');
+        consoleCtrl.state.commits.push({
+          hash: 'aaa1985',
+          message: '1985: Estado inicial',
+          branch: 'main',
+          timestamp: Date.now()
+        });
+        
+        // Crear branch 1955
+        graph.branch('1955');
+        graph.checkout('1955');
+        consoleCtrl.state.currentBranch = '1955';
+        
+        graph.commit('Llegada a 1955');
+        consoleCtrl.state.commits.push({
+          hash: 'bbb1955',
+          message: 'Llegada a 1955',
+          branch: '1955',
+          timestamp: Date.now()
+        });
+        
+        // Crear branch 1885 desde 1955
+        graph.branch('1885');
+        
+        // Simular archivo modificado en working directory
+        consoleCtrl.state.modifiedFiles = ['delorean.txt'];
+        
+        consoleCtrl.addOutput('📍 Estás en 1955. Branch actual: 1955');
+        consoleCtrl.addOutput('⚠️ Archivo modificado: delorean.txt');
+        consoleCtrl.addOutput('💡 El DeLorean ha sido alcanzado por un rayo');
+        consoleCtrl.addOutput('🔧 Usa "git status" para ver los cambios');
 
         // 3️⃣ Función para actualizar la UI del progreso
         function updateProgress() {
@@ -330,9 +374,10 @@
               updateProgress();
               updateInstructions(nextResult.exercise);
             }
-          } else if (result.suggestion) {
-            // ⚠️ Mostrar sugerencia
-            ui.showNotification(result.suggestion, 'info', 4000);
+          } else {
+            // ❌ Comando incorrecto - Mostrar error y NO avanzar
+            const errorMsg = result.suggestion || '❌ Comando incorrecto. Usa "hint" para obtener ayuda.';
+            ui.showNotification(errorMsg, 'error', 4000);
           }
         };
 
