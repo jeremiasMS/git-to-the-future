@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pantalla 3: Dystopia (1985A) | Git to the Future</title>
+    <title>Pantalla 3: La Distopía de Biff | Git to the Future</title>
 
     <!-- CSS Modular -->
     <link rel="stylesheet" href="../css/variables.css" />
@@ -49,7 +49,7 @@
             <div class="plutonium-progress__glow"></div>
           </div>
           <span class="plutonium-progress__counter" id="progressCounter"
-            >0/7</span
+            >0/9</span
           >
         </div>
       </div>
@@ -70,21 +70,23 @@
 
           <!-- Botones de Comandos Rápidos -->
           <div class="console__commands">
-            <button class="console__cmd-btn" data-command="init">init</button>
-            <button class="console__cmd-btn" data-command="status">
-              status
-            </button>
-            <button class="console__cmd-btn" data-command="add .">add .</button>
-            <button class="console__cmd-btn" data-command="commit -m 'mensaje'">
-              commit
-            </button>
-            <button class="console__cmd-btn" data-command="branch">
-              branch
-            </button>
-            <button class="console__cmd-btn" data-command="checkout">
+            <button class="console__cmd-btn" data-command="pull">pull</button>
+            <button class="console__cmd-btn" data-command="checkout 1955">
               checkout
             </button>
-            <button class="console__cmd-btn" data-command="merge">merge</button>
+            <button class="console__cmd-btn" data-command="branch fix/burn-almanac">branch</button>
+            <button class="console__cmd-btn" data-command="revert HEAD">
+              revert
+            </button>
+            <button class="console__cmd-btn" data-command="merge fix/burn-almanac">
+              merge
+            </button>
+            <button class="console__cmd-btn" data-command="cherry-pick">
+              cherry-pick
+            </button>
+            <button class="console__cmd-btn" data-command="apply carta_doc_1885.patch">
+              apply
+            </button>
           </div>
 
           <!-- Input de Comando -->
@@ -171,18 +173,19 @@
             class="mission-card__description"
             style="margin-bottom: 12px; font-size: 13px; line-height: 1.6"
           >
-            <strong style="color: #ff4081">🎬 Back to the Future II</strong>
-            (1989)<br />
-            <strong>📅 Año:</strong> 1985A (Distopía)<br />
-            <strong>🎥 Director:</strong> Robert Zemeckis
+            <strong style="color: #ff6659">😈 La Distopía de Biff</strong><br />
+            <strong>📅 Año:</strong> 1985A (Corrompido)<br />
+            <strong>⚠️ Crisis:</strong> Historia Reescrita
           </p>
           <p
             class="mission-card__description"
             style="font-size: 13px; line-height: 1.6"
           >
-            Biff del futuro entrega un almanaque deportivo a su yo del pasado, 
-            creando una línea temporal alternativa donde controla Hill Valley. 
-            Debes usar git merge para entender y corregir la historia corrupta.
+            Marty y Doc están en 2015, pero al hacer pull descubren que Biff 
+            ha reescrito la historia (git reset --hard). Hill Valley es una distopía: 
+            Biff millonario, George muerto. Debes usar git revert para deshacer 
+            el cambio quemando el almanaque, cherry-pick para rescatar a Jennifer, 
+            y git apply para recibir la carta de Doc desde 1885.
           </p>
           <div
             style="
@@ -238,6 +241,65 @@
         // 2️⃣ Configurar ejercicios y conectar validador
         validator.setExercises(SCREEN_EXERCISES.screen3);
         consoleCtrl.setValidator(validator);
+
+        // 🎬 Hardcoded: Repositorio con timeline corrupto
+        consoleCtrl.state.initialized = true;
+        consoleCtrl.state.branches = ['main', 'biff-paradise'];
+        consoleCtrl.state.currentBranch = 'main';
+        consoleCtrl.state.remotes = [{
+          name: 'origin',
+          url: 'https://github.com/hill-valley/timeline-corrupted.git',
+          branches: ['main', 'biff-paradise']
+        }];
+        
+        // Inicializar grafo
+        graph.init();
+        
+        // Commits en main (timeline normal)
+        graph.commit('1985: Vida normal');
+        consoleCtrl.state.commits.push({
+          hash: 'aaa1985',
+          message: '1985: Vida normal',
+          branch: 'main',
+          timestamp: Date.now()
+        });
+        
+        graph.commit('1955: Viaje al pasado');
+        consoleCtrl.state.commits.push({
+          hash: 'bbb1955',
+          message: '1955: Viaje al pasado',
+          branch: 'main',
+          timestamp: Date.now()
+        });
+        
+        // Crear branch corrupto biff-paradise
+        graph.branch('biff-paradise');
+        graph.checkout('biff-paradise');
+        consoleCtrl.state.currentBranch = 'biff-paradise';
+        
+        graph.commit('Biff recibe almanaque deportivo');
+        consoleCtrl.state.commits.push({
+          hash: 'ccc1955',
+          message: 'Biff recibe almanaque deportivo',
+          branch: 'biff-paradise',
+          timestamp: Date.now()
+        });
+        
+        graph.commit('1985A: Distopía de Biff');
+        consoleCtrl.state.commits.push({
+          hash: 'ddd1985a',
+          message: '1985A: Distopía de Biff',
+          branch: 'biff-paradise',
+          timestamp: Date.now()
+        });
+        
+        // Volver a main
+        graph.checkout('main');
+        consoleCtrl.state.currentBranch = 'main';
+        
+        consoleCtrl.addOutput('⚠️ ADVERTENCIA: Timeline corrupto detectado');
+        consoleCtrl.addOutput('📍 Branch "biff-paradise" contiene una realidad alternativa');
+        consoleCtrl.addOutput('💡 Deberás usar comandos avanzados para restaurar el timeline');
 
         // 3️⃣ Función para actualizar la UI del progreso
         function updateProgress() {
@@ -329,9 +391,10 @@
               updateProgress();
               updateInstructions(nextResult.exercise);
             }
-          } else if (result.suggestion) {
-            // ⚠️ Mostrar sugerencia
-            ui.showNotification(result.suggestion, 'info', 4000);
+          } else {
+            // ❌ Comando incorrecto - Mostrar error y NO avanzar
+            const errorMsg = result.suggestion || '❌ Comando incorrecto. Usa "hint" para obtener ayuda.';
+            ui.showNotification(errorMsg, 'error', 4000);
           }
         };
 

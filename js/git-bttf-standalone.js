@@ -587,7 +587,8 @@ class ConsoleController {
       staged: [],
       branches: ['main'],
       currentBranch: 'main',
-      commits: []
+      commits: [],
+      remotes: []
     };
     
     // Mostrar mensaje de bienvenida en la consola
@@ -663,8 +664,23 @@ class ConsoleController {
       case 'pull':
         this.gitPull(args);
         break;
+      case 'remote':
+        this.gitRemote(args);
+        break;
       case 'push':
         this.gitPush(args);
+        break;
+      case 'revert':
+        this.gitRevert(args);
+        break;
+      case 'stash':
+        this.gitStash(args);
+        break;
+      case 'cherry-pick':
+        this.gitCherryPick(args);
+        break;
+      case 'apply':
+        this.gitApply(args);
         break;
       case 'log':
         this.gitLog();
@@ -843,40 +859,56 @@ class ConsoleController {
     }
 
     if (args.length === 0) {
-      this.addOutput('Error: falta el nombre de la rama', 'error');
+      this.addOutput('Error: falta el nombre de la rama o commit', 'error');
       return;
     }
 
-    const branchName = args[0];
+    const target = args[0];
     const previousBranch = this.state.currentBranch;
     
     if (args.includes('-b')) {
       // Crear y cambiar a nueva rama
-      if (!this.state.branches.includes(branchName)) {
-        this.state.branches.push(branchName);
-        this.addOutput(`Rama '${branchName}' creada desde '${previousBranch}'`, 'success');
+      if (!this.state.branches.includes(target)) {
+        this.state.branches.push(target);
+        this.addOutput(`Rama '${target}' creada desde '${previousBranch}'`, 'success');
         
         if (this.graphController) {
-          const success = this.graphController.branch(branchName);
+          const success = this.graphController.branch(target);
           if (success) {
-            this.addOutput(`📊 Rama '${branchName}' creada en el gráfico`, 'success');
+            this.addOutput(`📊 Rama '${target}' creada en el gráfico`, 'success');
           }
         }
       }
     }
 
-    if (!this.state.branches.includes(branchName)) {
-      this.addOutput(`error: pathspec '${branchName}' did not match any file(s) known to git`, 'error');
+    // Permitir checkout a "commits simulados" como 1955, 1885, etc.
+    const isSimulatedCommit = /^\d{4}$/.test(target); // Formato año: 1955, 1885, 2015, etc.
+    
+    if (!this.state.branches.includes(target) && !isSimulatedCommit) {
+      this.addOutput(`error: pathspec '${target}' did not match any file(s) known to git`, 'error');
       return;
     }
 
-    this.state.currentBranch = branchName;
-    this.addOutput(`Switched to branch '${branchName}'`, 'success');
+    if (isSimulatedCommit) {
+      // Simular checkout a un commit (detached HEAD state)
+      this.addOutput(`Note: switching to '${target}'.`, 'info');
+      this.addOutput(``, 'info');
+      this.addOutput(`You are in 'detached HEAD' state. You can look around, make experimental`, 'info');
+      this.addOutput(`changes and commit them, and you can discard any commits you make in this`, 'info');
+      this.addOutput(`state without impacting any branches by switching back to a branch.`, 'info');
+      this.addOutput(``, 'info');
+      this.addOutput(`HEAD is now at ${this.generateHash().substring(0, 7)} Time travel to ${target}`, 'success');
+      this.state.currentBranch = `detached-${target}`;
+      return;
+    }
+
+    this.state.currentBranch = target;
+    this.addOutput(`Switched to branch '${target}'`, 'success');
 
     if (this.graphController) {
-      const success = this.graphController.checkout(branchName);
+      const success = this.graphController.checkout(target);
       if (success) {
-        this.addOutput(`📊 ✓ Ahora estás en la rama '${branchName}'`, 'success');
+        this.addOutput(`📊 ✓ Ahora estás en la rama '${target}'`, 'success');
         this.addOutput(`💡 Haz un commit para ver la bifurcación en el gráfico`, 'info');
       }
     }
@@ -996,6 +1028,60 @@ class ConsoleController {
     }
   }
 
+  gitRemote(args) {
+    if (!this.state.initialized) {
+      this.addOutput('fatal: not a git repository', 'error');
+      return;
+    }
+
+    const subcommand = args[0];
+
+    if (!subcommand) {
+      // Listar remotos
+      if (!this.state.remotes || this.state.remotes.length === 0) {
+        this.addOutput('No hay repositorios remotos configurados', 'info');
+        return;
+      }
+      this.state.remotes.forEach(remote => {
+        this.addOutput(remote.name, 'info');
+      });
+      return;
+    }
+
+    if (subcommand === 'add') {
+      const remoteName = args[1] || 'origin';
+      const remoteUrl = args[2] || 'https://github.com/DocBrown/DeLorean.git';
+
+      if (!this.state.remotes) {
+        this.state.remotes = [];
+      }
+
+      // Verificar si ya existe
+      const exists = this.state.remotes.find(r => r.name === remoteName);
+      if (exists) {
+        this.addOutput(`error: remote ${remoteName} already exists.`, 'error');
+        return;
+      }
+
+      this.state.remotes.push({ name: remoteName, url: remoteUrl });
+      this.addOutput(`🔗 Repositorio remoto '${remoteName}' añadido exitosamente`, 'success');
+      this.addOutput(`   URL: ${remoteUrl}`, 'info');
+    } else if (subcommand === '-v') {
+      // Mostrar remotos con URLs
+      if (!this.state.remotes || this.state.remotes.length === 0) {
+        this.addOutput('No hay repositorios remotos configurados', 'info');
+        return;
+      }
+      this.state.remotes.forEach(remote => {
+        this.addOutput(`${remote.name}\t${remote.url} (fetch)`, 'info');
+        this.addOutput(`${remote.name}\t${remote.url} (push)`, 'info');
+      });
+    } else {
+      this.addOutput(`git remote: '${subcommand}' no es un subcomando válido`, 'error');
+      this.addOutput('Usa: git remote [-v] | git remote add <nombre> <url>', 'info');
+    }
+  }
+
   gitPush(args) {
     if (!this.state.initialized) {
       this.addOutput('fatal: not a git repository', 'error');
@@ -1032,6 +1118,182 @@ class ConsoleController {
     this.addOutput(`✅ Cambios enviados exitosamente a ${remote}/${branch}`, 'success');
   }
 
+  gitRevert(args) {
+    if (!this.state.initialized) {
+      this.addOutput('fatal: not a git repository', 'error');
+      return;
+    }
+
+    if (this.state.commits.length === 0) {
+      this.addOutput('No hay commits para revertir', 'warning');
+      return;
+    }
+
+    const commitRef = args[0] || 'HEAD';
+    
+    this.addOutput(`Revertiendo ${commitRef}...`, 'info');
+    this.addOutput(``, 'info');
+    this.addOutput(`[${this.state.currentBranch} ${this.generateHash().substring(0, 7)}] Revert "${commitRef}"`, 'info');
+    
+    // Crear un nuevo commit que invierte los cambios
+    const revertMessage = `Revert changes from ${commitRef}`;
+    this.state.commits.push({
+      branch: this.state.currentBranch,
+      message: revertMessage,
+      hash: this.generateHash()
+    });
+
+    if (this.graphController) {
+      this.graphController.commit(revertMessage);
+    }
+
+    this.addOutput(`✅ Revert completado. Los cambios de ${commitRef} han sido deshechos de forma segura`, 'success');
+    this.addOutput(`💡 Se creó un nuevo commit que invierte los cambios sin alterar el historial`, 'info');
+  }
+
+  gitStash(args) {
+    if (!this.state.initialized) {
+      this.addOutput('fatal: not a git repository', 'error');
+      return;
+    }
+
+    const subcommand = args[0];
+
+    if (!subcommand) {
+      // git stash (sin argumentos) = stash push
+      if (this.state.staged.length === 0) {
+        this.addOutput('No hay cambios para guardar en el stash', 'info');
+        return;
+      }
+
+      if (!this.state.stash) {
+        this.state.stash = [];
+      }
+
+      const stashEntry = {
+        files: [...this.state.staged],
+        branch: this.state.currentBranch,
+        message: `WIP on ${this.state.currentBranch}: ${this.generateHash().substring(0, 7)}`,
+        timestamp: Date.now()
+      };
+
+      this.state.stash.push(stashEntry);
+      this.state.staged = [];
+
+      this.addOutput(`Saved working directory and index state ${stashEntry.message}`, 'success');
+      this.addOutput(`📦 Cambios guardados en el stash. Ahora puedes cambiar de rama sin hacer commit`, 'info');
+      this.addOutput(`💡 Usa 'git stash pop' para recuperar los cambios más tarde`, 'info');
+      return;
+    }
+
+    if (subcommand === 'list') {
+      // git stash list
+      if (!this.state.stash || this.state.stash.length === 0) {
+        this.addOutput('No hay entradas en el stash', 'info');
+        return;
+      }
+
+      this.state.stash.forEach((entry, index) => {
+        this.addOutput(`stash@{${index}}: ${entry.message}`, 'info');
+      });
+      return;
+    }
+
+    if (subcommand === 'pop') {
+      // git stash pop
+      if (!this.state.stash || this.state.stash.length === 0) {
+        this.addOutput('No hay entradas en el stash para recuperar', 'warning');
+        return;
+      }
+
+      const entry = this.state.stash.pop();
+      this.state.staged = [...entry.files];
+
+      this.addOutput(`Dropped refs/stash@{0} (${this.generateHash().substring(0, 7)})`, 'info');
+      this.addOutput(`✅ Cambios recuperados del stash`, 'success');
+      this.addOutput(`💡 Los archivos volvieron al staging area. Usa 'git status' para verlos`, 'info');
+      return;
+    }
+
+    if (subcommand === 'clear') {
+      // git stash clear
+      if (!this.state.stash || this.state.stash.length === 0) {
+        this.addOutput('El stash ya está vacío', 'info');
+        return;
+      }
+
+      const count = this.state.stash.length;
+      this.state.stash = [];
+      this.addOutput(`✅ Stash limpiado. ${count} entrada(s) eliminada(s)`, 'success');
+      return;
+    }
+
+    this.addOutput(`git stash: '${subcommand}' no es un subcomando válido`, 'error');
+    this.addOutput('Usa: git stash [list|pop|clear]', 'info');
+  }
+
+  gitCherryPick(args) {
+    if (!this.state.initialized) {
+      this.addOutput('fatal: not a git repository', 'error');
+      return;
+    }
+
+    if (args.length === 0) {
+      this.addOutput('Error: falta el hash del commit a cherry-pick', 'error');
+      this.addOutput('Uso: git cherry-pick <commit-hash>', 'info');
+      return;
+    }
+
+    const commitHash = args[0];
+    
+    this.addOutput(`Aplicando commit ${commitHash}...`, 'info');
+    this.addOutput(``, 'info');
+    this.addOutput(`[${this.state.currentBranch} ${this.generateHash().substring(0, 7)}] Cherry-pick: ${commitHash}`, 'info');
+    
+    // Simular cherry-pick: copiar un commit específico
+    const cherryMessage = `Cherry-picked from ${commitHash}`;
+    this.state.commits.push({
+      branch: this.state.currentBranch,
+      message: cherryMessage,
+      hash: this.generateHash()
+    });
+
+    if (this.graphController) {
+      this.graphController.commit(cherryMessage);
+    }
+
+    this.addOutput(`✅ Cherry-pick completado exitosamente`, 'success');
+    this.addOutput(`💡 El commit ${commitHash} fue copiado a la rama actual sin traer otros commits`, 'info');
+  }
+
+  gitApply(args) {
+    if (!this.state.initialized) {
+      this.addOutput('fatal: not a git repository', 'error');
+      return;
+    }
+
+    if (args.length === 0) {
+      this.addOutput('Error: falta el archivo de parche', 'error');
+      this.addOutput('Uso: git apply <archivo.patch>', 'info');
+      return;
+    }
+
+    const patchFile = args[0];
+    
+    this.addOutput(`Aplicando parche ${patchFile}...`, 'info');
+    this.addOutput(`Checking patch ${patchFile}...`, 'info');
+    this.addOutput(`Applied patch ${patchFile} cleanly.`, 'success');
+    this.addOutput(``, 'info');
+    
+    // Simular cambios aplicados
+    const filesChanged = Math.floor(Math.random() * 3) + 1;
+    const insertions = Math.floor(Math.random() * 20) + 5;
+    
+    this.addOutput(`✅ Parche aplicado exitosamente`, 'success');
+    this.addOutput(`📝 ${filesChanged} archivo(s) modificado(s), ${insertions} línea(s) insertada(s)`, 'info');
+    this.addOutput(`💡 Los cambios del parche están listos. Usa 'git add' y 'git commit' para confirmar`, 'info');
+  }
+
   gitLog() {
     if (!this.state.initialized) {
       this.addOutput('fatal: not a git repository', 'error');
@@ -1056,7 +1318,8 @@ class ConsoleController {
       staged: [],
       branches: ['main'],
       currentBranch: 'main',
-      commits: []
+      commits: [],
+      remotes: []
     };
     
     this.clearOutput();
@@ -1095,6 +1358,11 @@ class ConsoleController {
     this.addOutput('  git checkout <rama>      - Cambiar de rama', 'info');
     this.addOutput('  git merge <rama>         - Fusionar rama', 'info');
     this.addOutput('  git rebase <rama>        - Rebasar rama actual sobre otra', 'info');
+    this.addOutput('  git stash [list|pop]     - Guardar cambios temporalmente', 'info');
+    this.addOutput('  git revert <commit>      - Deshacer commit de forma segura', 'info');
+    this.addOutput('  git cherry-pick <commit> - Copiar commit específico', 'info');
+    this.addOutput('  git apply <patch>        - Aplicar archivo de parche', 'info');
+    this.addOutput('  git remote add <url>     - Añadir repositorio remoto', 'info');
     this.addOutput('  git pull [origin] [rama] - Descargar cambios del remoto', 'info');
     this.addOutput('  git push [origin] [rama] - Enviar commits al remoto', 'info');
     this.addOutput('  git log                  - Ver historial', 'info');
@@ -1203,6 +1471,41 @@ class ExerciseValidator {
       return cleanActual.startsWith('add');
     }
 
+    // Para remote add, verificar comando + subcomando
+    if (cleanExpected.startsWith('remote add')) {
+      return cleanActual.startsWith('remote add') || cleanActual.startsWith('remote');
+    }
+
+    // Para push, verificar que contenga push (con o sin -u, origin, main, etc.)
+    if (cleanExpected.startsWith('push')) {
+      return cleanActual.startsWith('push');
+    }
+
+    // Para rebase, verificar comando (con o sin rama específica)
+    if (cleanExpected.startsWith('rebase')) {
+      return cleanActual.startsWith('rebase');
+    }
+
+    // Para revert, verificar comando (con o sin commit específico)
+    if (cleanExpected.startsWith('revert')) {
+      return cleanActual.startsWith('revert');
+    }
+
+    // Para stash, verificar comando
+    if (cleanExpected.startsWith('stash')) {
+      return cleanActual.startsWith('stash');
+    }
+
+    // Para cherry-pick, verificar comando
+    if (cleanExpected.startsWith('cherry-pick')) {
+      return cleanActual.startsWith('cherry-pick');
+    }
+
+    // Para apply, verificar comando
+    if (cleanExpected.startsWith('apply')) {
+      return cleanActual.startsWith('apply');
+    }
+
     // Para otros comandos, coincidencia exacta
     return cleanActual === cleanExpected;
   }
@@ -1234,59 +1537,43 @@ const SCREEN_EXERCISES = {
   screen1: [
     {
       id: 1,
-      title: "Crear la máquina del tiempo",
-      description: "Inicializa un repositorio Git para comenzar tu viaje temporal",
+      title: "Inicializar la máquina del tiempo",
+      description: "Doc Brown está listo para su epifanía. Inicializa el repositorio en Hill Valley 1985",
       expectedCommand: "git init",
-      successMessage: "🚗 ¡La máquina del tiempo está lista! El DeLorean se ha inicializado",
-      hint: "Usa 'git init' para crear un nuevo repositorio Git"
+      successMessage: "⚡ ¡Repositorio inicializado! El DeLorean está bajo control de versiones",
+      hint: "Usa 'git init' para crear un nuevo repositorio Git en tu proyecto"
     },
     {
       id: 2,
-      title: "Documentar la situación inicial",
-      description: "Agrega archivos al staging area antes de documentar el estado actual",
+      title: "Preparar los componentes del DeLorean",
+      description: "Reúne todos los archivos del laboratorio caótico de Doc (familia_mcfly.txt, delorean.txt)",
       expectedCommand: "git add .",
-      successMessage: "📄 Archivos preparados en el staging area para el commit",
+      successMessage: "📦 Todos los componentes preparados. Planos del DeLorean y estado de la familia McFly listos",
       hint: "Usa 'git add .' para agregar todos los archivos al staging area"
     },
     {
       id: 3,
-      title: "Registrar el punto de partida (1985)",
-      description: "Crea tu primer commit para documentar la situación en 1985",
+      title: "Registrar el estado inicial: 1985",
+      description: "Guarda una instantánea del proyecto. La familia McFly es disfuncional, pero es tu punto de partida",
       expectedCommand: "git commit",
-      successMessage: "⏰ Punto temporal 1985 registrado correctamente en el commit",
-      hint: "Usa 'git commit -m \"mensaje\"' para crear un commit"
+      successMessage: "📸 Commit creado: Hill Valley 1985 - George es cobarde, Lorraine descontenta, Biff es el jefe",
+      hint: "Usa 'git commit -m \"Initial state: 1985\"' para crear tu primer commit con un mensaje descriptivo"
     },
     {
       id: 4,
-      title: "Crear línea temporal alternativa",
-      description: "Crea un nuevo branch llamado '1955' para la línea temporal donde Marty interfiere",
-      expectedCommand: "git branch 1955",
-      successMessage: "🌀 Nuevo branch '1955' creado",
-      hint: "Usa 'git branch 1955' para crear el nuevo branch"
+      title: "Conectar con el repositorio remoto",
+      description: "Doc no guarda su invento solo para él. Añade el repositorio remoto del DeLorean",
+      expectedCommand: "git remote add origin",
+      successMessage: "🔗 Repositorio remoto conectado: https://github.com/DocBrown/DeLorean.git",
+      hint: "Usa 'git remote add origin <url>' para conectar tu repo local con uno remoto. Ejemplo: git remote add origin https://github.com/DocBrown/DeLorean.git"
     },
     {
       id: 5,
-      title: "Viajar a 1955",
-      description: "Cambia al branch '1955' usando checkout para trabajar en esa línea temporal",
-      expectedCommand: "git checkout 1955",
-      successMessage: "🚗💨 Has viajado a 1955 con checkout. ¡Cuidado con no cambiar la historia!",
-      hint: "Usa 'git checkout 1955' para cambiar a ese branch"
-    },
-    {
-      id: 6,
-      title: "Volver a la línea principal",
-      description: "Regresa al branch 'main' antes de hacer el merge",
-      expectedCommand: "git checkout main",
-      successMessage: "✅ De vuelta en la línea temporal principal",
-      hint: "Usa 'git checkout main' para volver a la rama principal"
-    },
-    {
-      id: 7,
-      title: "Fusionar las líneas temporales",
-      description: "Haz merge del branch '1955' para restaurar la línea temporal",
-      expectedCommand: "git merge 1955",
-      successMessage: "🎉 ¡Merge completado! Marty ha regresado a 1985 exitosamente",
-      hint: "Usa 'git merge 1955' para fusionar los cambios"
+      title: "Llevar el DeLorean al Twin Pines Mall",
+      description: "Doc empuja su invento fuera del laboratorio para la demostración. ¡Es hora del primer push!",
+      expectedCommand: "git push",
+      successMessage: "🚀 ¡Push exitoso! El DeLorean está en el estacionamiento del Twin Pines Mall. El mundo (y Marty) pueden verlo",
+      hint: "Usa 'git push -u origin main' para subir tus cambios al repositorio remoto por primera vez"
     }
   ],
 
@@ -1294,59 +1581,67 @@ const SCREEN_EXERCISES = {
   screen2: [
     {
       id: 1,
-      title: 'Preparar el viaje al futuro',
-      description: 'Inicializa un repositorio para documentar el viaje temporal a 2015',
-      expectedCommand: 'git init',
-      successMessage: '🚀 ¡Viaje a 2015 iniciado! Doc lleva a Marty y Jennifer al futuro',
-      hint: "Usa 'git init' para inicializar el repositorio"
+      title: 'Viajar accidentalmente a 1955',
+      description: 'Marty viaja al pasado con el DeLorean. Usa checkout para ir al commit "1955"',
+      expectedCommand: 'git checkout 1955',
+      successMessage: '⚡ ¡Has viajado a 1955! Te enfrentas a libios y plutonio. Archivo creado: relacion_padres.txt',
+      hint: "Usa 'git checkout 1955' para viajar al pasado (un commit anterior)"
     },
     {
       id: 2,
-      title: 'Documentar el problema futuro',
-      description: 'Agrega archivos para documentar los problemas con Marty Jr.',
-      expectedCommand: 'git add .',
-      successMessage: '📄 Problemas del futuro documentados',
-      hint: "Usa 'git add .' para agregar archivos al staging area"
+      title: 'Crear rama para arreglar el pasado',
+      description: 'Marty interrumpió el encuentro de sus padres. Crea una rama para arreglar sin corromper main',
+      expectedCommand: 'git branch feature/fix-past',
+      successMessage: '🌿 Rama de corrección creada - Entorno aislado para que George y Lorraine se enamoren',
+      hint: "Usa 'git branch feature/fix-past' para crear una rama donde trabajar la solución"
     },
     {
       id: 3,
-      title: 'Registrar llegada a 2015',
-      description: 'Crea un commit documentando la llegada al futuro',
-      expectedCommand: 'git commit',
-      successMessage: '⏰ Llegada a 2015 registrada - ¡Bienvenidos al futuro!',
-      hint: 'Usa \'git commit -m "mensaje"\' para crear el commit'
+      title: 'Entrar a la rama de corrección',
+      description: 'Muévete a la rama feature/fix-past para empezar a trabajar en la solución',
+      expectedCommand: 'git checkout feature/fix-past',
+      successMessage: '🎯 Ahora estás en la rama de corrección - Puedes arreglar el encuentro sin alterar main',
+      hint: "Usa 'git checkout feature/fix-past' para cambiar a esa rama"
     },
     {
       id: 4,
-      title: 'Crear línea temporal corrupta',
-      description: "Crea una rama llamada 'biff-paradise' para la distopía que crea Biff",
-      expectedCommand: 'git branch biff-paradise',
-      successMessage: '💀 Rama distópica creada - Biff alterará la historia',
-      hint: "Usa 'git branch biff-paradise' para crear la nueva rama"
+      title: 'Documentar los pasos del plan',
+      description: 'Marty se hace pasar por extraterrestre y ayuda a George. Prepara estos cambios',
+      expectedCommand: 'git add .',
+      successMessage: '📝 Plan documentado: disfraz de extraterrestre, George gana confianza',
+      hint: "Usa 'git add .' para preparar los archivos del plan"
     },
     {
       id: 5,
-      title: 'Entrar en la distopía',
-      description: "Cambia a la rama 'biff-paradise' donde Biff es millonario",
-      expectedCommand: 'git checkout biff-paradise',
-      successMessage: '😈 Has entrado en el 1985 alternativo - ¡Biff controla todo!',
-      hint: "Usa 'git checkout biff-paradise' para cambiar a esa rama"
+      title: 'Confirmar que George y Lorraine se enamoran',
+      description: 'George golpea a Biff en el baile. ¡Los padres de Marty se enamoran! Haz commit',
+      expectedCommand: 'git commit',
+      successMessage: '💕 ¡Éxito! George y Lorraine se besan en el baile. El pasado está arreglado',
+      hint: 'Usa \'git commit -m "Fix: George and Lorraine fall in love"\' para confirmar la solución'
     },
     {
       id: 6,
-      title: 'Documentar la distopía',
-      description: 'Agrega archivos documentando el mundo corrupto de Biff',
-      expectedCommand: 'git add .',
-      successMessage: '📄 La distopía de Biff ha sido documentada',
-      hint: "Usa 'git add .' para agregar los archivos"
+      title: 'Volver a la línea temporal principal',
+      description: 'El pasado está arreglado. Regresa a main listo para integrar los cambios',
+      expectedCommand: 'git checkout main',
+      successMessage: '🔙 De vuelta en la rama principal - Listo para fusionar la corrección',
+      hint: "Usa 'git checkout main' para volver a la rama principal"
     },
     {
       id: 7,
-      title: 'Registrar la paradoja de Biff',
-      description: 'Crea un commit documentando cómo Biff cambió la historia',
-      expectedCommand: 'git commit',
-      successMessage: '💸 Paradoja registrada - Biff es millonario gracias al almanaque',
-      hint: 'Usa \'git commit -m "mensaje"\' para documentar la paradoja'
+      title: 'Fusionar la corrección del pasado',
+      description: 'El rayo en la torre del reloj provee energía. Fusiona los cambios de feature/fix-past',
+      expectedCommand: 'git merge feature/fix-past',
+      successMessage: '⚡ ¡Merge exitoso! El rayo ha dado energía al DeLorean. Volviendo a 1985...',
+      hint: "Usa 'git merge feature/fix-past' para integrar los cambios en main"
+    },
+    {
+      id: 8,
+      title: 'Reescribir la historia - 1985 mejorado',
+      description: 'Al regresar, la familia es exitosa y feliz. Usa rebase para reescribir la historia',
+      expectedCommand: 'git rebase',
+      successMessage: '🎉 ¡Historia reescrita! Familia McFly mejorada: George es autor, Lorraine feliz, Biff lava el auto',
+      hint: "Usa 'git rebase main' para reescribir la historia con las mejoras aplicadas limpiamente"
     }
   ],
 
@@ -1354,59 +1649,75 @@ const SCREEN_EXERCISES = {
   screen3: [
     {
       id: 1,
-      title: 'Volver a la línea temporal principal',
-      description: 'Regresa al branch main para continuar la historia',
-      expectedCommand: 'git checkout main',
-      successMessage: '🔄 De vuelta en la línea temporal principal',
-      hint: "Usa 'git checkout main' para volver a la rama principal"
+      title: 'Volver de 2015 y sincronizar',
+      description: 'Marty y Doc regresan de 2015. Haz pull para descubrir que la historia ha cambiado',
+      expectedCommand: 'git pull',
+      successMessage: '😱 ¡CONFLICTO! El 1985 ha cambiado completamente. Biff reescribió la historia con el almanaque',
+      hint: "Usa 'git pull' para traer cambios del remoto y descubrir la distopía"
     },
     {
       id: 2,
-      title: 'Crear la línea temporal corregida',
-      description: "Crea una rama llamada 'timeline-fixed' para la realidad corregida",
-      expectedCommand: 'git branch timeline-fixed',
-      successMessage: '✨ Nueva línea temporal creada para la realidad corregida',
-      hint: "Usa 'git branch timeline-fixed' para crear la nueva rama"
+      title: 'Ir al punto donde se corrompe la historia',
+      description: 'Vuelve a 1955 (el commit donde Biff recibe el almanaque) para investigar',
+      expectedCommand: 'git checkout 1955',
+      successMessage: '🕰️ Has vuelto a 1955. Archivos creados: hill_valley_ley.txt (Biff propietario), george_mcfly.txt (fallecido)',
+      hint: "Usa 'git checkout 1955' para viajar al punto de corrupción"
     },
     {
       id: 3,
-      title: 'Entrar en la línea corregida',
-      description: "Cambia a la rama 'timeline-fixed'",
-      expectedCommand: 'git checkout timeline-fixed',
-      successMessage: '🎯 Ahora estás en la línea temporal que debe ser corregida',
-      hint: "Usa 'git checkout timeline-fixed' para cambiar a esa rama"
+      title: 'Crear rama para la solución',
+      description: 'Crea una rama para arreglar el problema sin borrar la historia',
+      expectedCommand: 'git branch fix/burn-almanac',
+      successMessage: '🌿 Rama de corrección creada - Trabajarás de forma segura',
+      hint: "Usa 'git branch fix/burn-almanac' para crear una rama de trabajo segura"
     },
     {
       id: 4,
-      title: 'Documentar la recuperación del almanaque',
-      description: 'Agrega archivos documentando cómo Marty recupera el almanaque de Biff',
-      expectedCommand: 'git add .',
-      successMessage: '📚 Recuperación del almanaque documentada',
-      hint: "Usa 'git add .' para agregar los archivos"
+      title: 'Entrar a la rama de corrección',
+      description: 'Cambia a la rama fix/burn-almanac para empezar a trabajar',
+      expectedCommand: 'git checkout fix/burn-almanac',
+      successMessage: '🎯 En la rama de corrección - Listo para quemar el almanaque',
+      hint: "Usa 'git checkout fix/burn-almanac' para cambiar a la rama"
     },
     {
       id: 5,
-      title: 'Registrar la destrucción del almanaque',
-      description: 'Crea un commit documentando que el almanaque fue destruido',
-      expectedCommand: 'git commit',
-      successMessage: '🔥 ¡Almanaque destruido! La línea temporal será restaurada',
-      hint: 'Usa \'git commit -m "mensaje"\' para registrar la destrucción'
+      title: 'Deshacer el cambio de Biff de forma segura',
+      description: 'Usa revert para crear un nuevo commit que anule el "bad commit" de Biff. ¡Quema el almanaque!',
+      expectedCommand: 'git revert',
+      successMessage: '🔥 ¡Almanaque quemado! Nuevo commit creado que invierte los efectos del almanaque de Biff',
+      hint: "Usa 'git revert HEAD' para deshacer el último commit de forma segura sin reescribir historia"
     },
     {
       id: 6,
       title: 'Volver a la línea principal',
-      description: "Regresa al branch 'main'",
+      description: 'Regresa a main para fusionar la corrección',
       expectedCommand: 'git checkout main',
-      successMessage: '🔄 De vuelta en la línea temporal principal',
-      hint: "Usa 'git checkout main' para volver a main"
+      successMessage: '🔄 De vuelta en main - Listo para fusionar la solución',
+      hint: "Usa 'git checkout main' para volver a la rama principal"
     },
     {
       id: 7,
-      title: 'Fusionar la corrección temporal',
-      description: "Haz merge de 'timeline-fixed' para restaurar la realidad",
-      expectedCommand: 'git merge timeline-fixed',
-      successMessage: '🎉 ¡Línea temporal restaurada! Pero Doc ha desaparecido...',
-      hint: "Usa 'git merge timeline-fixed' para fusionar los cambios"
+      title: 'Fusionar la corrección',
+      description: 'Fusiona la rama fix/burn-almanac para restaurar la línea temporal',
+      expectedCommand: 'git merge fix/burn-almanac',
+      successMessage: '✅ Historia restaurada. Biff ya no tiene el almanaque',
+      hint: "Usa 'git merge fix/burn-almanac' para integrar la solución"
+    },
+    {
+      id: 8,
+      title: 'Rescatar a Jennifer específicamente',
+      description: 'En medio del caos de 2015, Jennifer quedó en su casa. Usa cherry-pick para traer solo ese commit',
+      expectedCommand: 'git cherry-pick',
+      successMessage: '👩 ¡Jennifer rescatada! Cherry-pick aplicó solo el commit específico sin traer todo lo demás',
+      hint: "Usa 'git cherry-pick <hash>' para copiar un commit específico a la rama actual"
+    },
+    {
+      id: 9,
+      title: 'Aplicar información de la carta de 1885',
+      description: 'Western Union entrega una carta de Doc desde 1885. Aplica el parche carta_doc_1885.patch',
+      expectedCommand: 'git apply',
+      successMessage: '📜 ¡Carta de Doc aplicada! Urgente: Doc está atrapado en 1885 y necesita rescate',
+      hint: "Usa 'git apply carta_doc_1885.patch' para aplicar los cambios del archivo de parche"
     }
   ],
 
@@ -1414,75 +1725,75 @@ const SCREEN_EXERCISES = {
   screen4: [
     {
       id: 1,
-      title: 'Preparar el rescate de Doc',
-      description: 'Inicializa un nuevo repositorio para el viaje al Lejano Oeste',
-      expectedCommand: 'git init',
-      successMessage: '🤠 ¡Preparándose para el Lejano Oeste! Marty debe rescatar a Doc',
-      hint: "Usa 'git init' para inicializar el repositorio"
+      title: 'Guardar trabajo temporal en 1955',
+      description: 'Marty está en 1955 reparando el DeLorean. Guarda cambios temporalmente con stash',
+      expectedCommand: 'git stash',
+      successMessage: '📦 Trabajo guardado. Archivo delorean.txt (reparaciones en progreso) guardado temporalmente',
+      hint: "Usa 'git stash' para guardar cambios sin hacer commit y poder cambiar de tarea"
     },
     {
       id: 2,
-      title: 'Crear línea temporal del Oeste',
-      description: "Crea una rama llamada '1885' para el Lejano Oeste",
-      expectedCommand: 'git branch 1885',
-      successMessage: '🏜️ Línea temporal del Lejano Oeste creada',
-      hint: "Usa 'git branch 1885' para crear la rama del Oeste"
+      title: 'Crear rama para la aventura del Oeste',
+      description: 'Crea una rama para el rescate de Doc en 1885',
+      expectedCommand: 'git branch aventura/viejo-oeste',
+      successMessage: '🤠 Rama del Lejano Oeste creada - ¡Rescate de Doc comienza!',
+      hint: "Usa 'git branch aventura/viejo-oeste' para crear la rama de la aventura"
     },
     {
       id: 3,
-      title: 'Viajar al Lejano Oeste',
-      description: "Cambia a la rama '1885' para rescatar a Doc",
-      expectedCommand: 'git checkout 1885',
-      successMessage: '🚂 ¡Has llegado al Lejano Oeste de 1885! Busca a Doc',
-      hint: "Usa 'git checkout 1885' para viajar al Oeste"
+      title: 'Entrar a la rama del Oeste',
+      description: 'Cambia a la rama aventura/viejo-oeste para trabajar en el rescate',
+      expectedCommand: 'git checkout aventura/viejo-oeste',
+      successMessage: '🏞️ Has viajado al Lejano Oeste de 1885. Marty encuentra a Doc trabajando de herrero',
+      hint: "Usa 'git checkout aventura/viejo-oeste' para cambiar a la rama"
     },
     {
       id: 4,
-      title: 'Documentar el encuentro con Doc',
-      description: 'Agrega archivos documentando el reencuentro con Doc en 1885',
+      title: 'Documentar que Doc salva a Clara',
+      description: 'Doc impide que Clara caiga al precipicio. Prepara estos archivos',
       expectedCommand: 'git add .',
-      successMessage: '👨‍🔬 Encuentro con Doc documentado',
-      hint: "Usa 'git add .' para agregar los archivos"
+      successMessage: '👩‍💼 Clara Clayton salvada por Doc. El amor comienza...',
+      hint: "Usa 'git add .' para preparar los archivos"
     },
     {
       id: 5,
-      title: 'Registrar el plan de escape',
-      description: 'Crea un commit documentando el plan para volver a 1985',
+      title: 'Confirmar el rescate de Clara',
+      description: 'Doc salvó a Clara del precipicio. Haz commit de este evento crucial',
       expectedCommand: 'git commit',
-      successMessage: '📝 Plan de escape registrado - ¡Usarán la locomotora!',
-      hint: 'Usa \'git commit -m "mensaje"\' para registrar el plan'
+      successMessage: '💕 Commit: El Doc salva a Clara - El amor florece en el Lejano Oeste',
+      hint: 'Usa \'git commit -m "El Doc salva a Clara"\' para registrar el evento'
     },
     {
       id: 6,
-      title: 'Crear línea temporal romántica',
-      description: "Crea una rama llamada 'clara-romance' para la historia de amor de Doc",
-      expectedCommand: 'git branch clara-romance',
-      successMessage: '💕 Línea temporal romántica creada - Doc conoce a Clara',
-      hint: "Usa 'git branch clara-romance' para crear la rama romántica"
+      title: 'Documentar el robo de la locomotora',
+      description: 'Marty y Doc roban una locomotora para empujar el DeLorean. Prepara los archivos',
+      expectedCommand: 'git add .',
+      successMessage: '🚂 Locomotora robada. Plan: empujar el DeLorean a 88 mph',
+      hint: "Usa 'git add .' para preparar los archivos del plan"
     },
     {
       id: 7,
-      title: 'Explorar el romance',
-      description: "Cambia a la rama 'clara-romance'",
-      expectedCommand: 'git checkout clara-romance',
-      successMessage: '💖 Doc se enamora de Clara Clayton',
-      hint: "Usa 'git checkout clara-romance' para explorar el romance"
+      title: 'Confirmar el plan de la locomotora',
+      description: 'Registra el ingenioso plan para el empuje final',
+      expectedCommand: 'git commit',
+      successMessage: '⚡ Commit: Roban locomotora para empuje final. Doc y Clara juntos',
+      hint: 'Usa \'git commit -m "Roban locomotora para el empuje final"\' para registrar'
     },
     {
       id: 8,
-      title: 'Volver a la línea principal',
-      description: "Regresa al branch 'main' para el merge final",
+      title: 'Marty regresa solo a 1985',
+      description: 'Marty vuelve a main. Doc se queda con Clara en el Oeste',
       expectedCommand: 'git checkout main',
-      successMessage: '🔄 En la línea temporal principal para el final',
-      hint: "Usa 'git checkout main' para volver a main"
+      successMessage: '⏱️ Marty ha regresado a 1985. Doc se quedó en 1885 con Clara',
+      hint: "Usa 'git checkout main' para que Marty regrese a su línea temporal"
     },
     {
       id: 9,
-      title: 'Fusionar todas las líneas temporales',
-      description: "Haz merge de '1885' para completar la saga",
-      expectedCommand: 'git merge 1885',
-      successMessage: '🎉 ¡SAGA COMPLETA! Has dominado Git através de Back to the Future',
-      hint: "Usa 'git merge 1885' para completar la historia"
+      title: 'Verificar que la rama de Doc sigue existiendo',
+      description: 'Usa branch -a para ver que aventura/viejo-oeste continúa independiente',
+      expectedCommand: 'git branch',
+      successMessage: '🎉 ¡Ramas visibles! aventura/viejo-oeste sigue viva. Doc y Clara tienen familia en el Oeste',
+      hint: "Usa 'git branch -a' o 'git branch' para ver todas las ramas. La historia de Doc continúa en paralelo"
     }
   ]
 };

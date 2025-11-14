@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pantalla 1: Origin (1985→1955) | Git to the Future</title>
+    <title>Pantalla 1: La Epifanía del Doc Brown | Git to the Future</title>
 
     <!-- CSS Modular -->
     <link rel="stylesheet" href="../css/variables.css" />
@@ -49,7 +49,7 @@
             <div class="plutonium-progress__glow"></div>
           </div>
           <span class="plutonium-progress__counter" id="progressCounter"
-            >0/6</span
+            >0/5</span
           >
         </div>
       </div>
@@ -78,13 +78,15 @@
             <button class="console__cmd-btn" data-command="commit -m 'mensaje'">
               commit
             </button>
-            <button class="console__cmd-btn" data-command="branch">
-              branch
+            <button class="console__cmd-btn" data-command="remote add origin https://github.com/DocBrown/DeLorean.git">
+              remote
             </button>
-            <button class="console__cmd-btn" data-command="checkout">
-              checkout
+            <button class="console__cmd-btn" data-command="push -u origin main">
+              push
             </button>
-            <button class="console__cmd-btn" data-command="merge">merge</button>
+            <button class="console__cmd-btn" data-command="log">
+              log
+            </button>
           </div>
 
           <!-- Input de Comando -->
@@ -171,18 +173,18 @@
             class="mission-card__description"
             style="margin-bottom: 12px; font-size: 13px; line-height: 1.6"
           >
-            <strong style="color: #64b5f6">🎬 Back to the Future</strong>
-            (1985)<br />
-            <strong>📅 Año:</strong> 1955<br />
-            <strong>🎥 Director:</strong> Robert Zemeckis
+            <strong style="color: #64b5f6">🎬 La Epifanía del Doc Brown</strong><br />
+            <strong>📅 Lugar:</strong> Hill Valley, 1985<br />
+            <strong>⚡ Momento:</strong> El Nacimiento del DeLorean
           </p>
           <p
             class="mission-card__description"
             style="font-size: 13px; line-height: 1.6"
           >
-            Marty McFly viaja accidentalmente 30 años al pasado en el DeLorean
-            de Doc Brown. Debe generar 1.21 gigawatts para regresar a 1985
-            mientras asegura que sus padres se enamoren.
+            Eres Doc Brown y estás a punto de cumplir tu epifanía: la máquina del tiempo. 
+            La familia McFly vive en el fracaso: George es cobarde, Lorraine descontenta, 
+            y Biff es el jefe. Pon tu proyecto bajo control de versiones y prepara 
+            la primera demostración en el Twin Pines Mall.
           </p>
           <div
             style="
@@ -329,9 +331,10 @@
               updateProgress();
               updateInstructions(nextResult.exercise);
             }
-          } else if (result.suggestion) {
-            // ⚠️ Mostrar sugerencia
-            ui.showNotification(result.suggestion, 'info', 4000);
+          } else {
+            // ❌ Comando incorrecto - Mostrar error y NO avanzar
+            const errorMsg = result.suggestion || '❌ Comando incorrecto. Usa "hint" para obtener ayuda.';
+            ui.showNotification(errorMsg, 'error', 4000);
           }
         };
 

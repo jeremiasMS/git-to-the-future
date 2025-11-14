@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pantalla 2: Time Travel (2015) | Git to the Future</title>
+    <title>Pantalla 2: El Viaje Accidental a 1955 | Git to the Future</title>
 
     <!-- CSS Modular -->
     <link rel="stylesheet" href="../css/variables.css" />
@@ -49,7 +49,7 @@
             <div class="plutonium-progress__glow"></div>
           </div>
           <span class="plutonium-progress__counter" id="progressCounter"
-            >0/7</span
+            >0/8</span
           >
         </div>
       </div>
@@ -70,21 +70,23 @@
 
           <!-- Botones de Comandos Rápidos -->
           <div class="console__commands">
-            <button class="console__cmd-btn" data-command="init">init</button>
-            <button class="console__cmd-btn" data-command="status">
-              status
+            <button class="console__cmd-btn" data-command="checkout 1955">checkout</button>
+            <button class="console__cmd-btn" data-command="branch feature/fix-past">
+              branch
             </button>
             <button class="console__cmd-btn" data-command="add .">add .</button>
             <button class="console__cmd-btn" data-command="commit -m 'mensaje'">
               commit
             </button>
-            <button class="console__cmd-btn" data-command="branch">
-              branch
+            <button class="console__cmd-btn" data-command="merge feature/fix-past">
+              merge
             </button>
-            <button class="console__cmd-btn" data-command="checkout">
-              checkout
+            <button class="console__cmd-btn" data-command="rebase main">
+              rebase
             </button>
-            <button class="console__cmd-btn" data-command="push">push</button>
+            <button class="console__cmd-btn" data-command="log">
+              log
+            </button>
           </div>
 
           <!-- Input de Comando -->
@@ -171,18 +173,19 @@
             class="mission-card__description"
             style="margin-bottom: 12px; font-size: 13px; line-height: 1.6"
           >
-            <strong style="color: #2196f3">🎬 Back to the Future II</strong>
-            (1989)<br />
-            <strong>📅 Año:</strong> 2015<br />
-            <strong>🎥 Director:</strong> Robert Zemeckis
+            <strong style="color: #ff9100">⚡ El Viaje Accidental a 1955</strong><br />
+            <strong>📅 Año:</strong> 1955<br />
+            <strong>🚗 Conflicto:</strong> Paradoja Temporal
           </p>
           <p
             class="mission-card__description"
             style="font-size: 13px; line-height: 1.6"
           >
-            Marty y Doc viajan al futuro (2015) para salvar a la familia McFly. 
-            Sin embargo, el anciano Biff roba el DeLorean y altera la historia 
-            con un almanaque deportivo, creando una línea temporal distópica.
+            Acabas de conocer la máquina del tiempo y te ves involucrado en un conflicto 
+            con plutonio y libios. Viajas accidentalmente a 1955 e introduces problemas: 
+            impides que tus padres se conozcan. Debes crear una branch para agregar 
+            correcciones sin alterar la rama principal. Luego, fusionar y reescribir 
+            la historia con rebase para el 1985 mejorado.
           </p>
           <div
             style="
@@ -238,6 +241,59 @@
         // 2️⃣ Configurar ejercicios y conectar validador
         validator.setExercises(SCREEN_EXERCISES.screen2);
         consoleCtrl.setValidator(validator);
+
+        // 🎬 Hardcoded: Repositorio inicializado con commits y branches
+        consoleCtrl.state.initialized = true;
+        consoleCtrl.state.branches = ['main', '1985', '1955'];
+        consoleCtrl.state.currentBranch = 'main';
+        
+        // Inicializar grafo
+        graph.init();
+        
+        // Estado inicial en 1985
+        graph.commit('Estado inicial: 1985');
+        consoleCtrl.state.commits.push({
+          hash: 'abc1985',
+          message: 'Estado inicial: 1985',
+          branch: 'main',
+          timestamp: Date.now()
+        });
+        
+        // Crear y cambiar a branch 1985
+        graph.branch('1985');
+        graph.checkout('1985');
+        consoleCtrl.state.currentBranch = '1985';
+        
+        // Commit: Viaje a 1955
+        graph.commit('Viaje a 1955');
+        consoleCtrl.state.commits.push({
+          hash: 'def1955',
+          message: 'Viaje a 1955',
+          branch: '1985',
+          timestamp: Date.now()
+        });
+        
+        // Volver a main y crear branch 1955
+        graph.checkout('main');
+        graph.branch('1955');
+        graph.checkout('1955');
+        consoleCtrl.state.currentBranch = '1955';
+        
+        // Commit: Encuentro interrumpido
+        graph.commit('Encuentro interrumpido');
+        consoleCtrl.state.commits.push({
+          hash: 'ghi1955',
+          message: 'Encuentro interrumpido',
+          branch: '1955',
+          timestamp: Date.now()
+        });
+        
+        // Volver a main para empezar ejercicios
+        graph.checkout('main');
+        consoleCtrl.state.currentBranch = 'main';
+        
+        consoleCtrl.addOutput('📍 Repositorio inicializado. Branches: main, 1985, 1955');
+        consoleCtrl.addOutput('💡 Usa "git log --oneline" para ver el historial');
 
         // 3️⃣ Función para actualizar la UI del progreso
         function updateProgress() {
@@ -329,9 +385,10 @@
               updateProgress();
               updateInstructions(nextResult.exercise);
             }
-          } else if (result.suggestion) {
-            // ⚠️ Mostrar sugerencia
-            ui.showNotification(result.suggestion, 'info', 4000);
+          } else {
+            // ❌ Comando incorrecto - Mostrar error y NO avanzar
+            const errorMsg = result.suggestion || '❌ Comando incorrecto. Usa "hint" para obtener ayuda.';
+            ui.showNotification(errorMsg, 'error', 4000);
           }
         };
 
