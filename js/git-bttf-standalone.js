@@ -20,7 +20,7 @@ class ScreenController {
       { id: 2, name: 'Time Travel', path: 'screen2.html', completed: false, locked: true },
       { id: 3, name: 'Dystopia', path: 'screen3.html', completed: false, locked: true },
       { id: 4, name: 'Wild West', path: 'screen4.html', completed: false, locked: true },
-      { id: 5, name: 'Demo BTTF', path: 'demo.html', completed: false, locked: true },
+      { id: 5, name: 'Certificado', path: 'certificate.html', completed: false, locked: true },
     ];
     this.loadProgress();
   }
@@ -593,6 +593,7 @@ class ConsoleController {
     this.graphController = graphController;
     this.validator = null;
     this.isFirstCommand = true; // Bandera para detectar primer comando
+    this.lastCommandSuccess = true; // Rastrear si el último comando tuvo éxito
     
     this.state = {
       initialized: false,
@@ -633,9 +634,27 @@ class ConsoleController {
     this.validator = validator;
   }
 
+  // 🆕 Actualizar indicador de rama en la UI
+  updateBranchIndicator() {
+    const indicator = document.getElementById('currentBranchIndicator');
+    console.log('🔍 Actualizando indicador de rama:', {
+      elemento: indicator,
+      ramaActual: this.state.currentBranch
+    });
+    if (indicator) {
+      indicator.textContent = this.state.currentBranch;
+      console.log('✅ Indicador actualizado a:', this.state.currentBranch);
+    } else {
+      console.error('❌ No se encontró el elemento currentBranchIndicator');
+    }
+  }
+
   executeCommand(commandString) {
     // Limpiar mensaje de bienvenida antes de ejecutar el primer comando
     this.clearWelcomeMessage();
+    
+    // Inicializar el flag de éxito (cada comando empieza exitoso hasta que falle)
+    this.lastCommandSuccess = true;
 
     const parts = commandString.toLowerCase().trim().split(' ');
     const isGitCommand = parts[0] === 'git';
@@ -716,6 +735,7 @@ class ConsoleController {
     }
     
     this.state.initialized = true;
+    this.state.currentBranch = 'main';
     this.addOutput('Repositorio Git inicializado correctamente', 'success');
     
     if (this.graphController) {
@@ -726,6 +746,19 @@ class ConsoleController {
         this.addOutput('⚠️ Gráfico Git no disponible aún', 'warning');
       }
     }
+    
+    // Actualizar indicador de rama
+    console.log('🔄 Llamando updateBranchIndicator desde gitInit');
+    this.updateBranchIndicator();
+    
+    // Forzar actualización directa como backup
+    setTimeout(() => {
+      const indicator = document.getElementById('currentBranchIndicator');
+      if (indicator) {
+        indicator.textContent = 'main';
+        console.log('✅ Indicador actualizado directamente a main');
+      }
+    }, 100);
   }
 
   gitStatus() {
@@ -777,25 +810,30 @@ class ConsoleController {
 
     if (this.state.staged.length === 0) {
       this.addOutput('No hay cambios en el staging area', 'warning');
+      this.lastCommandSuccess = false;
       return;
     }
 
     const messageIndex = args.indexOf('-m');
     if (messageIndex === -1 || messageIndex === args.length - 1) {
       this.addOutput('Error: falta el mensaje del commit (-m)', 'error');
+      this.lastCommandSuccess = false;
       return;
     }
 
     const message = args.slice(messageIndex + 1).join(' ').replace(/['"]/g, '');
+    const hash = this.generateHash();
+    const shortHash = hash.substring(0, 7);
     
     this.state.commits.push({
       message: message,
       files: [...this.state.staged],
-      branch: this.state.currentBranch
+      branch: this.state.currentBranch,
+      hash: hash
     });
 
-    const hash = this.generateHash();
-    this.addOutput(`[${this.state.currentBranch} ${hash}] ${message}`, 'success');
+    // Mostrar hash destacado
+    this.addOutput(`[${this.state.currentBranch} ${shortHash}] ${message}`, 'commit-hash');
     this.addOutput(`${this.state.staged.length} archivo(s) cambiados`, 'info');
 
     // Actualizar gráfico
@@ -844,6 +882,9 @@ class ConsoleController {
         this.graphController.checkout(previousBranch);
         this.state.currentBranch = previousBranch; // Mantener el estado correcto
         
+        // Actualizar indicador para mostrar que seguimos en la rama anterior
+        this.updateBranchIndicator();
+        
         this.addOutput(`🌿 Rama '${branchName}' creada y visible en el gráfico`, 'success');
         this.addOutput(`💡 Usa 'git checkout ${branchName}' para cambiar a esta rama`, 'info');
       } else {
@@ -872,6 +913,7 @@ class ConsoleController {
 
     if (args.length === 0) {
       this.addOutput('Error: falta el nombre de la rama o commit', 'error');
+      this.lastCommandSuccess = false;
       return;
     }
 
@@ -898,6 +940,7 @@ class ConsoleController {
     
     if (!this.state.branches.includes(target) && !isSimulatedCommit) {
       this.addOutput(`error: pathspec '${target}' did not match any file(s) known to git`, 'error');
+      this.lastCommandSuccess = false;
       return;
     }
 
@@ -916,12 +959,19 @@ class ConsoleController {
 
     this.state.currentBranch = target;
     this.addOutput(`Switched to branch '${target}'`, 'success');
+    
+    // Actualizar indicador INMEDIATAMENTE después de cambiar el estado
+    console.log('🔄 Actualizando indicador ANTES de checkout en grafo');
+    this.updateBranchIndicator();
 
     if (this.graphController) {
       const success = this.graphController.checkout(target);
       if (success) {
         this.addOutput(`📊 ✓ Ahora estás en la rama '${target}'`, 'success');
         this.addOutput(`💡 Haz un commit para ver la bifurcación en el gráfico`, 'info');
+      } else {
+        // Si el checkout en el grafo falla, el indicador ya se actualizó
+        this.addOutput(`⚠️ Rama cambiada en el estado (el grafo no se actualizó)`, 'warning');
       }
     }
   }
@@ -934,6 +984,7 @@ class ConsoleController {
 
     if (args.length === 0) {
       this.addOutput('Error: falta el nombre de la rama a fusionar', 'error');
+      this.lastCommandSuccess = false;
       return;
     }
 
@@ -941,6 +992,7 @@ class ConsoleController {
     
     if (!this.state.branches.includes(sourceBranch)) {
       this.addOutput(`merge: ${sourceBranch} - not something we can merge`, 'error');
+      this.lastCommandSuccess = false;
       return;
     }
 
@@ -965,12 +1017,14 @@ class ConsoleController {
   gitRebase(args) {
     if (!this.state.initialized) {
       this.addOutput('fatal: not a git repository', 'error');
+      this.lastCommandSuccess = false;
       return;
     }
 
     if (args.length === 0) {
       this.addOutput('Error: falta el nombre de la rama base', 'error');
       this.addOutput('Uso: git rebase <rama-base>', 'info');
+      this.lastCommandSuccess = false;
       return;
     }
 
@@ -978,6 +1032,7 @@ class ConsoleController {
     
     if (!this.state.branches.includes(baseBranch)) {
       this.addOutput(`fatal: invalid upstream '${baseBranch}'`, 'error');
+      this.lastCommandSuccess = false;
       return;
     }
 
@@ -1000,6 +1055,7 @@ class ConsoleController {
         this.addOutput(`💡 Los commits de '${this.state.currentBranch}' ahora están sobre '${baseBranch}'`, 'info');
       } else {
         this.addOutput('⚠️ No se pudo completar el rebase', 'warning');
+        this.lastCommandSuccess = false;
       }
     }
   }
@@ -1007,6 +1063,17 @@ class ConsoleController {
   gitPull(args) {
     if (!this.state.initialized) {
       this.addOutput('fatal: not a git repository', 'error');
+      this.lastCommandSuccess = false;
+      return;
+    }
+
+    // Verificar que hay un remoto configurado
+    if (!this.state.remotes || this.state.remotes.length === 0) {
+      this.addOutput('fatal: No remote repository specified.', 'error');
+      this.addOutput('Please, specify which branch you want to use on the command line and', 'error');
+      this.addOutput('try again (e.g. "git pull origin main").', 'error');
+      this.addOutput('💡 Primero configura un remoto con "git remote add origin <url>"', 'info');
+      this.lastCommandSuccess = false;
       return;
     }
 
@@ -1133,11 +1200,13 @@ class ConsoleController {
   gitRevert(args) {
     if (!this.state.initialized) {
       this.addOutput('fatal: not a git repository', 'error');
+      this.lastCommandSuccess = false;
       return;
     }
 
     if (this.state.commits.length === 0) {
       this.addOutput('No hay commits para revertir', 'warning');
+      this.lastCommandSuccess = false;
       return;
     }
 
@@ -1166,6 +1235,7 @@ class ConsoleController {
   gitStash(args) {
     if (!this.state.initialized) {
       this.addOutput('fatal: not a git repository', 'error');
+      this.lastCommandSuccess = false;
       return;
     }
 
@@ -1175,6 +1245,7 @@ class ConsoleController {
       // git stash (sin argumentos) = stash push
       if (this.state.staged.length === 0) {
         this.addOutput('No hay cambios para guardar en el stash', 'info');
+        this.lastCommandSuccess = false;
         return;
       }
 
@@ -1215,6 +1286,7 @@ class ConsoleController {
       // git stash pop
       if (!this.state.stash || this.state.stash.length === 0) {
         this.addOutput('No hay entradas en el stash para recuperar', 'warning');
+        this.lastCommandSuccess = false;
         return;
       }
 
@@ -1247,16 +1319,31 @@ class ConsoleController {
   gitCherryPick(args) {
     if (!this.state.initialized) {
       this.addOutput('fatal: not a git repository', 'error');
+      this.lastCommandSuccess = false;
       return;
     }
 
     if (args.length === 0) {
       this.addOutput('Error: falta el hash del commit a cherry-pick', 'error');
       this.addOutput('Uso: git cherry-pick <commit-hash>', 'info');
+      this.lastCommandSuccess = false;
       return;
     }
 
     const commitHash = args[0];
+    
+    // Validar que el commit existe (por hash o por número)
+    const commitExists = this.state.commits.some(commit => 
+      commit.hash.startsWith(commitHash) || commit.message.includes(commitHash)
+    );
+    
+    if (!commitExists) {
+      this.addOutput(`fatal: bad revision '${commitHash}'`, 'error');
+      this.addOutput(`Error: el commit ${commitHash} no existe`, 'error');
+      this.addOutput('💡 Usa "git log" para ver los commits disponibles', 'info');
+      this.lastCommandSuccess = false;
+      return;
+    }
     
     this.addOutput(`Aplicando commit ${commitHash}...`, 'info');
     this.addOutput(``, 'info');
@@ -1281,16 +1368,26 @@ class ConsoleController {
   gitApply(args) {
     if (!this.state.initialized) {
       this.addOutput('fatal: not a git repository', 'error');
+      this.lastCommandSuccess = false;
       return;
     }
 
     if (args.length === 0) {
       this.addOutput('Error: falta el archivo de parche', 'error');
       this.addOutput('Uso: git apply <archivo.patch>', 'info');
+      this.lastCommandSuccess = false;
       return;
     }
 
     const patchFile = args[0];
+    
+    // Validar que el archivo de parche tenga extensión .patch
+    if (!patchFile.endsWith('.patch')) {
+      this.addOutput(`error: ${patchFile}: No such file or directory`, 'error');
+      this.addOutput(`fatal: can't open patch '${patchFile}': No such file or directory`, 'error');
+      this.lastCommandSuccess = false;
+      return;
+    }
     
     this.addOutput(`Aplicando parche ${patchFile}...`, 'info');
     this.addOutput(`Checking patch ${patchFile}...`, 'info');
@@ -1317,11 +1414,26 @@ class ConsoleController {
       return;
     }
 
-    this.state.commits.reverse().forEach((commit, index) => {
-      this.addOutput(`commit ${this.generateHash()}`, 'info');
+    // Mostrar commits en orden inverso (más reciente primero)
+    const reversedCommits = [...this.state.commits].reverse();
+    
+    reversedCommits.forEach((commit, index) => {
+      const shortHash = commit.hash.substring(0, 7);
+      
+      // Línea de commit con hash destacado en amarillo
+      this.addOutput(`commit ${commit.hash}`, 'commit-hash');
+      this.addOutput(`Author: Git to the Future <git@bttf.dev>`, 'info');
+      this.addOutput(`Date:   ${new Date().toDateString()}`, 'info');
+      this.addOutput('', 'info');
       this.addOutput(`    ${commit.message}`, 'info');
-      if (index < this.state.commits.length - 1) this.addOutput('', 'info');
+      this.addOutput('', 'info');
+      
+      if (index < reversedCommits.length - 1) {
+        this.addOutput('', 'info');
+      }
     });
+    
+    this.addOutput('💡 Usa los primeros 7 caracteres del hash para referirte al commit', 'info');
   }
 
   resetAll() {

@@ -6,7 +6,7 @@ export class ScreenController {
       { id: 2, name: 'Time Travel', path: 'screen2.html', completed: false, locked: true },
       { id: 3, name: 'Dystopia', path: 'screen3.html', completed: false, locked: true },
       { id: 4, name: 'Wild West', path: 'screen4.html', completed: false, locked: true },
-      { id: 5, name: 'Demo BTTF', path: 'demo.html', completed: false, locked: true },
+      { id: 5, name: 'Certificado', path: 'certificate.html', completed: false, locked: true },
     ];
 
     this.currentScreen = null;

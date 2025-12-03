@@ -21,7 +21,11 @@
     <!-- Header con Logo y Back Button -->
     <header class="screen-header">
       <div class="screen-header__left">
-        <a href="../index-menu.html" title="Volver al menú principal" id="backBtn">
+        <a
+          href="../index-menu.html"
+          title="Volver al menú principal"
+          id="backBtn"
+        >
           <img
             src="../assets/fonts/img/Back.png"
             alt="Volver"
@@ -78,15 +82,16 @@
             <button class="console__cmd-btn" data-command="commit -m 'mensaje'">
               commit
             </button>
-            <button class="console__cmd-btn" data-command="remote add origin https://github.com/DocBrown/DeLorean.git">
+            <button
+              class="console__cmd-btn"
+              data-command="remote add origin https://github.com/DocBrown/DeLorean.git"
+            >
               remote
             </button>
             <button class="console__cmd-btn" data-command="push -u origin main">
               push
             </button>
-            <button class="console__cmd-btn" data-command="log">
-              log
-            </button>
+            <button class="console__cmd-btn" data-command="log">log</button>
           </div>
 
           <!-- Input de Comando -->
@@ -133,7 +138,7 @@
               <div class="graph__empty-line"></div>
               <div class="graph__empty-line"></div>
               <div class="graph__empty-text">
-                Visualizador de Líneas Temporales
+                Visualizador de Líneas Temporalesa
               </div>
               <div class="graph__empty-line"></div>
               <div class="graph__empty-hint">
@@ -148,7 +153,7 @@
 
           <!-- Branch Indicator movido abajo -->
           <div class="branch-indicator">
-            <span class="branch-indicator__label">Branch:</span>
+            <span class="branch-indicator__label"></span>
             <span class="branch-indicator__value" id="currentBranchIndicator"
               >Sin repositorio</span
             >
@@ -173,7 +178,8 @@
             class="mission-card__description"
             style="margin-bottom: 12px; font-size: 13px; line-height: 1.6"
           >
-            <strong style="color: #64b5f6">🎬 La Epifanía del Doc Brown</strong><br />
+            <strong style="color: #64b5f6">🎬 La Epifanía del Doc Brown</strong
+            ><br />
             <strong>📅 Lugar:</strong> Hill Valley, 1985<br />
             <strong>⚡ Momento:</strong> El Nacimiento del DeLorean
           </p>
@@ -181,10 +187,11 @@
             class="mission-card__description"
             style="font-size: 13px; line-height: 1.6"
           >
-            Eres Doc Brown y estás a punto de cumplir tu epifanía: la máquina del tiempo. 
-            La familia McFly vive en el fracaso: George es cobarde, Lorraine descontenta, 
-            y Biff es el jefe. Pon tu proyecto bajo control de versiones y prepara 
-            la primera demostración en el Twin Pines Mall.
+            Eres Doc Brown y estás a punto de cumplir tu epifanía: la máquina
+            del tiempo. La familia McFly vive en el fracaso: George es cobarde,
+            Lorraine descontenta, y Biff es el jefe. Pon tu proyecto bajo
+            control de versiones y prepara la primera demostración en el Twin
+            Pines Mall.
           </p>
           <div
             style="
@@ -210,9 +217,21 @@
         </div>
 
         <!-- Tarjeta de Pista -->
-        <div class="mission-card mission-card--hint" id="hintCard" style="display: none;">
+        <div
+          class="mission-card mission-card--hint"
+          id="hintCard"
+          style="display: none"
+        >
           <h2 class="mission-card__title">PISTA</h2>
-          <p class="mission-card__text" id="hintText" style="font-size: 13px; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+          <p
+            class="mission-card__text"
+            id="hintText"
+            style="
+              font-size: 13px;
+              line-height: 1.6;
+              color: rgba(255, 255, 255, 0.9);
+            "
+          >
             <!-- La pista se mostrará aquí -->
           </p>
         </div>
@@ -297,6 +316,13 @@
           // Ejecutar comando
           originalExecute(commandString);
 
+          // ❗ VERIFICAR QUE EL COMANDO SE HAYA EJECUTADO EXITOSAMENTE
+          if (!consoleCtrl.lastCommandSuccess) {
+            // Si el comando falló, no validar el ejercicio
+            console.log('❌ Comando falló, no se valida el ejercicio');
+            return;
+          }
+
           // Validar ejercicio actual
           const parts = cmd.split(' ');
           const command = parts[0] === 'git' ? parts[1] : parts[0];
@@ -311,7 +337,7 @@
             if (nextResult.completed) {
               // Actualizar progreso al 100% antes de mostrar completación
               updateProgress();
-              
+
               // 🎉 ¡Pantalla completada!
               ui.showNotification(
                 '🎉 ¡Has completado la Pantalla 1!',
@@ -331,11 +357,15 @@
               updateProgress();
               updateInstructions(nextResult.exercise);
             }
-          } else {
-            // ❌ Comando incorrecto - Mostrar error y NO avanzar
-            const errorMsg = result.suggestion || '❌ Comando incorrecto. Usa "hint" para obtener ayuda.';
+          } else if (result.shouldShowError) {
+            // ❌ Mostrar error solo si el comando es del tipo esperado pero con argumentos incorrectos
+            const errorMsg =
+              result.message ||
+              result.suggestion ||
+              '❌ Comando incorrecto. Usa "hint" para obtener ayuda.';
             ui.showNotification(errorMsg, 'error', 4000);
           }
+          // Si no es el tipo de comando esperado, no mostrar error (permitir explorar)
         };
 
         // 7️⃣ Event Listeners
@@ -389,27 +419,27 @@
             const exercise = validator.getCurrentExercise();
             const hintCard = document.getElementById('hintCard');
             const hintText = document.getElementById('hintText');
-            
+
             if (exercise && hintCard && hintText) {
               hintText.textContent = exercise.hint;
-              
+
               // Remover clase hide si existe
               hintCard.classList.remove('hide');
-              
+
               // Mostrar con animación
               hintCard.style.display = 'block';
-              
+
               // Forzar reflow para que la animación funcione
               void hintCard.offsetWidth;
-              
+
               // Agregar clase show para activar animación
               hintCard.classList.add('show');
-              
+
               // Auto-ocultar después de 8 segundos con animación
               setTimeout(() => {
                 hintCard.classList.remove('show');
                 hintCard.classList.add('hide');
-                
+
                 // Esperar a que termine la animación antes de ocultar
                 setTimeout(() => {
                   hintCard.style.display = 'none';
@@ -420,11 +450,19 @@
           });
         }
 
-        // Actualizar indicador de rama
+        // Actualizar indicador de rama cuando se hace checkout
         const originalCheckout = graph.checkout.bind(graph);
         graph.checkout = function (branchName) {
           const result = originalCheckout(branchName);
           if (result) ui.updateBranchIndicator(branchName);
+          return result;
+        };
+
+        // Actualizar indicador de rama cuando se inicializa
+        const originalInit = graph.init.bind(graph);
+        graph.init = function () {
+          const result = originalInit();
+          if (result) ui.updateBranchIndicator('main');
           return result;
         };
 

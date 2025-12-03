@@ -44,7 +44,7 @@ export class ExerciseValidator {
   // 🆕 Analizar comando y dar feedback específico
   analyzeCommand(command, args) {
     const exercise = this.getCurrentExercise();
-    if (!exercise) return { valid: false, message: '❌ No hay ejercicios activos' };
+    if (!exercise) return { valid: false, shouldShowError: false, message: '❌ No hay ejercicios activos' };
 
     const fullCommand = `${command} ${args.join(' ')}`.trim().toLowerCase();
     const expected = exercise.expectedCommand.toLowerCase();
@@ -52,7 +52,8 @@ export class ExerciseValidator {
     // ✅ Comando correcto
     if (this.isCommandMatch(fullCommand, expected)) {
       return { 
-        valid: true, 
+        valid: true,
+        shouldShowError: false,
         message: exercise.successMessage 
       };
     }
@@ -64,18 +65,39 @@ export class ExerciseValidator {
     const expectedCmd = expectedParts[0] === 'git' ? expectedParts[1] : expectedParts[0];
     const actualCmd = actualParts[0] === 'git' ? actualParts[1] : actualParts[0];
     
-    // Comando diferente al esperado
+    // Comando diferente al esperado - NO mostrar error (permitir explorar)
     if (actualCmd !== expectedCmd) {
       return { 
-        valid: false, 
-        message: `❌ Se esperaba el comando "${expectedCmd}"`,
+        valid: false,
+        shouldShowError: false,
+        message: `Se esperaba el comando "${expectedCmd}"`,
         suggestion: exercise.hint
       };
     }
 
-    // Comando correcto pero faltan/sobran argumentos
+    // Comando correcto pero argumentos incorrectos - SÍ mostrar error
+    if (expectedCmd === 'commit') {
+      return { 
+        valid: false,
+        shouldShowError: true,
+        message: `❌ El mensaje del commit no es el esperado. Revisa las instrucciones.`,
+        suggestion: exercise.hint
+      };
+    }
+
+    if (expectedCmd === 'branch' || expectedCmd === 'checkout') {
+      return { 
+        valid: false,
+        shouldShowError: true,
+        message: `❌ El nombre de la rama no es el esperado. Revisa las instrucciones.`,
+        suggestion: exercise.hint
+      };
+    }
+
+    // Otros casos - mostrar error genérico
     return { 
-      valid: false, 
+      valid: false,
+      shouldShowError: true,
       message: `❌ Revisa los argumentos del comando`,
       suggestion: exercise.hint
     };
@@ -89,24 +111,39 @@ export class ExerciseValidator {
   // Comparar comandos (con flexibilidad para variaciones)
   isCommandMatch(actual, expected) {
     // Normalizar espacios y remover "git" si existe
-    const cleanActual = actual.replace(/^git\s+/, '').replace(/\s+/g, ' ').trim();
-    const cleanExpected = expected.replace(/^git\s+/, '').replace(/\s+/g, ' ').trim();
+    const cleanActual = actual.replace(/^git\s+/, '').replace(/\s+/g, ' ').trim().toLowerCase();
+    const cleanExpected = expected.replace(/^git\s+/, '').replace(/\s+/g, ' ').trim().toLowerCase();
 
-    // Para commits, solo verificar que tenga commit y -m
+    // Para commits, verificar mensaje EXACTO (normalizado)
     if (cleanExpected.startsWith('commit')) {
-      return cleanActual.startsWith('commit') && cleanActual.includes('-m');
+      if (!cleanActual.startsWith('commit') || !cleanActual.includes('-m')) {
+        return false;
+      }
+      
+      // Extraer el mensaje del commit (entre comillas)
+      const actualMatch = cleanActual.match(/commit\s+-m\s+["'](.+?)["']/);
+      const expectedMatch = cleanExpected.match(/commit\s+-m\s+["'](.+?)["']/);
+      
+      if (!actualMatch || !expectedMatch) {
+        return false;
+      }
+      
+      // Comparar mensajes normalizados (sin importar comillas simples o dobles)
+      return actualMatch[1].toLowerCase().trim() === expectedMatch[1].toLowerCase().trim();
     }
 
-    // Para branch, verificar comando + nombre de rama
+    // Para branch, verificar comando + nombre de rama EXACTO
     if (cleanExpected.startsWith('branch')) {
       const expectedBranch = cleanExpected.split(' ')[1];
-      return cleanActual.startsWith('branch') && cleanActual.includes(expectedBranch);
+      const actualBranch = cleanActual.split(' ')[1];
+      return cleanActual.startsWith('branch') && actualBranch === expectedBranch;
     }
 
-    // Para checkout, verificar comando + nombre de rama
+    // Para checkout, verificar comando + nombre de rama EXACTO
     if (cleanExpected.startsWith('checkout')) {
       const expectedBranch = cleanExpected.split(' ')[1];
-      return cleanActual.startsWith('checkout') && cleanActual.includes(expectedBranch);
+      const actualBranch = cleanActual.split(' ')[1];
+      return cleanActual.startsWith('checkout') && actualBranch === expectedBranch;
     }
 
     // Para rebase, verificar comando + rama

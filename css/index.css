@@ -109,8 +109,8 @@ body {
  ============================================ */
 .content-card {
   padding: var(--spacing-xs) var(--spacing-lg);
-  margin-bottom: 0;
-  min-height: 70vh;
+  margin-bottom: var(--spacing-xl);
+  min-height: 65vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -124,23 +124,27 @@ body {
   flex-direction: column;
   justify-content: center;
   padding-bottom: 0;
+  margin-bottom: 0;
 }
 
 /* Mission Section with Extra Space */
 .content-card--mission {
   padding-top: var(--spacing-xl);
   margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 /* Hero Card with DeLorean */
 .content-card--hero {
-  min-height: 10vh;
+  min-height: 45vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-sm) var(--spacing-lg);
+  padding-bottom: 0;
   gap: var(--spacing-md);
+  margin-bottom: 0;
 }
 
 .content-card--hero h3 {
@@ -197,15 +201,15 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin-top: 120px;
+  margin-top: 40px;
 }
 
 .delorean-console {
-  max-width: 650px;
+  max-width: 550px;
   width: 100%;
   height: auto;
   filter: drop-shadow(0 10px 40px rgba(33, 150, 243, 0.5));
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 0;
 }
 
 /* Shadow under DeLorean */

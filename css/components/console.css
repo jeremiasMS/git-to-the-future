@@ -126,6 +126,20 @@
   color: #f48771;
 }
 
+/* Hash de commits destacado en amarillo brillante */
+.console__output-line--commit-hash {
+  color: #ffcc00;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(255, 204, 0, 0.6);
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  background: rgba(255, 204, 0, 0.1);
+  padding: 4px 8px;
+  border-radius: 3px;
+  border-left: 3px solid #ffcc00;
+  margin: 4px 0;
+}
+
 /* Command Buttons Grid - Estilo Terminal */
 .console__commands {
   display: grid;

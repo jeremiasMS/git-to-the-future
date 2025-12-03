@@ -8,7 +8,7 @@
   margin-bottom: 0;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0px;
   box-shadow: none;
   font-family: 'Consolas', 'Courier New', monospace;
   flex-shrink: 0;
@@ -29,11 +29,6 @@
   color: #4ec9b0;
 }
 
-.branch-indicator__label::after {
-  content: ')';
-  color: #4ec9b0;
-}
-
 .branch-indicator__value {
   background-color: transparent;
   color: #f48771;
@@ -48,20 +43,25 @@
   transition: all 0.15s ease;
   line-height: 1;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .branch-indicator__value::before {
-  content: '✦ ';
+  content: '';
   color: #00ff00;
   font-size: 12px;
+}
+
+.branch-indicator__value::after {
+  content: ')';
+  color: #4ec9b0;
 }
 
 @media (max-width: 768px) {
   .branch-indicator {
     flex-direction: row;
-    gap: 8px;
+    gap: 0px;
   }
   
   .branch-indicator__value {

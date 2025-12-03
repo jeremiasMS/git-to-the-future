@@ -21,7 +21,11 @@
     <!-- Header con Logo y Back Button -->
     <header class="screen-header">
       <div class="screen-header__left">
-        <a href="../index-menu.html" title="Volver al menú principal" id="backBtn">
+        <a
+          href="../index-menu.html"
+          title="Volver al menú principal"
+          id="backBtn"
+        >
           <img
             src="../assets/fonts/img/Back.png"
             alt="Volver"
@@ -74,17 +78,28 @@
             <button class="console__cmd-btn" data-command="checkout 1955">
               checkout
             </button>
-            <button class="console__cmd-btn" data-command="branch fix/burn-almanac">branch</button>
+            <button
+              class="console__cmd-btn"
+              data-command="branch fix/burn-almanac"
+            >
+              branch
+            </button>
             <button class="console__cmd-btn" data-command="revert HEAD">
               revert
             </button>
-            <button class="console__cmd-btn" data-command="merge fix/burn-almanac">
+            <button
+              class="console__cmd-btn"
+              data-command="merge fix/burn-almanac"
+            >
               merge
             </button>
             <button class="console__cmd-btn" data-command="cherry-pick">
               cherry-pick
             </button>
-            <button class="console__cmd-btn" data-command="apply carta_doc_1885.patch">
+            <button
+              class="console__cmd-btn"
+              data-command="apply carta_doc_1885.patch"
+            >
               apply
             </button>
           </div>
@@ -146,9 +161,9 @@
             </div>
           </div>
 
-          <!-- Branch Indicator movido abajo -->
+          <!-- Branch Indicator -->
           <div class="branch-indicator">
-            <span class="branch-indicator__label">Branch:</span>
+            <span class="branch-indicator__label"></span>
             <span class="branch-indicator__value" id="currentBranchIndicator"
               >Sin repositorio</span
             >
@@ -181,11 +196,11 @@
             class="mission-card__description"
             style="font-size: 13px; line-height: 1.6"
           >
-            Marty y Doc están en 2015, pero al hacer pull descubren que Biff 
-            ha reescrito la historia (git reset --hard). Hill Valley es una distopía: 
-            Biff millonario, George muerto. Debes usar git revert para deshacer 
-            el cambio quemando el almanaque, cherry-pick para rescatar a Jennifer, 
-            y git apply para recibir la carta de Doc desde 1885.
+            Marty y Doc están en 2015, pero al hacer pull descubren que Biff ha
+            reescrito la historia (git reset --hard). Hill Valley es una
+            distopía: Biff millonario, George muerto. Debes usar git revert para
+            deshacer el cambio quemando el almanaque, cherry-pick para rescatar
+            a Jennifer, y git apply para recibir la carta de Doc desde 1885.
           </p>
           <div
             style="
@@ -211,9 +226,21 @@
         </div>
 
         <!-- Tarjeta de Pista -->
-        <div class="mission-card mission-card--hint" id="hintCard" style="display: none;">
+        <div
+          class="mission-card mission-card--hint"
+          id="hintCard"
+          style="display: none"
+        >
           <h2 class="mission-card__title">PISTA</h2>
-          <p class="mission-card__text" id="hintText" style="font-size: 13px; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+          <p
+            class="mission-card__text"
+            id="hintText"
+            style="
+              font-size: 13px;
+              line-height: 1.6;
+              color: rgba(255, 255, 255, 0.9);
+            "
+          >
             <!-- La pista se mostrará aquí -->
           </p>
         </div>
@@ -246,60 +273,69 @@
         consoleCtrl.state.initialized = true;
         consoleCtrl.state.branches = ['main', 'biff-paradise'];
         consoleCtrl.state.currentBranch = 'main';
-        consoleCtrl.state.remotes = [{
-          name: 'origin',
-          url: 'https://github.com/hill-valley/timeline-corrupted.git',
-          branches: ['main', 'biff-paradise']
-        }];
-        
+        consoleCtrl.state.remotes = [
+          {
+            name: 'origin',
+            url: 'https://github.com/hill-valley/timeline-corrupted.git',
+            branches: ['main', 'biff-paradise'],
+          },
+        ];
+
         // Inicializar grafo
         graph.init();
-        
+
         // Commits en main (timeline normal)
         graph.commit('1985: Vida normal');
         consoleCtrl.state.commits.push({
           hash: 'aaa1985',
           message: '1985: Vida normal',
           branch: 'main',
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
-        
+
         graph.commit('1955: Viaje al pasado');
         consoleCtrl.state.commits.push({
           hash: 'bbb1955',
           message: '1955: Viaje al pasado',
           branch: 'main',
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
-        
+
         // Crear branch corrupto biff-paradise
         graph.branch('biff-paradise');
         graph.checkout('biff-paradise');
         consoleCtrl.state.currentBranch = 'biff-paradise';
-        
+
         graph.commit('Biff recibe almanaque deportivo');
         consoleCtrl.state.commits.push({
           hash: 'ccc1955',
           message: 'Biff recibe almanaque deportivo',
           branch: 'biff-paradise',
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
-        
+
         graph.commit('1985A: Distopía de Biff');
         consoleCtrl.state.commits.push({
           hash: 'ddd1985a',
           message: '1985A: Distopía de Biff',
           branch: 'biff-paradise',
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
-        
+
         // Volver a main
         graph.checkout('main');
         consoleCtrl.state.currentBranch = 'main';
-        
+
+        // Actualizar indicador de rama inicial
+        consoleCtrl.updateBranchIndicator();
+
         consoleCtrl.addOutput('⚠️ ADVERTENCIA: Timeline corrupto detectado');
-        consoleCtrl.addOutput('📍 Branch "biff-paradise" contiene una realidad alternativa');
-        consoleCtrl.addOutput('💡 Deberás usar comandos avanzados para restaurar el timeline');
+        consoleCtrl.addOutput(
+          '📍 Branch "biff-paradise" contiene una realidad alternativa'
+        );
+        consoleCtrl.addOutput(
+          '💡 Deberás usar comandos avanzados para restaurar el timeline'
+        );
 
         // 3️⃣ Función para actualizar la UI del progreso
         function updateProgress() {
@@ -357,6 +393,13 @@
           // Ejecutar comando
           originalExecute(commandString);
 
+          // ❗ VERIFICAR QUE EL COMANDO SE HAYA EJECUTADO EXITOSAMENTE
+          if (!consoleCtrl.lastCommandSuccess) {
+            // Si el comando falló, no validar el ejercicio
+            console.log('❌ Comando falló, no se valida el ejercicio');
+            return;
+          }
+
           // Validar ejercicio actual
           const parts = cmd.split(' ');
           const command = parts[0] === 'git' ? parts[1] : parts[0];
@@ -371,7 +414,7 @@
             if (nextResult.completed) {
               // Actualizar progreso al 100% antes de mostrar completación
               updateProgress();
-              
+
               // 🎉 ¡Pantalla completada!
               ui.showNotification(
                 '🎉 ¡Has completado la Pantalla 3!',
@@ -391,14 +434,16 @@
               updateProgress();
               updateInstructions(nextResult.exercise);
             }
-          } else {
-            // ❌ Comando incorrecto - Mostrar error y NO avanzar
-            const errorMsg = result.suggestion || '❌ Comando incorrecto. Usa "hint" para obtener ayuda.';
+          } else if (result.shouldShowError) {
+            // ❌ Mostrar error solo si el comando es del tipo esperado pero con argumentos incorrectos
+            const errorMsg =
+              result.message ||
+              result.suggestion ||
+              '❌ Comando incorrecto. Usa "hint" para obtener ayuda.';
             ui.showNotification(errorMsg, 'error', 4000);
           }
-        };
-
-        // 7️⃣ Event Listeners
+          // Si no es el tipo de comando esperado, no mostrar error (permitir explorar)
+        }; // 7️⃣ Event Listeners
         // Ejecutar comando con botón o Enter
         const executeCommand = () => {
           const input = document.getElementById('commandInput');
@@ -449,27 +494,27 @@
             const exercise = validator.getCurrentExercise();
             const hintCard = document.getElementById('hintCard');
             const hintText = document.getElementById('hintText');
-            
+
             if (exercise && hintCard && hintText) {
               hintText.textContent = exercise.hint;
-              
+
               // Remover clase hide si existe
               hintCard.classList.remove('hide');
-              
+
               // Mostrar con animación
               hintCard.style.display = 'block';
-              
+
               // Forzar reflow para que la animación funcione
               void hintCard.offsetWidth;
-              
+
               // Agregar clase show para activar animación
               hintCard.classList.add('show');
-              
+
               // Auto-ocultar después de 8 segundos con animación
               setTimeout(() => {
                 hintCard.classList.remove('show');
                 hintCard.classList.add('hide');
-                
+
                 // Esperar a que termine la animación antes de ocultar
                 setTimeout(() => {
                   hintCard.style.display = 'none';
@@ -480,11 +525,40 @@
           });
         }
 
-        // Actualizar indicador de rama
+        // Actualizar indicador de rama cuando se inicializa
+        const originalInit = graph.init.bind(graph);
+        graph.init = function () {
+          const result = originalInit();
+          if (result) {
+            consoleCtrl.state.currentBranch = 'main';
+            consoleCtrl.updateBranchIndicator();
+          }
+          return result;
+        };
+
+        // Interceptor de checkout: solo maneja el grafo, gitCheckout() maneja el estado
         const originalCheckout = graph.checkout.bind(graph);
         graph.checkout = function (branchName) {
+          console.log('🔔 Interceptor checkout llamado:', branchName);
+          console.log(
+            '📋 Ramas disponibles en grafo:',
+            Object.keys(graph.branches)
+          );
+
+          // Si es un año (commit simulado), no intentar checkout en el grafo
+          const isSimulatedCommit = /^\d{4}$/.test(branchName);
+          if (isSimulatedCommit) {
+            console.log('📅 Detectado commit simulado (año):', branchName);
+            // El estado ya fue actualizado por gitCheckout(), solo retornar true
+            return true;
+          }
+
           const result = originalCheckout(branchName);
-          if (result) ui.updateBranchIndicator(branchName);
+          console.log('📊 Resultado de checkout en grafo:', result);
+          if (!result) {
+            console.warn('⚠️ Checkout en grafo falló para:', branchName);
+          }
+          // No actualizar el estado aquí, gitCheckout() ya lo hizo
           return result;
         };
 

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certificado | Git to the Future</title>
+
+    <!-- CSS Modular -->
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/components/base.css" />
+    <link rel="stylesheet" href="../css/components/navigation.css" />
+    <link rel="stylesheet" href="../css/screens.css" />
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+      }
+
+      .certificate-main {
+        height: calc(100vh - 80px);
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 20px 40px;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+
+      .certificate-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        height: 100%;
+        align-items: center;
+      }
+
+      .certificate-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+      }
+
+      .certificate-title {
+        font-size: 42px;
+        font-weight: bold;
+        color: var(--color-accent);
+        margin: 0 0 15px 0;
+        font-family: var(--font-family);
+      }
+
+      .certificate-subtitle {
+        font-size: 20px;
+        color: var(--color-text);
+        margin: 0 0 30px 0;
+        line-height: 1.5;
+      }
+
+      .certificate-image-wrapper {
+        position: relative;
+        border: 3px solid var(--color-accent);
+        border-radius: var(--border-radius);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        background: white;
+        padding: 10px;
+        max-height: calc(100vh - 180px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .certificate-image {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        display: block;
+        border-radius: var(--border-radius);
+      }
+
+      .certificate-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 25px;
+      }
+
+      .btn-certificate {
+        padding: 12px 30px;
+        font-size: 16px;
+        border-radius: var(--border-radius);
+        border: 2px solid var(--color-accent);
+        background: transparent;
+        color: var(--color-accent);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: var(--font-family);
+        font-weight: 600;
+        position: relative;
+      }
+
+      .btn-certificate:hover {
+        background: var(--color-accent);
+        color: var(--color-background);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(var(--color-accent-rgb), 0.4);
+      }
+
+      .btn-certificate--primary {
+        background: var(--color-accent);
+        color: var(--color-background);
+      }
+
+      .btn-certificate--primary:hover {
+        background: var(--color-accent-hover);
+        border-color: var(--color-accent-hover);
+      }
+
+      .btn-certificate--locked {
+        background: rgba(100, 100, 100, 0.3);
+        border-color: rgba(150, 150, 150, 0.5);
+        color: rgba(150, 150, 150, 0.7);
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      .btn-certificate--locked:hover {
+        background: rgba(100, 100, 100, 0.3);
+        border-color: rgba(150, 150, 150, 0.5);
+        color: rgba(150, 150, 150, 0.7);
+        transform: none;
+        box-shadow: none;
+      }
+
+      .btn-certificate--locked::before {
+        content: '🔒 ';
+        margin-right: 5px;
+      }
+
+      .btn-certificate--locked .tooltip {
+        visibility: hidden;
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(50, 50, 50, 0.95);
+        color: #fff;
+        text-align: center;
+        padding: 10px 15px;
+        border-radius: var(--border-radius);
+        white-space: nowrap;
+        font-size: 14px;
+        z-index: 1000;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        pointer-events: none;
+      }
+
+      .btn-certificate--locked:hover .tooltip {
+        visibility: visible;
+      }
+
+      .certificate-image-wrapper--locked {
+        opacity: 0.4;
+        filter: grayscale(100%) blur(3px);
+      }
+
+      .certificate-info {
+        margin-top: 25px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--border-radius);
+      }
+
+      .certificate-info-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: var(--color-accent);
+        margin: 0 0 10px 0;
+      }
+
+      .certificate-info-text {
+        font-size: 14px;
+        color: var(--color-text-muted);
+        line-height: 1.6;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body class="screen-body">
+    <!-- Header con Logo y Back Button (igual que los ejercicios) -->
+    <header class="screen-header">
+      <div class="screen-header__left">
+        <a
+          href="../index-menu.html"
+          title="Volver al menú principal"
+          id="backBtn"
+        >
+          <img
+            src="../assets/fonts/img/Back.png"
+            alt="Volver"
+            class="screen-header__back"
+          />
+        </a>
+      </div>
+      <a href="../index.html">
+        <img
+          src="../assets/fonts/img/GItToTheFuture.png"
+          alt="Git to the Future"
+          class="screen-header__logo"
+        />
+      </a>
+      <div class="screen-header__right"></div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="certificate-main">
+      <div class="certificate-content">
+        <!-- Columna Izquierda: Información -->
+        <div class="certificate-left">
+          <h1 class="certificate-title">Certificado de Finalización</h1>
+          <p class="certificate-subtitle">
+            Has completado exitosamente Git to the Future y dominado los
+            fundamentos de control de versiones navegando a través de la saga de
+            Back to the Future.
+          </p>
+
+          <div class="certificate-actions">
+            <button
+              class="btn-certificate btn-certificate--primary"
+              id="downloadBtn"
+            >
+              Descargar Certificado
+            </button>
+            <button class="btn-certificate" id="shareBtn">Compartir</button>
+          </div>
+
+          <div class="certificate-info">
+            <p class="certificate-info-title">Habilidades Adquiridas</p>
+            <p class="certificate-info-text">
+              Inicialización de repositorios • Commits y staging • Gestión de
+              ramas • Merges y rebases • Resolución de conflictos • Trabajo con
+              remotos • Cherry-pick y stash • Historial y navegación
+            </p>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Certificado -->
+        <div class="certificate-right">
+          <div class="certificate-image-wrapper">
+            <img
+              src="../assets/fonts/img/Certificade.png"
+              alt="Certificado Git to the Future"
+              class="certificate-image"
+              id="certificateImage"
+            />
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- JavaScript Inline (sin módulos para compatibilidad) -->
+    <script src="../js/git-bttf-standalone.js"></script>
+    <script>
+      console.log('Iniciando página de certificado');
+
+      // Cargar progreso desde localStorage
+      const progressData = localStorage.getItem('git-bttf-progress');
+      let allLevelsCompleted = false;
+
+      console.log('=== DEBUG CERTIFICADO ===');
+      console.log('Raw localStorage:', progressData);
+
+      if (progressData) {
+        try {
+          const progress = JSON.parse(progressData);
+          console.log('Progress parseado:', progress);
+          
+          // El progress es un array directo, no un objeto con screens
+          if (Array.isArray(progress)) {
+            const screens1to4 = progress.filter(screen => screen.id >= 1 && screen.id <= 4);
+            console.log('Screens 1-4 filtradas:', screens1to4);
+            
+            screens1to4.forEach(screen => {
+              console.log(`Screen ${screen.id}: completed = ${screen.completed} (tipo: ${typeof screen.completed})`);
+            });
+            
+            allLevelsCompleted = screens1to4.every(screen => screen.completed === true);
+            console.log('Resultado final allLevelsCompleted:', allLevelsCompleted);
+          } else {
+            console.warn('Progress no es un array:', typeof progress);
+          }
+        } catch (e) {
+          console.error('Error parseando progress:', e);
+        }
+      } else {
+        console.warn('No hay datos en localStorage (git-bttf-progress)');
+      }
+
+      console.log('=== FIN DEBUG ===');
+      console.log('Todos los niveles completados:', allLevelsCompleted);
+
+      // Elementos del DOM
+      const downloadBtn = document.getElementById('downloadBtn');
+      const shareBtn = document.getElementById('shareBtn');
+      const certificateWrapper = document.querySelector('.certificate-image-wrapper');
+
+      // Aplicar bloqueo si no está completado
+      if (!allLevelsCompleted) {
+        console.log('Aplicando bloqueo al certificado');
+        downloadBtn.classList.add('btn-certificate--locked');
+        downloadBtn.classList.remove('btn-certificate--primary');
+        downloadBtn.textContent = 'Certificado Bloqueado';
+        certificateWrapper.classList.add('certificate-image-wrapper--locked');
+        
+        // Agregar tooltip
+        const tooltip = document.createElement('span');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = 'Completa todos los niveles para desbloquear';
+        downloadBtn.appendChild(tooltip);
+      } else {
+        console.log('Certificado desbloqueado');
+      }
+
+      // Descargar certificado
+      downloadBtn.addEventListener('click', async () => {
+        // Verificar si está bloqueado
+        if (!allLevelsCompleted) {
+          alert('⚠️ Debes completar todos los niveles (1-4) para descargar el certificado');
+          return;
+        }
+
+        try {
+          // Fetch la imagen como blob
+          const response = await fetch('../assets/fonts/img/Certificade.png');
+          const blob = await response.blob();
+          
+          // Crear URL del blob
+          const blobUrl = URL.createObjectURL(blob);
+          
+          // Crear link de descarga
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = 'Certificado-Git-to-the-Future.png';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          
+          // Liberar memoria
+          URL.revokeObjectURL(blobUrl);
+
+          console.log('Certificado descargado exitosamente');
+        } catch (error) {
+          console.error('Error al descargar certificado:', error);
+          alert('❌ Error al descargar el certificado');
+        }
+      });
+
+      // Compartir logro
+      shareBtn.addEventListener('click', () => {
+        const text = 'Acabo de completar Git to the Future. Aprendí Git navegando a través de Back to the Future. #GitToTheFuture #Git #BackToTheFuture';
+        
+        // Intentar copiar al portapapeles
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            alert('✅ Texto copiado al portapapeles');
+          }).catch(() => {
+            prompt('Copia este texto:', text);
+          });
+        } else {
+          prompt('Copia este texto:', text);
+        }
+      });
+
+      console.log('Página de certificado cargada');
+    </script>
+  </body>
+</html>

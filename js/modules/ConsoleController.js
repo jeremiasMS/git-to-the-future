@@ -48,6 +48,14 @@ export class ConsoleController {
     this.graphController = graphController;
   }
 
+  // 🆕 Actualizar indicador de rama en la UI
+  updateBranchIndicator() {
+    const indicator = document.getElementById('currentBranchIndicator');
+    if (indicator && this.state.currentBranch) {
+      indicator.textContent = this.state.currentBranch;
+    }
+  }
+
     // Añadir línea al output de la consola
   addOutput(text, type = 'default') {
     if (!this.outputElement) return;
@@ -94,6 +102,7 @@ export class ConsoleController {
     }
 
     this.state.initialized = true;
+    this.state.currentBranch = 'main';
     
     // Actualizar gráfico si está disponible
     if (this.graphController) {
@@ -106,6 +115,9 @@ export class ConsoleController {
     if (this.graphController) {
       this.addOutput('🎨 ¡Mira el gráfico! Se ha creado la rama main con un commit inicial', 'info');
     }
+    
+    // Actualizar indicador de rama
+    this.updateBranchIndicator();
   }
 
   gitStatus(args) {
@@ -257,6 +269,9 @@ export class ConsoleController {
       this.addOutput(`🎨 ¡Mira el gráfico! El indicador muestra que ahora estás en '${targetBranch}'`, 'info');
       this.addOutput(`💡 Los próximos commits se añadirán a la rama '${targetBranch}'`, 'info');
     }
+    
+    // Actualizar indicador de rama
+    this.updateBranchIndicator();
   }
 
   gitMerge(args) {
